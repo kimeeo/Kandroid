@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Kandroid</string>
+    <string name="title_activity_main">Kandroid</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Vivamus sagittis lacus vel augue laoreet rutrum faucibus. Curabitur est gravida et libero vitae dictum. Hi omnes lingua, institutis, legibus inter se differunt. Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Vivamus sagittis lacus vel augue laoreet rutrum faucibus. Curabitur est gravida et libero vitae dictum. Hi omnes lingua, institutis, legibus inter se differunt. </string>
+</resources>

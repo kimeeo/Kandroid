@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Kandroid_lib</string>
+    <string name="_emptyViewMessage">No Records Found</string>
+
+
+    <string name="_donloadApp">Download The App</string>
+    <string name="_yesClose">Yes</string>
+    <string name="_noClose">No</string>
+
+    <string name="mayCostSMSChargeTitle">Attention</string>
+    <string name="mayCostSMSCharge">We will be sending SMS from you mobile no. You may charge for this.</string>
+</resources>

@@ -1,0 +1,13 @@
+<android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toolbar"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:minHeight="?attr/actionBarSize"
+    style="@style/ToolBarStyle"
+    >
+
+    <com.mikepenz.iconics.view.IconicsButton style="@style/Toolbar.Button"
+        android:layout_width="wrap_content" android:id="@+id/titleButton"
+        android:layout_height="wrap_content" />
+</android.support.v7.widget.Toolbar>

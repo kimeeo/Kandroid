@@ -1,0 +1,175 @@
+<!--
+  ~ Copyright (c) 2015. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  ~ Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+  ~ Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+  ~ Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+  ~ Vestibulum commodo. Ut rhoncus gravida arcu.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".RecyclerFragment">
+
+    <android.support.v4.view.ViewPager android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <!--
+   <com.ogaclejapan.smarttablayout.SmartTabLayout
+       xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:app="http://schemas.android.com/apk/res-auto"
+       android:id="@+id/indicator"
+       android:layout_width="match_parent"
+       android:layout_height="30dp"
+       android:clipToPadding="false"
+       android:paddingLeft="4dp"
+       android:paddingRight="4dp"
+       app:stl_defaultTabTextColor="#ffffff"
+       app:stl_defaultTabTextHorizontalPadding="18dp"
+       app:stl_dividerColor="@android:color/transparent"
+       app:stl_dividerThickness="0dp"
+       app:stl_indicatorColor="#000000"
+       app:stl_indicatorCornerRadius="18dp"
+       app:stl_indicatorInterpolation="smart"
+       app:stl_indicatorGravity="center"
+       app:stl_indicatorThickness="36dp"
+       app:stl_underlineColor="@android:color/transparent"
+       app:stl_underlineThickness="0dp"
+       />-->
+   <include layout="@layout/_fragment_recycler_empty_view"/>
+
+
+    <com.nshmura.recyclertablayout.RecyclerTabLayout
+        android:id="@+id/indicator"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app_tabIndicatorColor="?attr/colorAccent"
+        app_tabIndicatorHeight="2dp"
+        app_tabBackground="?attr/selectableItemBackground"
+        app_tabTextAppearance="@android:style/TextAppearance.Small"
+        app_tabSelectedTextColor="?android:textColorPrimary"
+        app_tabMinWidth="72dp"
+        app_tabMaxWidth="264dp"
+        app_tabPaddingStart="12dp"
+        app_tabPaddingTop="0dp"
+        app_tabPaddingEnd="12dp"
+        app_tabPaddingBottom="0dp"
+        app_tabPadding="0dp"/>
+    
+    
+    <!--
+       <com.flyco.tablayout.SegmentTabLayout
+           android:id="@+id/indicator"
+           android:layout_width="wrap_content"
+           android:layout_height="32dp"
+           android:layout_gravity="center_horizontal"
+           android:layout_marginTop="10dp"
+           app:tl_bar_color="#ffffff"
+           app:tl_indicator_color="#2C97DE"
+           app:tl_indicator_corner_radius="8dp"
+           app:tl_tab_padding="20dp"/>
+    -->
+
+       <!--
+       <com.viewpagerindicator.CirclePageIndicator
+           android:id="@+id/indicator"
+           android:padding="10dip"
+           android:layout_height="wrap_content"
+           android:layout_width="fill_parent"
+           app:radius="4dp"
+           app:fillColor="#FF888888"
+           app:pageColor="#88FF0000"
+           app:strokeColor="#FF000000"
+           app:strokeWidth="1dp"
+           />
+    -->
+
+    <!--
+    <com.ogaclejapan.smarttablayout.SmartTabLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/indicator"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:stl_defaultTabTextColor="#ffffff"
+        app:stl_defaultTabTextHorizontalPadding="24dp"
+        app:stl_indicatorInterpolation="linear"
+        app:stl_indicatorThickness="3dp"
+        app:stl_underlineThickness="1dp"
+        />
+-->
+
+    <!--
+<com.viewpagerindicator.CirclePageIndicator
+    android:id="@+id/indicator"
+    android:padding="10dip"
+    android:layout_height="wrap_content"
+    android:layout_width="fill_parent"
+    app:radius="4dp"
+    app:fillColor="#FF888888"
+    app:pageColor="#88FF0000"
+    app:strokeColor="#FF000000"
+    app:strokeWidth="1dp"
+    />
+-->
+<!--
+
+ <com.viewpagerindicator.TitlePageIndicator
+    android:id="@+id/indicator"
+    android:padding="10dip"
+    android:layout_height="wrap_content"
+    android:layout_width="fill_parent"
+    android:background="#18FF0000"
+    android:textColor="#AA000000"
+    app:footerColor="#FFAA2222"
+    app:footerLineHeight="1dp"
+    app:footerIndicatorHeight="3dp"
+    app:footerIndicatorStyle="underline"
+    app:selectedColor="#FF000000"
+    app:selectedBold="true"
+    />
+
+-->
+    <!--
+    <com.viewpagerindicator.CirclePageIndicator
+        android:id="@+id/indicator"
+        android:padding="10dip"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:background="#FFCCCCCC"
+        app:radius="10dp"
+        app:fillColor="#FF888888"
+        app:pageColor="#88FF0000"
+        app:strokeColor="#FF000000"
+        app:strokeWidth="2dp"
+        />
+        -->
+    <!--
+        <com.viewpagerindicator.LinePageIndicator
+            android:id="@+id/indicator"
+            android:padding="5dip"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            app:strokeWidth="4dp"
+            app:lineWidth="30dp"
+            app:unselectedColor="#FF888888"
+            app:selectedColor="#FF880000"
+            />
+        -->
+
+    <!--
+    <com.viewpagerindicator.UnderlinePageIndicator
+        android:id="@+id/indicator"
+        android:layout_height="2dp"
+        android:layout_width="fill_parent"
+        android:background="#FFCCCCCC"
+        app:selectedColor="#FFCC0000"
+        app:fadeDelay="1000"
+        app:fadeLength="1000"
+        />
+
+        -->
+</RelativeLayout>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="listData" />
+    <item
+        type="id"
+        name="scrapped_view" />
+
+    <item
+        type="id"
+        name="navigationList" />
+    <item
+        type="id"
+        name="indicatorId" />
+    <item
+        type="id"
+        name="pager_id" />
+
+    <item
+        type="id"
+        name="emptyView" />
+
+
+    <item name="jazzy_key" type="id"/>
+</resources>

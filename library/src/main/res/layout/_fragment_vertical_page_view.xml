@@ -1,0 +1,42 @@
+<!--
+  ~ Copyright (c) 2015. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  ~ Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+  ~ Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+  ~ Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+  ~ Vestibulum commodo. Ut rhoncus gravida arcu.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".RecyclerFragment">
+
+    <com.kimeeo.library.listDataView.viewPager.directionalviewpager.VerticalViewPager
+        android:id="@+id/viewPager"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+    <com.nshmura.recyclertablayout.RecyclerTabLayout
+        android:id="@+id/indicator"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app_tabIndicatorColor="?attr/colorAccent"
+        app_tabIndicatorHeight="2dp"
+        app_tabBackground="?attr/selectableItemBackground"
+        app_tabTextAppearance="@android:style/TextAppearance.Small"
+        app_tabSelectedTextColor="?android:textColorPrimary"
+        app_tabMinWidth="72dp"
+        app_tabMaxWidth="264dp"
+        app_tabPaddingStart="12dp"
+        app_tabPaddingTop="0dp"
+        app_tabPaddingEnd="12dp"
+        app_tabPaddingBottom="0dp"
+        app_tabPadding="0dp"/>
+
+    <include layout="@layout/_fragment_recycler_empty_view"/>
+
+</RelativeLayout>

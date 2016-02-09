@@ -1,0 +1,15 @@
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.mutualmobile.cardstack.CardStackLayout
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:paddingTop="6dp"
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:parallax_enabled="false"
+        app:parallax_scale="100"
+        app:showInitAnimation="false"/>
+</LinearLayout>
