@@ -20,12 +20,12 @@ android {
 }
 
 dependencies {
-    final SUPPORT_LIBRARY_VERSION = '23.0.1'
+    final SUPPORT_LIBRARY_VERSION = '23.1.1'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     //compile "com.android.support:support-v4:$SUPPORT_LIBRARY_VERSION"
     compile "com.android.support:customtabs:$SUPPORT_LIBRARY_VERSION"
-    compile "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
+    //compile "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
     //compile "com.android.support:cardview-v7:$SUPPORT_LIBRARY_VERSION"
     compile "com.android.support:design:$SUPPORT_LIBRARY_VERSION"
     //compile "com.android.support:recyclerview-v7:$SUPPORT_LIBRARY_VERSION"
