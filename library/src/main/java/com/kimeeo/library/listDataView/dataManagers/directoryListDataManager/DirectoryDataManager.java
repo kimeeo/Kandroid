@@ -1,4 +1,4 @@
-package com.kimeeo.library.listDataView.dataManagers.simpleList;
+package com.kimeeo.library.listDataView.dataManagers.directoryListDataManager;
 
 import android.content.Context;
 
@@ -7,36 +7,67 @@ import com.kimeeo.library.listDataView.dataManagers.DataManager;
 import com.kimeeo.library.listDataView.dataManagers.IListProvider;
 import com.kimeeo.library.listDataView.dataManagers.PageData;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by bhavinpadhiyar on 1/30/16.
  */
-public class ListDataManager extends DataManager {
+public class DirectoryDataManager extends DataManager {
 
     private static final String LOG_TAG= "BaseDataManager";
 
-    private IListProvider listProvider;
+    private File directory;
     public void garbageCollectorCall()
     {
         super.garbageCollectorCall();
-        listProvider = null;
+        directory = null;
     }
 
-    public ListDataManager(Context context,IListProvider listProvider)
+    public boolean isFileList()
+    {
+        return true;
+    }
+    public DirectoryDataManager(Context context, File directory)
     {
         super(context);
-        this.listProvider=listProvider;
+        this.directory=directory;
+    }
+    public DirectoryDataManager(Context context, String path)
+    {
+        super(context);
+        this.directory=new File(path);
     }
     protected void callService(String url)
     {
         boolean isRefreshPage = isRefreshPage(getPageData(), url);
-        List<?> data;
-        if(isRefreshPage)
-            data=listProvider.getList(getPageData(),getRefreshDataServerCallParams(getPageData()));
+        File file[]=null;
+        if(directory!=null && directory.exists() && directory.isDirectory())
+            file=directory.listFiles();
+
+        if(file!=null)
+        {
+            if(isFileList()) {
+                List<File> data1 = new ArrayList<>();
+                for (int i = 0; i < file.length; i++) {
+                    data1.add(file[i]);
+                }
+                dataHandler(url, data1, "DONE");
+            }
+            else
+            {
+                List<String> data1 = new ArrayList<>();
+                for (int i = 0; i < file.length; i++) {
+                    data1.add(file[i].getAbsolutePath());
+                }
+                dataHandler(url, data1, "DONE");
+            }
+        }
         else
-            data=listProvider.getList(getPageData(), getNextDataServerCallParams(getPageData()));
-        dataHandler(url,data,"DONE");
+        {
+            dataHandler(url, null, "ERROR");
+        }
     }
     protected String getNextDataURL(PageData data)
     {
