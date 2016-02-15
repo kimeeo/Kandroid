@@ -9,4 +9,10 @@
 
     <string name="mayCostSMSChargeTitle">Attention</string>
     <string name="mayCostSMSCharge">We will be sending SMS from you mobile no. You may charge for this.</string>
+
+    <string name="_mapNotSupported">This feature is not supported by this application</string>
+    <string name="_mapNotSupportedDebug">This feature is not supported by this application. Make sure to include <uses-library name="com.google.android.maps" /> <meta-data
+        name="com.google.android.maps.v2.API_KEY"
+        value="YOUR KEY"/> </string>
 </resources>
+

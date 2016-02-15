@@ -34,6 +34,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.kimeeo.library.BuildConfig;
 import com.kimeeo.library.R;
 import com.kimeeo.library.listDataView.BaseListDataView;
 import com.kimeeo.library.listDataView.dataManagers.DataChangeWatcher;
@@ -178,7 +179,14 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
         View rootView = inflater.inflate(R.layout._fregment_map_fragment, container, false);
         return rootView;
     }
-
+    protected View createRootMapNotSupportedView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState, boolean debug) {
+        View rootView;
+        if(debug)
+            rootView =inflater.inflate(R.layout._fregment_map_fragment_not_support_debug, container, false);
+        else
+            rootView =inflater.inflate(R.layout._fregment_map_fragment_not_support, container, false);
+        return rootView;
+    }
     protected SupportMapFragment getSupportMapFragment(View rootView,FragmentManager fragmentManager)
     {
         return (SupportMapFragment)fragmentManager.findFragmentById(R.id.mapFragment);
@@ -190,25 +198,34 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
 
     @Override
     final public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-        configViewParam();
-        View rootView = createRootView(inflater, container, savedInstanceState);
-        FragmentManager fragmentManager = getChildFragmentManager();
-        mapFragment = getSupportMapFragment(rootView,fragmentManager);
-        googleMap = mapFragment.getMap();
-        try {
-            MapsInitializer.initialize(getActivity());
-        } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();
+
+        try
+        {
+            configViewParam();
+            View rootView = createRootView(inflater, container, savedInstanceState);
+            FragmentManager fragmentManager = getChildFragmentManager();
+            mapFragment = getSupportMapFragment(rootView,fragmentManager);
+            googleMap = mapFragment.getMap();
+            try {
+                MapsInitializer.initialize(getActivity());
+            } catch (GooglePlayServicesNotAvailableException e) {
+                e.printStackTrace();
+            }
+            setHasOptionsMenu(showMenu());
+            viewCreated(rootView);
+
+            if(rootView.findViewById(R.id.progressBar)!=null)
+                mProgressBar= rootView.findViewById(R.id.progressBar);
+
+            configMapView(googleMap,mapFragment,getDataManager());
+            loadNext();
+            return rootView;
+        }catch (Exception e)
+        {
+            View rootView =createRootMapNotSupportedView(inflater, container, savedInstanceState,BuildConfig.DEBUG);
+            viewCreated(rootView);
+            return rootView;
         }
-        setHasOptionsMenu(showMenu());
-        viewCreated(rootView);
-
-        if(rootView.findViewById(R.id.progressBar)!=null)
-            mProgressBar= rootView.findViewById(R.id.progressBar);
-
-        configMapView(googleMap,mapFragment,getDataManager());
-        loadNext();
-        return rootView;
     }
 
     protected Drawable getEmptyViewDrawable()
