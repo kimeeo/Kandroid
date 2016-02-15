@@ -14,46 +14,35 @@ import java.util.List;
 /**
  * Created by bhavinpadhiyar on 1/30/16.
  */
-public class DirectoryDataManager extends DataManager {
+abstract public class DirectoryDataManager extends DataManager {
 
     private static final String LOG_TAG= "BaseDataManager";
-
-    private File directory;
-    public void garbageCollectorCall()
-    {
-        super.garbageCollectorCall();
-        directory = null;
-    }
 
     public boolean isFileList()
     {
         return true;
     }
-    public DirectoryDataManager(Context context, File directory)
+    public DirectoryDataManager(Context context)
     {
         super(context);
-        this.directory=directory;
     }
-    public DirectoryDataManager(Context context, String path)
+
+    protected void callService(String path)
     {
-        super(context);
-        this.directory=new File(path);
-    }
-    protected void callService(String url)
-    {
-        boolean isRefreshPage = isRefreshPage(getPageData(), url);
+        File directory =new File(path);
+        boolean isRefreshPage = isRefreshPage(getPageData(), path);
         File file[]=null;
         if(directory!=null && directory.exists() && directory.isDirectory())
             file=directory.listFiles();
 
-        if(file!=null)
+        if(file!=null && file.length!=0)
         {
             if(isFileList()) {
                 List<File> data1 = new ArrayList<>();
                 for (int i = 0; i < file.length; i++) {
                     data1.add(file[i]);
                 }
-                dataHandler(url, data1, "DONE");
+                dataHandler(path, data1, "DONE");
             }
             else
             {
@@ -61,17 +50,13 @@ public class DirectoryDataManager extends DataManager {
                 for (int i = 0; i < file.length; i++) {
                     data1.add(file[i].getAbsolutePath());
                 }
-                dataHandler(url, data1, "DONE");
+                dataHandler(path, data1, "DONE");
             }
         }
         else
         {
-            dataHandler(url, null, "ERROR");
+            dataHandler(path, null, "ERROR");
         }
-    }
-    protected String getNextDataURL(PageData data)
-    {
-        return data.curruntPage+"";
     }
     protected void parseData(String url, Object value, Object status)
     {

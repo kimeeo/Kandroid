@@ -122,17 +122,17 @@ abstract public class BaseDataManager extends DataManager {
             return loadedDataVO.typeCastList(list, iBaseObjectClass);
         return null;
     }
-
     protected void updatePagingData(BaseDataParser loadedDataVO) {
         try
         {
-            pageData.curruntPage = loadedDataVO.getActivePageIndex();
-            pageData.totalPage = loadedDataVO.getTotalPageCount();
+            getPageData().curruntPage +=1;
+            getPageData().totalPage +=1;
         }catch (Exception e)
         {
-            pageData.curruntPage=pageData.totalPage=1;
+            getPageData().curruntPage=getPageData().totalPage=1;
         }
     }
+
     protected boolean isRefreshPage(PageData pageData,String url)
     {
         try
@@ -142,11 +142,5 @@ abstract public class BaseDataManager extends DataManager {
         {
             return false;
         }
-    }
-
-
-    final public Class<BaseDataParser> getLoadedDataParsingAwareClass()
-    {
-        return null;
     }
 }

@@ -17,6 +17,8 @@ import com.kimeeo.kandroid.sample.lists.LiteListView;
 import com.kimeeo.kandroid.sample.lists.MapView;
 import com.kimeeo.kandroid.sample.lists.MosaicListWithAdaptor;
 import com.kimeeo.kandroid.sample.lists.RSSListView;
+import com.kimeeo.kandroid.sample.lists.SimpleListAssetsView;
+import com.kimeeo.kandroid.sample.lists.SimpleListDirectoryView;
 import com.kimeeo.kandroid.sample.lists.SimpleListView;
 import com.kimeeo.kandroid.sample.lists.StackView;
 import com.kimeeo.kandroid.sample.lists.StickyVerticalListView;
@@ -159,6 +161,11 @@ public class Application extends BaseApplication {
         fragmentData=new FragmentData("04","RSS","","",RSSListView.class,"");
         data.add(fragmentData);
 
+        fragmentData=new FragmentData("04","Directory List","","",SimpleListDirectoryView.class,"");
+        data.add(fragmentData);
+
+        fragmentData=new FragmentData("04","Assets List","","",SimpleListAssetsView.class,"");
+        data.add(fragmentData);
 
 
 
