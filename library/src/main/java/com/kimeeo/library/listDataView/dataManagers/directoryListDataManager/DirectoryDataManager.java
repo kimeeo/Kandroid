@@ -37,6 +37,9 @@ abstract public class DirectoryDataManager extends DataManager {
 
         if(file!=null && file.length!=0)
         {
+            if(isRefreshPage)
+                removeAll(this);
+
             if(isFileList()) {
                 List<File> data1 = new ArrayList<>();
                 for (int i = 0; i < file.length; i++) {
