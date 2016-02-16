@@ -1,5 +1,6 @@
 package com.kimeeo.kandroid.sample.model;
 
+import com.kimeeo.kandroid.sample.lists.AdaptorLayoutView;
 import com.kimeeo.kandroid.sample.lists.BaseView;
 import com.kimeeo.kandroid.sample.lists.BaseViewListView;
 import com.kimeeo.kandroid.sample.lists.BaseViewPager2;
@@ -170,6 +171,7 @@ public class Application extends BaseApplication {
 
 
 
+
         fragmentData=new FragmentData("04","Header View","","",EasyHeaderVerticalGridView.class,"");
         data.add(fragmentData);
 
@@ -177,6 +179,9 @@ public class Application extends BaseApplication {
         data.add(fragmentData);
 
         fragmentData=new FragmentData("04","Airtel View","","",CardStackViewLikeAirTel.class,"");
+        data.add(fragmentData);
+
+        fragmentData=new FragmentData("04","AdaptorLayoutView","","",AdaptorLayoutView.class,"");
         data.add(fragmentData);
 
         return data;

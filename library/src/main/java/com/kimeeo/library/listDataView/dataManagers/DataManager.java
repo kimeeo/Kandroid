@@ -33,6 +33,7 @@ abstract public class DataManager extends ArrayList<Object>{
 
     private static final String TAG = "DataManager";
 
+
     public Object remove(int position) {
         Object value=super.remove(position);
         notifyRemove(new Object[]{value});
@@ -95,6 +96,12 @@ abstract public class DataManager extends ArrayList<Object>{
         super.clear();
     }
 
+
+    public void reset()
+    {
+        removeAll(this);
+        loadNext();
+    }
 
     public void setPagingSupport(boolean value){
         isPagingSupport =value;

@@ -62,4 +62,5 @@ dependencies {
 
     compile 'com.github.ahorn:android-rss:v1.0-rc1'
     compile 'com.simplecityapps:recyclerview-fastscroll:1.0.5'
+    compile 'com.commit451:adapterlayout:1.0.1'
 }
