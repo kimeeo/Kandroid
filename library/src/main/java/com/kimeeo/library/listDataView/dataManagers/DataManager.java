@@ -36,59 +36,33 @@ abstract public class DataManager extends ArrayList<Object>{
 
     public Object remove(int position) {
         Object value=super.remove(position);
-        notifyRemove(new Object[]{value});
+        notifyRemove(position,new Object[]{value});
         return value;
     }
     public boolean add(Object value)
     {
-        notifyAdd(new Object[]{value});
+        notifyAdd(size(),new Object[]{value});
         return super.add(value);
     }
-
-    protected void notifyAdd(Object[] objects) {
-        if(objects!=null && objects.length!=0)
-        {
-            ArrayList list= new ArrayList<>();
-            for (Object item:objects) {
-                list.add(item);
-            }
-            if(dataChangeWatcher!=null)
-                dataChangeWatcher.itemsAdded(list);
-        }
-
-    }
-
-    protected void notifyRemove(Object[] objects) {
-        if(objects!=null && objects.length!=0)
-        {
-            ArrayList list= new ArrayList<>();
-            for (Object item:objects) {
-                list.add(item);
-            }
-            if(dataChangeWatcher!=null)
-                dataChangeWatcher.itemsRemoved(list);
-        }
-
-    }
     public void  add(int position,Object value) {
-        notifyAdd(new Object[]{value});
+        notifyAdd(position,new Object[]{value});
         super.add(position, value);
     }
     public boolean addAll(Collection value) {
-        notifyAdd(value.toArray());
+        notifyAdd(size(),value.toArray());
         return super.addAll(value);
     }
     public boolean addAll(int index, Collection collection) {
-        notifyAdd(collection.toArray());
+        notifyAdd(index, collection.toArray());
         return super.addAll(index,collection);
     }
     public void addAll(int index,Object[] values) {
-        notifyAdd(values);
+        notifyAdd(index,values);
         super.addAll(index, Arrays.asList(values));
     }
 
     public boolean removeAll(Collection value) {
-        notifyRemove(value.toArray());
+        notifyRemove(0, value.toArray());
         return super.removeAll(value);
     }
 
@@ -96,6 +70,34 @@ abstract public class DataManager extends ArrayList<Object>{
         super.clear();
     }
 
+
+
+
+    protected void notifyAdd(int position,Object[] objects) {
+        if(objects!=null && objects.length!=0)
+        {
+            ArrayList list= new ArrayList<>();
+            for (Object item:objects) {
+                list.add(item);
+            }
+            if(dataChangeWatcher!=null)
+                dataChangeWatcher.itemsAdded(position,list);
+        }
+
+    }
+
+    protected void notifyRemove(int position,Object[] objects) {
+        if(objects!=null && objects.length!=0)
+        {
+            ArrayList list= new ArrayList<>();
+            for (Object item:objects) {
+                list.add(item);
+            }
+            if(dataChangeWatcher!=null)
+                dataChangeWatcher.itemsRemoved(position,list);
+        }
+
+    }
 
     public void reset()
     {

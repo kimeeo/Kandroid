@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 
 import com.kimeeo.library.R;
 import com.kimeeo.library.fragments.BaseFragment;
+import com.kimeeo.library.listDataView.dataManagers.DataChangeWatcher;
 import com.kimeeo.library.listDataView.dataManagers.DataManager;
 import com.kimeeo.library.listDataView.dataManagers.OnCallService;
 import com.kimeeo.library.listDataView.viewPager.jazzyViewPager.JazzyViewPager;
@@ -18,12 +19,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
  * Created by bhavinpadhiyar on 1/21/16.
  */
-abstract public class BaseFragmentViewPagerAdapter extends FragmentStatePagerAdapter implements OnCallService{
+abstract public class BaseFragmentViewPagerAdapter extends FragmentStatePagerAdapter implements OnCallService,DataChangeWatcher {
     private OnItemCreated onItemCreated;
     protected void garbageCollectorCall() {
         onItemCreated=null;
@@ -34,8 +36,15 @@ abstract public class BaseFragmentViewPagerAdapter extends FragmentStatePagerAda
 
     abstract public Fragment getItemFragment(int position,Object navigationObject);
     abstract public String getItemTitle(int position,Object navigationObject);
-    public void add(Object value) {insert(value, getDataManager().size());}
-    public void insert(Object value, int position) {
+
+
+
+
+    public void add(Object value) {
+
+        add(getDataManager().size(),value);
+    }
+    public void add(int position,Object value) {
         getDataManager().add(position, value);
         notifyDataSetChanged();
     }
@@ -43,6 +52,11 @@ abstract public class BaseFragmentViewPagerAdapter extends FragmentStatePagerAda
     public void remove(int position) {
         getDataManager().remove(position);
         notifyDataSetChanged();
+    }
+    public boolean removeAll(Collection value) {
+        boolean value1 =getDataManager().removeAll(value);
+        notifyDataSetChanged();
+        return value1;
     }
 
     public void clear() {
@@ -56,6 +70,9 @@ abstract public class BaseFragmentViewPagerAdapter extends FragmentStatePagerAda
         getDataManager().addAll(startIndex, Arrays.asList(values));
         notifyDataSetChanged();
     }
+
+
+
     private DataManager dataManager;
 
 
@@ -67,9 +84,20 @@ abstract public class BaseFragmentViewPagerAdapter extends FragmentStatePagerAda
         //must have to be disable
         this.dataManager.setRefreshEnabled(false);
         this.dataManager.setOnCallService(this);
+        this.dataManager.setDataChangeWatcher(this);
         this.mViewPager = viewPager;
         this.onItemCreated =onItemCreated;
     }
+
+    public void itemsAdded(int position,List items)
+    {
+        notifyDataSetChanged();
+    }
+    public void itemsRemoved(int position,List items)
+    {
+        notifyDataSetChanged();
+    }
+
     public void removeOnCallService()
     {
         onCallService=null;

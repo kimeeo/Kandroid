@@ -7,11 +7,13 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 
 import com.kimeeo.library.R;
+import com.kimeeo.library.listDataView.dataManagers.DataChangeWatcher;
 import com.kimeeo.library.listDataView.dataManagers.DataManager;
 import com.kimeeo.library.listDataView.dataManagers.OnCallService;
 import com.rey.material.widget.ProgressView;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +21,7 @@ import java.util.Map;
 /**
  * Created by bhavinpadhiyar on 1/20/16.
  */
-abstract public class BaseListViewAdapter extends BaseAdapter implements OnCallService
+abstract public class BaseListViewAdapter extends BaseAdapter implements OnCallService,DataChangeWatcher
 {
 
     public static class ViewTypes {
@@ -35,12 +37,18 @@ abstract public class BaseListViewAdapter extends BaseAdapter implements OnCallS
         dataManager=null;
         onCallService=null;
     }
+
+
+
+
+
+
+
     public void add(Object value) {
 
-        insert(value, getDataManager().size());
+        add(getDataManager().size(),value);
     }
-
-    public void insert(Object value, int position) {
+    public void add(int position,Object value) {
         getDataManager().add(position, value);
         notifyDataSetChanged();
     }
@@ -48,6 +56,11 @@ abstract public class BaseListViewAdapter extends BaseAdapter implements OnCallS
     public void remove(int position) {
         getDataManager().remove(position);
         notifyDataSetChanged();
+    }
+    public boolean removeAll(Collection value) {
+        boolean value1 =getDataManager().removeAll(value);
+        notifyDataSetChanged();
+        return value1;
     }
 
     public void clear() {
@@ -61,6 +74,8 @@ abstract public class BaseListViewAdapter extends BaseAdapter implements OnCallS
         getDataManager().addAll(startIndex, Arrays.asList(values));
         notifyDataSetChanged();
     }
+
+
 
 
     protected DataManager getDataManager()
@@ -95,8 +110,16 @@ abstract public class BaseListViewAdapter extends BaseAdapter implements OnCallS
     public BaseListViewAdapter(DataManager dataManager){
         this.dataManager= dataManager;
         this.dataManager.setOnCallService(this);
+        this.dataManager.setDataChangeWatcher(this);
     }
-
+    public void itemsAdded(int position,List items)
+    {
+        notifyDataSetChanged();
+    }
+    public void itemsRemoved(int position,List items)
+    {
+        notifyDataSetChanged();
+    }
     public boolean supportLoader = true;
 
     public BaseItemHolder onCreateViewHolder(ViewGroup container, int viewType) {

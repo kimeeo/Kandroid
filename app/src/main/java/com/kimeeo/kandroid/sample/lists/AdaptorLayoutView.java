@@ -1,5 +1,6 @@
 package com.kimeeo.kandroid.sample.lists;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,9 +37,23 @@ public class AdaptorLayoutView extends LinearLayoutAdapterLayoutView implements 
 {
     protected DataManager createDataManager()
     {
-        ListDataManager listData1= new ListDataManager(getActivity(),listData);
+        final ListDataManager listData1= new ListDataManager(getActivity(),listData);
         listData1.setRefreshEnabled(false);
-        return listData1;
+
+        final DefaultProjectDataManager data=new DefaultProjectDataManager(getActivity(),this);
+
+        final Handler handler = new Handler();
+        final Runnable runnablelocal = new Runnable() {
+            @Override
+            public void run() {
+                getAdapter().add(0,getSample("ABC","1"));
+            }
+        };
+        handler.postDelayed(runnablelocal, 5000);
+
+        return data;
+
+       // return listData1;
     }
 
     IListProvider listData=new IListProvider()

@@ -7,28 +7,31 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kimeeo.library.R;
+import com.kimeeo.library.listDataView.dataManagers.DataChangeWatcher;
 import com.kimeeo.library.listDataView.dataManagers.DataManager;
 import com.kimeeo.library.listDataView.dataManagers.OnCallService;
 import com.kimeeo.library.listDataView.viewPager.BaseItemHolder;
 import com.rey.material.widget.ProgressView;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
  * Created by bhavinpadhiyar on 1/20/16.
  */
-abstract public class BaseViewPagerAdapter extends PagerAdapter implements OnCallService{
+abstract public class BaseViewPagerAdapter extends PagerAdapter implements OnCallService,DataChangeWatcher {
 
-    public void add(Object value) {
-        insert(value, getDataManager().size());
-    }
     public void garbageCollectorCall() {
         dataManager=null;
         onCallService=null;
     }
 
-    public void insert(Object value, int position) {
+    public void add(Object value) {
+
+        add(getDataManager().size(),value);
+    }
+    public void add(int position,Object value) {
         getDataManager().add(position, value);
         notifyDataSetChanged();
     }
@@ -37,8 +40,14 @@ abstract public class BaseViewPagerAdapter extends PagerAdapter implements OnCal
         getDataManager().remove(position);
         notifyDataSetChanged();
     }
+    public boolean removeAll(Collection value) {
+        boolean value1 =getDataManager().removeAll(value);
+        notifyDataSetChanged();
+        return value1;
+    }
 
     public void clear() {
+        int size = getDataManager().size();
         getDataManager().clear();
         notifyDataSetChanged();
     }
@@ -48,6 +57,7 @@ abstract public class BaseViewPagerAdapter extends PagerAdapter implements OnCal
         getDataManager().addAll(startIndex, Arrays.asList(values));
         notifyDataSetChanged();
     }
+
 
     protected BaseItemHolder getProgressViewHolder(View view) {
         return  new ProgressViewHolder(view);
@@ -63,6 +73,17 @@ abstract public class BaseViewPagerAdapter extends PagerAdapter implements OnCal
     {
         this.dataManager = dataManager;
         this.dataManager.setOnCallService(this);
+        this.dataManager.setDataChangeWatcher(this);
+    }
+
+
+    public void itemsAdded(int position,List items)
+    {
+        notifyDataSetChanged();
+    }
+    public void itemsRemoved(int position,List items)
+    {
+        notifyDataSetChanged();
     }
 
     public int getCount()

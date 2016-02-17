@@ -1,6 +1,9 @@
 package com.kimeeo.kandroid.sample.projectCore;
 
+import android.os.Handler;
+
 import com.kimeeo.kandroid.sample.lists.DefaultRecyclerIndexableViewAdapter;
+import com.kimeeo.kandroid.sample.model.SampleModel;
 import com.kimeeo.library.listDataView.dataManagers.BaseDataParser;
 import com.kimeeo.library.listDataView.recyclerView.BaseRecyclerViewAdapter;
 import com.kimeeo.library.listDataView.dataManagers.DataManager;
@@ -16,8 +19,24 @@ abstract public class DefaultVerticalListView extends ListView implements Defaul
      // Data Manager
     protected DataManager createDataManager()
     {
-        DefaultProjectDataManager data=new DefaultProjectDataManager(getActivity(),this);
+        final DefaultProjectDataManager data=new DefaultProjectDataManager(getActivity(),this);
+
+        final Handler handler = new Handler();
+        final Runnable runnablelocal = new Runnable() {
+            @Override
+            public void run() {
+                getAdapter().remove(1);
+            }
+        };
+        handler.postDelayed(runnablelocal, 5000);
+
         return data;
+    }
+    private SampleModel getSample(String name, String phone) {
+        SampleModel o = new SampleModel();
+        o.name =name;
+        o.details = phone;
+        return o;
     }
     protected BaseRecyclerViewAdapter createListViewAdapter()
     {

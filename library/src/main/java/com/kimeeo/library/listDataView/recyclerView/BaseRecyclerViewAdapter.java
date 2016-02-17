@@ -8,18 +8,20 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.kimeeo.library.R;
+import com.kimeeo.library.listDataView.dataManagers.DataChangeWatcher;
 import com.kimeeo.library.listDataView.dataManagers.DataManager;
 import com.kimeeo.library.listDataView.dataManagers.OnCallService;
 import com.lsjwzh.widget.recyclerviewpager.TabLayoutSupport;
 import com.rey.material.widget.ProgressView;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
  * Created by bhavinpadhiyar on 7/21/15.
  */
-abstract public class BaseRecyclerViewAdapter extends RecyclerView.Adapter<BaseItemHolder> implements OnCallService, TabLayoutSupport.ViewPagerTabLayoutAdapter,BaseItemHolder.OnItemHolderClick {
+abstract public class BaseRecyclerViewAdapter extends RecyclerView.Adapter<BaseItemHolder> implements OnCallService, TabLayoutSupport.ViewPagerTabLayoutAdapter,BaseItemHolder.OnItemHolderClick,DataChangeWatcher {
 
     public static class ViewTypes {
         public static final int VIEW_PROGRESS = 0;
@@ -38,17 +40,28 @@ abstract public class BaseRecyclerViewAdapter extends RecyclerView.Adapter<BaseI
     }
     public void add(Object value) {
 
-        insert(value, getDataManager().size());
+        add(getDataManager().size(), value);
     }
-
-    public void insert(Object value, int position) {
+    public void add(int position,Object value) {
         getDataManager().add(position, value);
-        notifyItemInserted(position);
+        if(position==0)
+            notifyDataSetChanged();
+        else
+            notifyItemInserted(position);
     }
-
     public void remove(int position) {
         getDataManager().remove(position);
-        notifyItemRemoved(position);
+        if(position==0)
+            notifyDataSetChanged();
+        else
+            notifyItemRemoved(position);
+
+    }
+    public boolean removeAll(Collection value) {
+        boolean value1 =getDataManager().removeAll(value);
+        if(value1)
+            notifyItemRangeRemoved(0, value.size());
+        return value1;
     }
 
     public void clear() {
@@ -101,8 +114,29 @@ abstract public class BaseRecyclerViewAdapter extends RecyclerView.Adapter<BaseI
     public BaseRecyclerViewAdapter(DataManager dataManager, OnCallService onCallService) {
         this.dataManager= dataManager;
         this.dataManager.setOnCallService(this);
+        this.dataManager.setDataChangeWatcher(this);
         setOnCallService(onCallService);
     }
+
+    public void itemsAdded(int position,List items)
+    {
+        if(items!=null && items.size()!=0) {
+            if (position == 0)
+                notifyDataSetChanged();
+            else
+                notifyItemRangeInserted(position, items.size());
+        }
+    }
+    public void itemsRemoved(int position,List items)
+    {
+        if(items!=null && items.size()!=0) {
+            if (position == 0)
+                notifyDataSetChanged();
+            else
+                notifyItemRangeRemoved(position, items.size());
+        }
+    }
+
 
     public void onItemHolderClick(BaseItemHolder itemHolder,int position)
     {

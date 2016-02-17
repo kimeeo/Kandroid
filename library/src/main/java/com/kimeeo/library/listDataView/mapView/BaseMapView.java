@@ -336,7 +336,7 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
 
         if(updatePending!=null)
         {
-            itemsAdded(updatePending);
+            itemsAdded(0,updatePending);
             updatePending=null;
         }
 
@@ -594,7 +594,7 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
         }
     };
 
-    public void itemsAdded(List dataList)
+    public void itemsAdded(int pos,List dataList)
     {
         if(googleMap==null)
         {
@@ -621,11 +621,11 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
 
         firstItemIn = true;
     }
-    public void removedItem(Object item)
+    public void removedItem(int pos,Object item)
     {
 
     }
-    public void itemsRemoved(List dataList)
+    public void itemsRemoved(int pos,List dataList)
     {
         if(googleMap!=null) {
             for (Object item : dataList)
@@ -633,7 +633,7 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
                 if(item instanceof IPOI)
                     removePOIMarker((IPOI) item);
                 else
-                    removedItem(item);
+                    removedItem(pos,item);
             }
             fitMapToPins();
         }

@@ -121,6 +121,7 @@ public class ListViewHelper implements AdapterView.OnItemClickListener,OnCallSer
     {
         this.mAdapter = adapter;
         this.mAdapter.setOnCallService(this);
+
         return this;
     }
 

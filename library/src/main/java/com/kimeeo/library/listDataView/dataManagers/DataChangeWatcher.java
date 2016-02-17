@@ -7,6 +7,6 @@ import java.util.List;
  */
 public interface DataChangeWatcher
 {
-    void itemsAdded(List items);
-    void itemsRemoved(List items);
+    void itemsAdded(int index,List items);
+    void itemsRemoved(int index,List items);
 }
