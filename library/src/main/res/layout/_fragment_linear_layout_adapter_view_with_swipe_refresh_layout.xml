@@ -5,6 +5,13 @@
     android:layout_height="match_parent"
     tools:context=".RecyclerFragment">
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,6 +28,7 @@
             android:paddingRight="15dp"/>
 
     </HorizontalScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
     <include layout="@layout/_fragment_recycler_empty_view"/>
 
 </RelativeLayout>

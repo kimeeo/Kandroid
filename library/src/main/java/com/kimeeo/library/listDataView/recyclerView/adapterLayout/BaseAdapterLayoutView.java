@@ -12,14 +12,12 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.kimeeo.library.R;
 import com.kimeeo.library.listDataView.BaseListDataView;
 import com.kimeeo.library.listDataView.recyclerView.BaseRecyclerViewAdapter;
@@ -40,6 +38,7 @@ abstract public class BaseAdapterLayoutView extends BaseListDataView implements 
     protected View mEmptyView;
     protected ImageView mEmptyViewImage;
     protected TextView mEmptyViewMessage;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     protected BaseRecyclerViewAdapter mAdapter;
 
     protected ViewGroup mViewGroup;
@@ -58,6 +57,7 @@ abstract public class BaseAdapterLayoutView extends BaseListDataView implements 
             mEmptyViewImage.setImageBitmap(null);
         mEmptyViewImage=null;
         mEmptyViewMessage=null;
+        mSwipeRefreshLayout=null;
     }
     protected ViewGroup getViewGroup()
     {
@@ -74,7 +74,8 @@ abstract public class BaseAdapterLayoutView extends BaseListDataView implements 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         configViewParam();
         mRootView = createRootView(inflater, container, savedInstanceState);
-        getDataManager().setRefreshEnabled(false);
+        if(getDataManager().getRefreshEnabled())
+            configSwipeRefreshLayout(createSwipeRefreshLayout(mRootView));
 
         mViewGroup = createViewGroup(mRootView);
 
@@ -103,10 +104,8 @@ abstract public class BaseAdapterLayoutView extends BaseListDataView implements 
 
     }
 
-
-
-
     abstract protected View createRootView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState);
+    abstract protected ViewGroup createViewGroup(View rootView);
     /*
     {
         if(getDataManager().getRefreshEnabled())
@@ -115,13 +114,8 @@ abstract public class BaseAdapterLayoutView extends BaseListDataView implements 
             return inflater.inflate(R.layout._fragment_recycler, container, false);
     }
     */
-    abstract protected ViewGroup createViewGroup(View rootView);
-    /*
-    {
-        ViewGroup ViewGroup = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        return ViewGroup;
-    }
-    */
+
+
 
     protected Drawable getEmptyViewDrawable()
     {
@@ -166,16 +160,52 @@ abstract public class BaseAdapterLayoutView extends BaseListDataView implements 
             emptyView.setVisibility(View.GONE);
         return emptyView;
     }
-
-    protected void onDataScroll(RecyclerView recyclerView, int dx, int dy)
+    protected SwipeRefreshLayout getSwipeRefreshLayout()
     {
-
+        return mSwipeRefreshLayout;
     }
+    protected void configSwipeRefreshLayout(SwipeRefreshLayout view)
+    {
+        mSwipeRefreshLayout = view;
+        if(mSwipeRefreshLayout!=null) {
+            mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    if (getDataManager().canLoadRefresh())
+                        loadRefreshData();
+                    else
+                        mSwipeRefreshLayout.setRefreshing(false);
+
+                    mSwipeRefreshLayout.setEnabled(getDataManager().hasScopeOfRefresh());
+                }
+            });
+            boolean refreshEnabled = getDataManager().getRefreshEnabled();
+            mSwipeRefreshLayout.setEnabled(refreshEnabled);
+            mSwipeRefreshLayout.setColorSchemeColors(R.array.progressColors);
+        }
+    }
+    /*
     protected void loadRefreshData()
     {
         getDataManager().reset();
+    }*/
+    protected SwipeRefreshLayout createSwipeRefreshLayout(View rootView)
+    {
+        if(rootView.findViewById(R.id.swipeRefreshLayout)!=null) {
+            SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+            return swipeRefreshLayout;
+        }
+        return null;
     }
+    public void updateSwipeRefreshLayout(boolean isRefreshData)
+    {
+        if(mSwipeRefreshLayout!=null) {
+            mSwipeRefreshLayout.setRefreshing(false);
 
+            if(isRefreshData)
+                mSwipeRefreshLayout.setEnabled(getDataManager().hasScopeOfRefresh());
+        }
+    }
     public void onDataLoadError(String url, Object status)
     {
         if(mEmptyView!=null)
@@ -185,6 +215,7 @@ abstract public class BaseAdapterLayoutView extends BaseListDataView implements 
             else
                 mEmptyView.setVisibility(View.GONE);
         }
+        updateSwipeRefreshLayout(false);
     }
     public void onDataReceived(String url, Object value,Object status)
     {
@@ -199,6 +230,9 @@ abstract public class BaseAdapterLayoutView extends BaseListDataView implements 
             else
                 mEmptyView.setVisibility(View.GONE);
         }
+
+        updateSwipeRefreshLayout(isRefreshData);
+
     }
 
     @Override
