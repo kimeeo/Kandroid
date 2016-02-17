@@ -41,7 +41,7 @@ abstract public class DataManager extends ArrayList<Object>{
     }
     public boolean add(Object value)
     {
-        notifyAdd(size(),new Object[]{value});
+        notifyAdd(size(), new Object[]{value});
         return super.add(value);
     }
     public void  add(int position,Object value) {
@@ -49,7 +49,7 @@ abstract public class DataManager extends ArrayList<Object>{
         super.add(position, value);
     }
     public boolean addAll(Collection value) {
-        notifyAdd(size(),value.toArray());
+        notifyAdd(size(), value.toArray());
         return super.addAll(value);
     }
     public boolean addAll(int index, Collection collection) {
@@ -70,8 +70,12 @@ abstract public class DataManager extends ArrayList<Object>{
         super.clear();
     }
 
-
-
+    public boolean addAllSilent(int index, Collection collection) {
+        return super.addAll(index,collection);
+    }
+    public boolean addAllSilent(Collection value) {
+        return super.addAll(value);
+    }
 
     protected void notifyAdd(int position,Object[] objects) {
         if(objects!=null && objects.length!=0)

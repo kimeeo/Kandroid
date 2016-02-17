@@ -274,7 +274,6 @@ abstract public class BaseRecyclerView extends BaseListDataView implements Adapt
         if (isRefreshData)
             recyclerView.scrollToPosition(0);
 
-
         if(mEmptyView!=null)
         {
             if(getDataManager().size()==0)

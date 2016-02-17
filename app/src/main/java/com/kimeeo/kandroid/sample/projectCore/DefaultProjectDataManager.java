@@ -11,23 +11,23 @@ import com.kimeeo.library.listDataView.dataManagers.PageData;
  */
 public class DefaultProjectDataManager extends DefaultJSONDataManager
 {
-    private IDataManagerDelegate host;
-    public DefaultProjectDataManager(Context context,IDataManagerDelegate host)
+    private IDataManagerDelegate delegate;
+    public DefaultProjectDataManager(Context context,IDataManagerDelegate delegate)
     {
         super(context);
-        setCachingTime(15 * 60 * 1000);
-        //setCachingTime(-1);
-        this.host = host;
+        //setCachingTime(15 * 60 * 1000);
+        setCachingTime(-1);
+        this.delegate = delegate;
         setRefreshEnabled(true);
     }
-    protected String getRefreshDataURL(PageData pageData){return host.getRefreshDataURL(pageData);}
+    protected String getRefreshDataURL(PageData pageData){return delegate.getRefreshDataURL(pageData);}
     protected String getNextDataURL(PageData pageData)
     {
-        return host.getNextDataURL(pageData);
+        return delegate.getNextDataURL(pageData);
     }
     public Class getLoadedDataParsingAwareClass()
     {
-        return host.getLoadedDataParsingAwareClass();
+        return delegate.getLoadedDataParsingAwareClass();
     }
 
     public static interface IDataManagerDelegate
