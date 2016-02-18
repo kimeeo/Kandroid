@@ -21,6 +21,7 @@ public class DefaultWebView extends BaseFragment {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl((String)getFragmentData().getActionValue());
         webView.setWebViewClient(new WebViewClient());
+        webView.setBackgroundColor(0x00000000);
         return view;
     }
     protected void garbageCollectorCall()
