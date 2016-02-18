@@ -985,7 +985,7 @@ public class Action {
         launchActivity(target,null,null,false);
     }
     public void launchActivity(Class target,Pair<View, String>[] sharedElements,Map<String,Object> data,boolean killCurrunt) {
-        launchActivity(activity,target,null,null,killCurrunt);
+        launchActivity(activity,target,sharedElements,data,killCurrunt);
     }
     public void launchActivity(Activity activity,Class target,Pair<View, String>[] sharedElements,Map<String,Object> data,boolean killCurrunt) {
 
