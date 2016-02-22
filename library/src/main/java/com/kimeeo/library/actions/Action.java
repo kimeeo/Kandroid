@@ -997,9 +997,12 @@ public class Action {
             {
                 if(entry.getValue() instanceof String)
                     intent.putExtra(entry.getKey(),(String)entry.getValue());
-                if(entry.getValue() instanceof String[])
+                else if(entry.getValue() instanceof String[])
                     intent.putExtra(entry.getKey(),(String[])entry.getValue());
-
+                else if(entry.getValue() instanceof Integer)
+                    intent.putExtra(entry.getKey(),(Integer)entry.getValue());
+                else if(entry.getValue() instanceof Integer[])
+                    intent.putExtra(entry.getKey(),(Integer[])entry.getValue());
                 else if(entry.getValue() instanceof Boolean)
                     intent.putExtra(entry.getKey(),(Boolean)entry.getValue());
                 else if(entry.getValue() instanceof Boolean[])
