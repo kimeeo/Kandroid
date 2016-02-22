@@ -131,7 +131,7 @@ abstract public class BaseFragment extends Fragment implements IApplicationAware
     public Object getPramas()
     {
         if(fragmentData!=null)
-            fragmentData.getParam();
+            return fragmentData.getParam();
         return null;
     }
 
