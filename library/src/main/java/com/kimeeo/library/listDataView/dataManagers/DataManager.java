@@ -34,6 +34,21 @@ abstract public class DataManager extends ArrayList<Object>{
     private static final String TAG = "DataManager";
 
 
+    public boolean remove(Object item) {
+        int position=-1;
+        for (int i = 0; i < this.size(); i++) {
+            if(this.get(i)==item)
+            {
+                position=i;
+                break;
+            }
+        }
+        boolean value=super.remove(item);
+        notifyRemove(position,new Object[]{value});
+        return value;
+    }
+
+
     public Object remove(int position) {
         Object value=super.remove(position);
         notifyRemove(position,new Object[]{value});
@@ -320,8 +335,26 @@ abstract public class DataManager extends ArrayList<Object>{
     {
         return refreshItemPos;
     }
+
+    public boolean isConfigurableObject() {
+        return isConfigurableObject;
+    }
+
+    public void setIsConfigurableObject(boolean isConfigurableObject) {
+        this.isConfigurableObject = isConfigurableObject;
+    }
+
+    private  boolean isConfigurableObject=false;
     protected void dataLoadingDone(List<?> list,boolean isRefreshPage)
     {
+        if(isConfigurableObject())
+        {
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i) instanceof IConfigurableObject)
+                    ((IConfigurableObject) list.get(i)).config();
+            }
+        }
+
 
         if(list!=null) {
             if (isRefreshPage)

@@ -58,6 +58,7 @@ abstract public class JSONDataManager extends AQueryDataManager {
         super.garbageCollectorCall();
         loadedDataVO=null;
     }
+
     protected void parseData(String url, Object value, Object status)
     {
         //BaseDataParser oldLoadedDataVO = loadedDataVO;

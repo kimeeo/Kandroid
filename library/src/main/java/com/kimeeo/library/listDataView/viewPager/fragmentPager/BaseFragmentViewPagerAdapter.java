@@ -40,39 +40,6 @@ abstract public class BaseFragmentViewPagerAdapter extends FragmentStatePagerAda
 
 
 
-    public void add(Object value) {
-
-        add(getDataManager().size(),value);
-    }
-    public void add(int position,Object value) {
-        getDataManager().add(position, value);
-        notifyDataSetChanged();
-    }
-
-    public void remove(int position) {
-        getDataManager().remove(position);
-        notifyDataSetChanged();
-    }
-    public boolean removeAll(Collection value) {
-        boolean value1 =getDataManager().removeAll(value);
-        notifyDataSetChanged();
-        return value1;
-    }
-
-    public void clear() {
-        int size = getDataManager().size();
-        getDataManager().clear();
-        notifyDataSetChanged();
-    }
-
-    public void addAll(Object[] values) {
-        int startIndex = getDataManager().size();
-        getDataManager().addAll(startIndex, Arrays.asList(values));
-        notifyDataSetChanged();
-    }
-
-
-
     private DataManager dataManager;
 
 

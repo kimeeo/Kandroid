@@ -25,7 +25,7 @@ abstract public class DefaultVerticalListView extends ListView implements Defaul
         final Runnable runnablelocal = new Runnable() {
             @Override
             public void run() {
-                getAdapter().remove(1);
+                getDataManager().remove(1);
             }
         };
         handler.postDelayed(runnablelocal, 5000);

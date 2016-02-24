@@ -38,45 +38,6 @@ abstract public class BaseRecyclerViewAdapter extends RecyclerView.Adapter<BaseI
         mOnItemClickListener=null;
         onCallService=null;
     }
-    public void add(Object value) {
-
-        add(getDataManager().size(), value);
-    }
-    public void add(int position,Object value) {
-        getDataManager().add(position, value);
-        if(position==0)
-            notifyDataSetChanged();
-        else
-            notifyItemInserted(position);
-    }
-    public void remove(int position) {
-        getDataManager().remove(position);
-        if(position==0)
-            notifyDataSetChanged();
-        else
-            notifyItemRemoved(position);
-
-    }
-    public boolean removeAll(Collection value) {
-        boolean value1 =getDataManager().removeAll(value);
-        if(value1)
-            notifyItemRangeRemoved(0, value.size());
-        return value1;
-    }
-
-    public void clear() {
-        int size = getDataManager().size();
-        getDataManager().clear();
-        notifyItemRangeRemoved(0, size);
-    }
-
-    public void addAll(Object[] values) {
-        int startIndex = getDataManager().size();
-        getDataManager().addAll(startIndex, Arrays.asList(values));
-        notifyItemRangeInserted(startIndex, values.length);
-    }
-
-
     protected DataManager getDataManager()
     {
         return dataManager;

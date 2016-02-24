@@ -52,6 +52,7 @@ import java.util.Map;
  */
 abstract public class BaseMapView extends BaseListDataView implements DataChangeWatcher
 {
+    /*
     public Object remove(int position) {
         return getDataManager().remove(position);
     }
@@ -71,10 +72,12 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
     public void addAll(int index,Object[] values) {
         getDataManager().addAll(index, Arrays.asList(values));
     }
-
     public boolean removeAll(Collection value) {
         return getDataManager().removeAll(value);
     }
+    */
+
+
 
     protected SupportMapFragment mapFragment;
     protected GoogleMap googleMap;

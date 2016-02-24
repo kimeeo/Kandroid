@@ -46,7 +46,7 @@ public class AdaptorLayoutView extends LinearLayoutAdapterLayoutView implements 
         final Runnable runnablelocal = new Runnable() {
             @Override
             public void run() {
-                getAdapter().add(0,getSample("ABC","1"));
+                getDataManager().add(0,getSample("ABC","1"));
             }
         };
         handler.postDelayed(runnablelocal, 5000);
