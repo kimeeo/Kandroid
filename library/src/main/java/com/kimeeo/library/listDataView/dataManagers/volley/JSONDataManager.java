@@ -1,10 +1,9 @@
-package com.kimeeo.library.listDataView.dataManagers.aQuery;
+package com.kimeeo.library.listDataView.dataManagers.volley;
 
 import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.kimeeo.library.ajax.ExtendedAjaxCallback;
 import com.kimeeo.library.listDataView.dataManagers.BaseDataParser;
 import com.kimeeo.library.listDataView.dataManagers.IConfigurableObject;
 import com.kimeeo.library.listDataView.dataManagers.IParseableObject;
@@ -12,42 +11,18 @@ import com.kimeeo.library.listDataView.dataManagers.PageData;
 
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Map;
-
 /**
  * Created by bhavinpadhiyar on 12/23/15.
  */
 
 
-abstract public class JSONDataManager extends AQueryDataManager {
+abstract public class JSONDataManager extends StringVolleyDataManager {
 
     private static final String LOG_TAG= "JSONDataManager";
 
-
-    public JSONDataManager(Context context)
+    public JSONDataManager(Context context,IVolleyRequestProvider volleyRequestController)
     {
-        super(context);
-    }
-    protected void callService(String url)
-    {
-        ExtendedAjaxCallback ajaxCallback =getAjaxCallback();
-        Map<String, Object> params=null;
-        if(isLoadingRefreshData)
-            params = getRefreshDataServerCallParams(pageData);
-        else
-            params = getNextDataServerCallParams(pageData);
-
-
-        if(params==null) {
-            ajaxCallback.setClazz(String.class);
-            getaQuery().ajax(url, String.class,getCachingTime(), ajaxCallback);
-        }
-        else {
-            ajaxCallback.setParams(params);
-            ajaxCallback.setClazz(String.class);
-            ajaxCallback.expire(getCachingTime());
-            getaQuery().ajax(url, params, String.class, ajaxCallback);
-        }
+        super(context,volleyRequestController);
     }
 
     protected void dataIn(BaseDataParser value)
@@ -59,10 +34,8 @@ abstract public class JSONDataManager extends AQueryDataManager {
         super.garbageCollectorCall();
         loadedDataVO=null;
     }
-
     protected void parseData(String url, Object value, Object status)
     {
-        //BaseDataParser oldLoadedDataVO = loadedDataVO;
         boolean isRefreshPage = isRefreshPage(pageData,url);
         try
         {

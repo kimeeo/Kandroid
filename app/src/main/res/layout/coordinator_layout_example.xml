@@ -7,8 +7,7 @@
     android:id="@+id/host"
     android:layout_height="match_parent"
     android:background="@android:color/background_light"
-    android:fitsSystemWindows="true"
-    >
+    android:fitsSystemWindows="true">
 
 
 

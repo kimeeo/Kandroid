@@ -38,6 +38,9 @@ dependencies {
 
     compile files('libs/android-query-full.0.26.8.jar')
     compile files('libs/nineoldandroids-2.4.0.jar')
+    compile files('libs/volley1.0.0.jar')
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.4.0'
 
     compile 'com.google.code.gson:gson:2.3.1'
 
