@@ -104,6 +104,7 @@ public class Action {
     private CustomTabsIntent.Builder intentBuilder;
     private Map<Integer,ProgressDialog> progressDialogMap=new HashMap<>();
     private boolean supportChromTab;
+    private Class<?> webViewClass = WebViewActivity.class;
 
 
     public void clear()
@@ -178,7 +179,7 @@ public class Action {
         if(mCustomTabActivityHelper==null) {
             supportChromTab=true;
             mCustomTabActivityHelper = new CustomTabActivityHelper();
-            mCustomTabActivityHelper.setConnectionCallback(mConnectionCallback);
+            mCustomTabActivityHelper.setConnectionCallback(getConnectionCallback());
 
             mCustomTabActivityHelper.bindCustomTabsService(activity);
             intentBuilder = new CustomTabsIntent.Builder();
@@ -270,21 +271,37 @@ public class Action {
     private CustomTabActivityHelper.CustomTabFallback customTabFallback = new CustomTabActivityHelper.CustomTabFallback()
     {
         public void openUri(Activity activity, Uri uri) {
-            Intent intent = new Intent(activity, WebViewActivity.class);
+            Intent intent = new Intent(activity, getWebViewClass());
             intent.putExtra(WebViewActivity.EXTRA_URL, uri.toString());
             activity.startActivity(intent);
         }
     };
 
-    private CustomTabActivityHelper.ConnectionCallback mConnectionCallback = new CustomTabActivityHelper.ConnectionCallback() {
+
+    public void setConnectionCallback(CustomTabActivityHelper.ConnectionCallback mConnectionCallback) {
+        this.mConnectionCallback = mConnectionCallback;
+    }
+
+    public CustomTabActivityHelper.ConnectionCallback getConnectionCallback() {
+        return mConnectionCallback;
+    }
+
+    public void onChromTabsConnected() {
+
+    }
+    public void onChromTabsDisconnected() {
+
+    }
+
+    public CustomTabActivityHelper.ConnectionCallback mConnectionCallback = new CustomTabActivityHelper.ConnectionCallback() {
         @Override
         public void onCustomTabsConnected() {
-
+            onChromTabsConnected();
         }
 
         @Override
         public void onCustomTabsDisconnected() {
-
+            onChromTabsDisconnected();
         }
     };
 
@@ -1141,6 +1158,15 @@ public class Action {
     public void setProgressBarType(int type) {
         progressBarType=type;
     }
+
+    public Class<?> getWebViewClass() {
+        return webViewClass;
+    }
+
+    public void setWebViewClass(Class<?> webViewClass) {
+        this.webViewClass = webViewClass;
+    }
+
     public static interface FileOperation
     {
         void success(File file);
