@@ -12,9 +12,15 @@ import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.Volley;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.OkUrlFactory;
 
 import org.apache.http.cookie.Cookie;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -34,14 +40,30 @@ public class SampleVolleyRequestController implements IVolleyRequestProvider {
         if (mInstance == null)
         {
             mInstance = new SampleVolleyRequestController();
-            Network network = new BasicNetwork(new HurlStack());
-            Cache cache = new DiskBasedCache(Environment.getDataDirectory(), 1024 * 1024);
-            mInstance.mRequestQueue = new RequestQueue(cache, network);
-            mInstance.mRequestQueue.start();
-            //Volley.newRequestQueue(app.getApplicationContext(),network);
+            mInstance.mRequestQueue  = Volley.newRequestQueue(app.getApplicationContext(), new OkHttpStack());
         }
         return mInstance;
     }
+
+    public static class OkHttpStack extends HurlStack {
+        private final OkUrlFactory mFactory;
+
+        public OkHttpStack() {
+            this(new OkHttpClient());
+        }
+
+        public OkHttpStack(OkHttpClient client) {
+            if (client == null) {
+                throw new NullPointerException("Client must not be null.");
+            }
+            mFactory = new OkUrlFactory(client);
+        }
+
+        @Override protected HttpURLConnection createConnection(URL url) throws IOException {
+            return mFactory.open(url);
+        }
+    }
+
     private List<Cookie> cookies;
     public List<Cookie> getCookies()
     {
@@ -51,7 +73,6 @@ public class SampleVolleyRequestController implements IVolleyRequestProvider {
     {
         this.cookies=cookies;
     }
-
 
     public RequestQueue getRequestQueue() {
 

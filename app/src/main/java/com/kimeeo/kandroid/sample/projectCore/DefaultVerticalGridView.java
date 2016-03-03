@@ -11,7 +11,7 @@ import com.kimeeo.library.listDataView.recyclerView.verticalViews.GridView;
  */
 abstract public class DefaultVerticalGridView extends GridView implements DefaultProjectDataManager.IDataManagerDelegate
 {
-     // Data Manager
+    // Data Manager
     protected DataManager createDataManager()
     {
         return new DefaultProjectDataManager(getActivity(),this);
