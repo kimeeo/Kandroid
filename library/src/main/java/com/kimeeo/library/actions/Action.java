@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.NotificationCompat;
@@ -34,6 +35,7 @@ import com.hitherejoe.tabby.CustomTabActivityHelper;
 import com.kimeeo.library.R;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.HashMap;
 import android.support.v4.app.NotificationCompat.Builder;
 import java.util.Map;
@@ -1012,43 +1014,64 @@ public class Action {
         {
             for (Map.Entry<String,Object> entry:data.entrySet())
             {
-                if(entry.getValue() instanceof String)
-                    intent.putExtra(entry.getKey(),(String)entry.getValue());
-                else if(entry.getValue() instanceof String[])
-                    intent.putExtra(entry.getKey(),(String[])entry.getValue());
-                else if(entry.getValue() instanceof Integer)
-                    intent.putExtra(entry.getKey(),(Integer)entry.getValue());
-                else if(entry.getValue() instanceof Integer[])
-                    intent.putExtra(entry.getKey(),(Integer[])entry.getValue());
-                else if(entry.getValue() instanceof Boolean)
-                    intent.putExtra(entry.getKey(),(Boolean)entry.getValue());
-                else if(entry.getValue() instanceof Boolean[])
-                    intent.putExtra(entry.getKey(),(Boolean[])entry.getValue());
-
-                else if(entry.getValue() instanceof Bundle)
-                    intent.putExtra(entry.getKey(),(Bundle)entry.getValue());
-
-                else if(entry.getValue() instanceof Byte)
-                    intent.putExtra(entry.getKey(),(Byte)entry.getValue());
-                else if(entry.getValue() instanceof Byte[])
-                    intent.putExtra(entry.getKey(),(Byte[])entry.getValue());
-
-                else if(entry.getValue() instanceof Double)
-                    intent.putExtra(entry.getKey(),(Double)entry.getValue());
-                else if(entry.getValue() instanceof Double[])
-                    intent.putExtra(entry.getKey(),(Double[])entry.getValue());
-                else if(entry.getValue() instanceof Float)
-                    intent.putExtra(entry.getKey(),(Float)entry.getValue());
-                else if(entry.getValue() instanceof Float[])
-                    intent.putExtra(entry.getKey(),(Float[])entry.getValue());
-                else if(entry.getValue() instanceof Intent)
-                    intent.putExtra(entry.getKey(),(Intent)entry.getValue());
-                else if(entry.getValue() instanceof Long)
-                    intent.putExtra(entry.getKey(),(Long)entry.getValue());
-                else if(entry.getValue() instanceof Long[])
-                    intent.putExtra(entry.getKey(),(Long[])entry.getValue());
-                else
-                    intent.putExtra(entry.getKey(),entry.getValue().toString());
+                if(entry.getValue()!=null) {
+                    if (entry.getValue() instanceof String)
+                        intent.putExtra(entry.getKey(), (String) entry.getValue());
+                    else if (entry.getValue() instanceof String[])
+                        intent.putExtra(entry.getKey(), (String[]) entry.getValue());
+                    else if (entry.getValue() instanceof Integer)
+                        intent.putExtra(entry.getKey(), (Integer) entry.getValue());
+                    else if (entry.getValue() instanceof Integer[])
+                        intent.putExtra(entry.getKey(), (Integer[]) entry.getValue());
+                    else if (entry.getValue() instanceof Boolean)
+                        intent.putExtra(entry.getKey(), (Boolean) entry.getValue());
+                    else if (entry.getValue() instanceof Boolean[])
+                        intent.putExtra(entry.getKey(), (Boolean[]) entry.getValue());
+                    else if (entry.getValue() instanceof Bundle)
+                        intent.putExtra(entry.getKey(), (Bundle) entry.getValue());
+                    else if (entry.getValue() instanceof Byte)
+                        intent.putExtra(entry.getKey(), (Byte) entry.getValue());
+                    else if (entry.getValue() instanceof Byte[])
+                        intent.putExtra(entry.getKey(), (Byte[]) entry.getValue());
+                    else if (entry.getValue() instanceof Character)
+                        intent.putExtra(entry.getKey(), (Character) entry.getValue());
+                    else if (entry.getValue() instanceof Character[])
+                        intent.putExtra(entry.getKey(), (Character[]) entry.getValue());
+                    else if (entry.getValue() instanceof CharSequence)
+                        intent.putExtra(entry.getKey(), (CharSequence) entry.getValue());
+                    else if (entry.getValue() instanceof CharSequence[])
+                        intent.putExtra(entry.getKey(), (CharSequence[]) entry.getValue());
+                    else if (entry.getValue() instanceof Serializable)
+                        intent.putExtra(entry.getKey(), (Serializable) entry.getValue());
+                    else if (entry.getValue() instanceof Short)
+                        intent.putExtra(entry.getKey(), (Short) entry.getValue());
+                    else if (entry.getValue() instanceof Short[])
+                        intent.putExtra(entry.getKey(), (Short[]) entry.getValue());
+                    else if (entry.getValue() instanceof Double)
+                        intent.putExtra(entry.getKey(), (Double) entry.getValue());
+                    else if (entry.getValue() instanceof Double[])
+                        intent.putExtra(entry.getKey(), (Double[]) entry.getValue());
+                    else if (entry.getValue() instanceof Float)
+                        intent.putExtra(entry.getKey(), (Float) entry.getValue());
+                    else if (entry.getValue() instanceof Float[])
+                        intent.putExtra(entry.getKey(), (Float[]) entry.getValue());
+                    else if (entry.getValue() instanceof Intent)
+                        intent.putExtra(entry.getKey(), (Intent) entry.getValue());
+                    else if (entry.getValue() instanceof Long)
+                        intent.putExtra(entry.getKey(), (Long) entry.getValue());
+                    else if (entry.getValue() instanceof Long[])
+                        intent.putExtra(entry.getKey(), (Long[]) entry.getValue());
+                    else if (entry.getValue() instanceof Parcelable[])
+                        intent.putExtra(entry.getKey(), (Parcelable[]) entry.getValue());
+                    else if (entry.getValue() instanceof Object[])
+                        intent.putExtra(entry.getKey(), (Object[]) entry.getValue());
+                    else if (entry.getValue() instanceof Object[])
+                        intent.putExtra(entry.getKey(), (Object[]) entry.getValue());
+                    else if (entry.getValue() instanceof Intent)
+                        intent.putExtras((Intent)entry.getValue());
+                    else
+                        intent.putExtra(entry.getKey(), entry.getValue().toString());
+                }
             }
         }
 
