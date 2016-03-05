@@ -100,7 +100,7 @@ public class Action {
     private ProgressDialog progressDialog;
     private AQuery aq;
     private File downloadFolder = Environment.getExternalStorageDirectory();
-    private Class webActivity;
+    //private Class webActivity;
     private Bitmap mCloseButtonBitmap;
     private CustomTabActivityHelper mCustomTabActivityHelper;
     private CustomTabsIntent.Builder intentBuilder;
@@ -145,7 +145,7 @@ public class Action {
 
 
     public void setWebActivity(Class webActivity) {
-        this.webActivity = webActivity;
+        this.webViewClass = webActivity;
     }
 
     private String folderLocation=null;
@@ -161,7 +161,7 @@ public class Action {
     public Action(Activity activity, Class webActivity)
     {
         this.activity=activity;
-        this.webActivity=webActivity;
+        this.webViewClass=webActivity;
     }
     public Action(Activity activity)
     {
@@ -267,7 +267,7 @@ public class Action {
 
     public void openChromeTab(String url) {
         intentBuilder.addMenuItem("Share", createPendingShareIntent());
-        CustomTabActivityHelper.openCustomTab(activity, intentBuilder.build(), Uri.parse(url), customTabFallback);
+        CustomTabActivityHelper.openCustomTab(activity, intentBuilder.build(), Uri.parse(url), getCustomTabFallback());
     }
 
     private CustomTabActivityHelper.CustomTabFallback customTabFallback = new CustomTabActivityHelper.CustomTabFallback()
@@ -278,7 +278,13 @@ public class Action {
             activity.startActivity(intent);
         }
     };
+    public void setCustomTabFallback(CustomTabActivityHelper.CustomTabFallback customTabFallback) {
+        this.customTabFallback = customTabFallback;
+    }
 
+    public CustomTabActivityHelper.CustomTabFallback getCustomTabFallback() {
+        return customTabFallback;
+    }
 
     public void setConnectionCallback(CustomTabActivityHelper.ConnectionCallback mConnectionCallback) {
         this.mConnectionCallback = mConnectionCallback;
@@ -834,10 +840,10 @@ public class Action {
             String link = actionMap.get(ATTRIBUTE_URL.toLowerCase());
             if(link.startsWith("http")==false)
                 link ="http://"+link;
-            if(webActivity!=null) {
+            if(getWebViewClass()!=null) {
                 String title = actionMap.get(ATTRIBUTE_TITLE);
                 String subTitle = actionMap.get(ATTRIBUTE_SUB_TITLE);
-                openURLInAPP(link, title, subTitle, webActivity);
+                openURLInAPP(link, title, subTitle, getWebViewClass());
             }
             else {
                 setupCustomTabHelper(new String[]{link},null,null,true);

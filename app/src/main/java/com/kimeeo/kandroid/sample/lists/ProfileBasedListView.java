@@ -79,7 +79,6 @@ public class ProfileBasedListView extends BaseProfileRecyclerView implements Def
         for (BaseViewProfile viewProfile:viewProfileList) {
             menu.add(viewProfile.getName());
         }
-
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

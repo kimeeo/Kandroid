@@ -3,6 +3,7 @@ package com.hitherejoe.tabby;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -14,7 +15,7 @@ public class WebViewActivity extends ActionBarActivity {
 
     WebView mWebView;
 
-    public static final String EXTRA_URL ="WebViewActivity";
+    public static final String EXTRA_URL ="url";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,4 +35,14 @@ public class WebViewActivity extends ActionBarActivity {
         if (actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home)
+        {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }
