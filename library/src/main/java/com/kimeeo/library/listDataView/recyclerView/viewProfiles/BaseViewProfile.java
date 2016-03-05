@@ -18,6 +18,7 @@ abstract public class BaseViewProfile implements IViewProvider
     abstract public RecyclerView.LayoutManager createLayoutManager();
     abstract public BaseRecyclerViewAdapter createListViewAdapter();
     abstract public BaseItemHolder getItemHolder(int viewType,View view);
+
     public void configViewParam()
     {
 

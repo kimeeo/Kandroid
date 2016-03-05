@@ -28,12 +28,7 @@ abstract public class BaseProfileRecyclerView extends BaseRecyclerView implement
     {
         return null;
     }
-    protected RecyclerView.ItemDecoration curruntItemDecoration;
-    protected void garbageCollectorCall() {
-        super.garbageCollectorCall();
-        curruntItemDecoration=null;
-    }
-
+    protected RecyclerView.ItemDecoration itemDecoration;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View rootView = createRootView(inflater, container, savedInstanceState);
@@ -42,18 +37,14 @@ abstract public class BaseProfileRecyclerView extends BaseRecyclerView implement
         recyclerView = createRecyclerView(rootView);
         mEmptyView= createEmptyView(rootView);
         onViewCreated(rootView);
-        garbageCollectorCall();
         return rootView;
     }
-
     public void applyProfile(BaseViewProfile profile) {
         RecyclerView.LayoutManager layoutManager= profile.createLayoutManager();
         profile.configLayoutManager(layoutManager);
         recyclerView.setLayoutManager(layoutManager);
-        if(curruntItemDecoration!=null)
-            recyclerView.removeItemDecoration(curruntItemDecoration);
-        curruntItemDecoration=profile.createItemDecoration(getActivity());
-        recyclerView.addItemDecoration(curruntItemDecoration);
+
+
 
         mAdapter = profile.createListViewAdapter();
         profile.configViewAdapter(mAdapter);
@@ -78,6 +69,13 @@ abstract public class BaseProfileRecyclerView extends BaseRecyclerView implement
         }
         else
             recyclerView.setItemAnimator(null);
+
+        try {
+            recyclerView.removeItemDecoration(itemDecoration);
+        }
+        catch(Exception e){}
+        itemDecoration= profile.createItemDecoration(getActivity());
+        recyclerView.addItemDecoration(itemDecoration);
 
         profile.configRecyclerView(recyclerView, mAdapter);
     }
