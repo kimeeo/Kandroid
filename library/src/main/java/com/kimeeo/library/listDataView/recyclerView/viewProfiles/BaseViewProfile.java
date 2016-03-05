@@ -2,7 +2,9 @@ package com.kimeeo.library.listDataView.recyclerView.viewProfiles;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
+import com.kimeeo.library.listDataView.recyclerView.BaseItemHolder;
 import com.kimeeo.library.listDataView.recyclerView.BaseProfileRecyclerView;
 import com.kimeeo.library.listDataView.recyclerView.BaseRecyclerViewAdapter;
 import com.kimeeo.library.listDataView.recyclerView.DefaultDividerDecoration;
@@ -13,6 +15,9 @@ import com.kimeeo.library.listDataView.recyclerView.IViewProvider;
  */
 abstract public class BaseViewProfile implements IViewProvider
 {
+    abstract public RecyclerView.LayoutManager createLayoutManager();
+    abstract public BaseRecyclerViewAdapter createListViewAdapter();
+    abstract public BaseItemHolder getItemHolder(int viewType,View view);
     public void configViewParam()
     {
 
@@ -40,8 +45,7 @@ abstract public class BaseViewProfile implements IViewProvider
         configViewParam();
     }
 
-    abstract public RecyclerView.LayoutManager createLayoutManager();
-    abstract public BaseRecyclerViewAdapter createListViewAdapter();
+
 
     public void configViewAdapter(BaseRecyclerViewAdapter value)
     {
