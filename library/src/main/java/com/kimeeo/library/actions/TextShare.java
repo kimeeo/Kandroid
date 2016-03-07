@@ -13,14 +13,24 @@ public class TextShare extends BaseAction{
     }
 
     public void perform(String data,String title) {
-        if(data!=null && data.equals("")==false) {
-            if(title==null)
-                title ="Share with...";
-            Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
-            sendIntent.setType("text/plain");
-            sendIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, title);
-            sendIntent.putExtra(android.content.Intent.EXTRA_TEXT, data);
-            activity.startActivity(Intent.createChooser(sendIntent, title));
+
+        try
+        {
+            if(data!=null && data.equals("")==false) {
+                if(title==null)
+                    title ="Share with...";
+                Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sendIntent.setType("text/plain");
+                sendIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, title);
+                sendIntent.putExtra(android.content.Intent.EXTRA_TEXT, data);
+                activity.startActivity(Intent.createChooser(sendIntent, title));
+            }
         }
+        catch (Exception e)
+        {
+
+        }
+
+
     }
 }

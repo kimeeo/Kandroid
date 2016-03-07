@@ -35,12 +35,20 @@ public class ImageSet extends Download {
         perform(link, location, showProgress, success, fail, operation);
     }
     public void perform(Uri sendUri,String title) {
-        Intent intent = new Intent(Intent.ACTION_ATTACH_DATA);
-        intent.setDataAndType(sendUri, "image/*");
-        intent.putExtra("mimeType", "image/*");
-        if(title==null)
-            title= "Set Image as";
-        activity.startActivity(Intent.createChooser(intent, title));
+        try
+        {
+            Intent intent = new Intent(Intent.ACTION_ATTACH_DATA);
+            intent.setDataAndType(sendUri, "image/*");
+            intent.putExtra("mimeType", "image/*");
+            if(title==null)
+                title= "Set Image as";
+            activity.startActivity(Intent.createChooser(intent, title));
+        }
+        catch (Exception e)
+        {
+
+        }
+
     }
     public void perform(Uri sendUri) {
         perform(sendUri,null);

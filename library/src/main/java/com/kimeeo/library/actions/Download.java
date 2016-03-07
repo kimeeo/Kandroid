@@ -132,43 +132,50 @@ public class Download extends BaseAction{
     }
     public void perform(String link,String location,final Boolean showProgress,final DownloadResult downloadResult,String fileName,File targetFolder)
     {
-        if(aq==null)
-            aq = new AQuery(activity);
+        try
+        {
+            if(aq==null)
+                aq = new AQuery(activity);
 
-        if(location==null || location.equals(""))
-            location=getFolderLocation();
+            if(location==null || location.equals(""))
+                location=getFolderLocation();
 
-        if(location.startsWith("/"))
-            location=location.substring(1);
+            if(location.startsWith("/"))
+                location=location.substring(1);
 
-        if(targetFolder==null)
-            targetFolder = downloadFolder;
+            if(targetFolder==null)
+                targetFolder = downloadFolder;
 
-        File file = new File(targetFolder.getPath()+"/"+location+"/"+fileName);
-        File target = new File(targetFolder, location+"/"+fileName);
+            File file = new File(targetFolder.getPath()+"/"+location+"/"+fileName);
+            File target = new File(targetFolder, location+"/"+fileName);
 
-        if (file.exists())
-            downloadResult.success(file);
-        else {
+            if (file.exists())
+                downloadResult.success(file);
+            else {
 
-            int showProgressID=-1;
-            if(showProgress)
-                showProgressID=showNotificationProgress(getTitle(),getDetails());
-            final int showProgressIDFinal=showProgressID;
+                int showProgressID=-1;
+                if(showProgress)
+                    showProgressID=showNotificationProgress(getTitle(),getDetails());
+                final int showProgressIDFinal=showProgressID;
 
-            AjaxCallback callback=new AjaxCallback<File>() {
-                public void callback(String url, File file, AjaxStatus status) {
-                    if (showProgress && showProgressIDFinal!=-1)
-                        hideNotificationProgress(showProgressIDFinal);
+                AjaxCallback callback=new AjaxCallback<File>() {
+                    public void callback(String url, File file, AjaxStatus status) {
+                        if (showProgress && showProgressIDFinal!=-1)
+                            hideNotificationProgress(showProgressIDFinal);
 
-                    if (file != null)
-                        downloadResult.success(file);
-                    else
-                        downloadResult.fail(status);
-                }
-            };
+                        if (file != null)
+                            downloadResult.success(file);
+                        else
+                            downloadResult.fail(status);
+                    }
+                };
 
-            aq.download(link, target,callback);
+                aq.download(link, target,callback);
+            }
+        }
+        catch (Exception e)
+        {
+
         }
     }
 

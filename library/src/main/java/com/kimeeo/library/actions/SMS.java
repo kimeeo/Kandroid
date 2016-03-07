@@ -62,13 +62,21 @@ public class SMS extends BaseAction{
 
     public void perform(String recipient,String message)
     {
-        if(recipient!=null) {
-            String uri = "smsto:" + recipient;
-            Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(uri));
-            intent.putExtra("compose_mode", true);
-            if (message != null)
-                intent.putExtra("sms_body", message);
-            activity.startActivity(intent);
+        try
+        {
+            if(recipient!=null)
+            {
+                String uri = "smsto:" + recipient;
+                Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(uri));
+                intent.putExtra("compose_mode", true);
+                if (message != null)
+                    intent.putExtra("sms_body", message);
+                activity.startActivity(intent);
+            }
+        }
+        catch (Exception e)
+        {
+
         }
     }
 }

@@ -15,21 +15,27 @@ public class Copy extends BaseAction{
     }
 
     public void perform(String data, String sucess) {
-
-        if (data != null) {
-            Object clipboardobj = activity.getSystemService(Context.CLIPBOARD_SERVICE);
-            if (clipboardobj instanceof android.text.ClipboardManager) {
-                android.text.ClipboardManager clipboard1 = (android.text.ClipboardManager) clipboardobj;
-                clipboard1.setText(data);
-            } else {
-                android.content.ClipboardManager clipboard2 = (android.content.ClipboardManager) clipboardobj;
-                int currentVersion = android.os.Build.VERSION.SDK_INT;
-                if (currentVersion >= 11)
-                    clipboard2.setText(data);
+        try
+        {
+            if (data != null) {
+                Object clipboardobj = activity.getSystemService(Context.CLIPBOARD_SERVICE);
+                if (clipboardobj instanceof android.text.ClipboardManager) {
+                    android.text.ClipboardManager clipboard1 = (android.text.ClipboardManager) clipboardobj;
+                    clipboard1.setText(data);
+                } else {
+                    android.content.ClipboardManager clipboard2 = (android.content.ClipboardManager) clipboardobj;
+                    int currentVersion = android.os.Build.VERSION.SDK_INT;
+                    if (currentVersion >= 11)
+                        clipboard2.setText(data);
+                }
+                if (sucess != null && sucess.equals("") == false)
+                    new Toast(activity).perform(sucess);
             }
-            if (sucess != null && sucess.equals("") == false)
-                new Toast(activity).perform(sucess);
+        }catch (Exception e)
+        {
+
         }
+
     }
 
     public void perform(String data) {

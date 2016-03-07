@@ -14,11 +14,18 @@ public class MailTo extends BaseAction{
     }
 
     public void perform(String url) {
+        try
+        {
+            String link=url;
+            if(url.startsWith("mailto:")==false)
+                link="mailto:"+url;
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+            activity.startActivity(browserIntent);
+        }
+        catch (Exception e)
+        {
 
-        String link=url;
-        if(url.startsWith("mailto:")==false)
-            link="mailto:"+url;
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-        activity.startActivity(browserIntent);
+        }
+
     }
 }

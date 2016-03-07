@@ -14,13 +14,22 @@ public class Toast extends BaseAction{
     }
 
     public void perform(String msg,boolean isLong) {
-        if(msg!=null && msg.equals("")==false)
+        try
         {
-            if(isLong)
-                android.widget.Toast.makeText(activity, msg, android.widget.Toast.LENGTH_LONG).show();
-            else
-                android.widget.Toast.makeText(activity, msg, android.widget.Toast.LENGTH_SHORT).show();
+            if(msg!=null && msg.equals("")==false)
+            {
+                if(isLong)
+                    android.widget.Toast.makeText(activity, msg, android.widget.Toast.LENGTH_LONG).show();
+                else
+                    android.widget.Toast.makeText(activity, msg, android.widget.Toast.LENGTH_SHORT).show();
+            }
         }
+        catch (Exception e)
+        {
+
+        }
+
+
     }
     public void perform(String msg) {
         perform(msg,true);

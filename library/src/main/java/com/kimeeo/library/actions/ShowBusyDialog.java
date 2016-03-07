@@ -29,24 +29,34 @@ public class ShowBusyDialog extends BaseAction{
         perform(msg,null,duration);
     }
     public void perform(String msg,String details, Integer duration) {
-        hideBusy();
-        progressDialog= new ProgressDialog(activity);
-        progressDialog.setMessage(msg);
-        if(details!=null)
-            progressDialog.setMessage(details);
-        progressDialog.show();
 
-        if(duration!=-1)
+        try
         {
-            final Handler handler = new Handler();
-            final Runnable runnablelocal = new Runnable() {
-                @Override
-                public void run() {
-                    hideBusy();
-                }
-            };
-            handler.postDelayed(runnablelocal,duration);
+            hideBusy();
+            progressDialog= new ProgressDialog(activity);
+            progressDialog.setMessage(msg);
+            if(details!=null)
+                progressDialog.setMessage(details);
+            progressDialog.show();
+
+            if(duration!=-1)
+            {
+                final Handler handler = new Handler();
+                final Runnable runnablelocal = new Runnable() {
+                    @Override
+                    public void run() {
+                        hideBusy();
+                    }
+                };
+                handler.postDelayed(runnablelocal,duration);
+            }
         }
+        catch (Exception e)
+        {
+
+        }
+
+
     }
 
     public void hideBusy() {

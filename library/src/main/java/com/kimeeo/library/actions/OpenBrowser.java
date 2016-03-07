@@ -14,10 +14,18 @@ public class OpenBrowser extends BaseAction{
     }
 
     public void perform(String link) {
-        if(link.startsWith("http")==false)
-            link ="http://"+link;
 
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-        activity.startActivity(browserIntent);
+        try
+        {
+            if(link.startsWith("http")==false)
+                link ="http://"+link;
+
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+            activity.startActivity(browserIntent);
+        }
+        catch (Exception e)
+        {
+
+        }
     }
 }

@@ -33,13 +33,22 @@ public class DownloadAndOpen extends Download {
         perform(link, location, showProgress, success, fail, operation);
     }
     public void perform(File file,String title) {
+
+        try
+        {
+
+
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(Uri.fromFile(file), getMimeType(file.getPath()));
         if(title==null)
             title= "Set Image as";
 
         activity.startActivity(Intent.createChooser(intent, title));
+        }
+        catch (Exception e)
+        {
 
+        }
 
 
     }

@@ -15,10 +15,19 @@ public class Phone extends BaseAction{
 
     public void perform(String phoneNo) {
 
-        if(phoneNo!=null) {
-            String link = "tel:" + phoneNo;
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-            activity.startActivity(browserIntent);
+        try
+        {
+            if(phoneNo!=null) {
+                String link = "tel:" + phoneNo;
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+                activity.startActivity(browserIntent);
+            }
         }
+        catch (Exception e)
+        {
+
+        }
+
+
     }
 }

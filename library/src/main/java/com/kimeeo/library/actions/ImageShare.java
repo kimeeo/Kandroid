@@ -33,12 +33,21 @@ public class ImageShare extends Download {
         perform(link, location, showProgress, success, fail, operation);
     }
     public void perform(File file,String title) {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("image/*");
-        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getPath()));
-        if(title==null)
-            title= "Share Image";
-        activity.startActivity(Intent.createChooser(shareIntent, title));
+        try
+        {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("image/*");
+            shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getPath()));
+            if(title==null)
+                title= "Share Image";
+            activity.startActivity(Intent.createChooser(shareIntent, title));
+        }
+        catch (Exception e)
+        {
+
+        }
+
+
     }
     public void perform(File file) {
         perform(file,null);

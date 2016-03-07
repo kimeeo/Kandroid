@@ -107,10 +107,17 @@ public class OpenCharomeTab extends OpenInAppBrowser
         super(activity,webView);
     }
     public void perform(String url) {
-        openURL =url;
-        //intentBuilder.addMenuItem("Share", createPendingShareIntent());
-        mCustomTabActivityHelper.mayLaunchUrl(Uri.parse(url), null, null);
-        CustomTabActivityHelper.openCustomTab(activity, intentBuilder.build(), Uri.parse(url), getCustomTabFallback());
+        try
+        {
+            openURL =url;
+            //intentBuilder.addMenuItem("Share", createPendingShareIntent());
+            mCustomTabActivityHelper.mayLaunchUrl(Uri.parse(url), null, null);
+            CustomTabActivityHelper.openCustomTab(activity, intentBuilder.build(), Uri.parse(url), getCustomTabFallback());
+        }
+        catch (Exception e)
+        {
+            perform(url, null);
+        }
     }
 
     private CustomTabActivityHelper.CustomTabFallback customTabFallback = new CustomTabActivityHelper.CustomTabFallback()
