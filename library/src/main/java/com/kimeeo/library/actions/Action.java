@@ -256,17 +256,17 @@ public class Action {
 
 
 
-    private PendingIntent createPendingShareIntent() {
+    private PendingIntent createPendingShareIntent(String url) {
         Intent actionIntent = new Intent(Intent.ACTION_SEND);
         actionIntent.setType("text/plain");
-        actionIntent.putExtra(Intent.EXTRA_TEXT, "");
-        actionIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME,"Share");
+        actionIntent.putExtra(Intent.EXTRA_TEXT, url);
+        actionIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME,"Share URL With");
         PendingIntent intent=PendingIntent.getActivity(activity.getApplicationContext(), 0, actionIntent, 0);
         return intent;
     }
 
     public void openChromeTab(String url) {
-        intentBuilder.addMenuItem("Share", createPendingShareIntent());
+        intentBuilder.addMenuItem("Share", createPendingShareIntent(url));
         CustomTabActivityHelper.openCustomTab(activity, intentBuilder.build(), Uri.parse(url), getCustomTabFallback());
     }
 

@@ -187,16 +187,8 @@ abstract public class DataManager extends ArrayList<Object>{
         {
             if(canLoadNext())
             {
-                try {
-                    isLoadingRefreshData = false;
-
-                    invokeService(getNextDataURL(pageData));
-                }
-                catch (Exception e)
-                {
-                    Log.e(TAG, "Loading Next data fail: "+getNextDataURL(pageData));
-                    noMoreData(e);
-                }
+                isLoadingRefreshData = false;
+                invokeNextDataLoad();
             }
             else
             {
@@ -204,11 +196,35 @@ abstract public class DataManager extends ArrayList<Object>{
             }
         }
     }
+
+    protected void invokeNextDataLoad()
+    {
+        try {
+            invokeService(getNextDataURL(pageData),false);
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "Loading Next data fail: "+getNextDataURL(pageData));
+            noMoreData(e);
+        }
+
+    }
+    protected void invokeRefreshDataLoad() {
+        try {
+            invokeService(getRefreshDataURL(pageData),true);
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "Loading Next data fail: "+getNextDataURL(pageData));
+            noMoreData(e);
+        }
+    }
     public void forceLoadNext()
     {
         try {
             isLoadingRefreshData = false;
-            invokeService(getNextDataURL(pageData));
+
+            invokeNextDataLoad();
         }
         catch (Exception e)
         {
@@ -224,7 +240,7 @@ abstract public class DataManager extends ArrayList<Object>{
             {
                 try {
                     isLoadingRefreshData = true;
-                    invokeService(getRefreshDataURL(pageData));
+                    invokeRefreshDataLoad();
                 }
                 catch (Exception e)
                 {
@@ -238,7 +254,7 @@ abstract public class DataManager extends ArrayList<Object>{
         }
     }
 
-    private void invokeService(String url) throws Exception
+    protected void invokeService(String url,Boolean isLoadingRefresh) throws Exception
     {
 
         if(url==null || url.equals(""))
