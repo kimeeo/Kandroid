@@ -40,14 +40,21 @@ public class OpenInAppBrowser extends BaseAction{
     public void perform(String link, String title, String subTitle,Class webActivity) {
         if(link!=null && webActivity!=null)
         {
-            Intent intent = new Intent(activity, webActivity);
-            intent.putExtra(Action.ATTRIBUTE_URL, link);
-            if (title != null)
-                intent.putExtra(Action.ATTRIBUTE_TITLE, title);
+            try
+            {
+                Intent intent = new Intent(activity, webActivity);
+                intent.putExtra(Action.ATTRIBUTE_URL, link);
+                if (title != null)
+                    intent.putExtra(Action.ATTRIBUTE_TITLE, title);
 
-            if (subTitle != null)
-                intent.putExtra(Action.ATTRIBUTE_SUB_TITLE, subTitle);
-            activity.startActivity(intent);
+                if (subTitle != null)
+                    intent.putExtra(Action.ATTRIBUTE_SUB_TITLE, subTitle);
+                activity.startActivity(intent);
+            }
+            catch (Exception e)
+            {
+                new OpenBrowser(activity).perform(link);
+            }
         }
     }
     public void perform(String link, String title, String subTitle) {
