@@ -12,6 +12,7 @@ import com.kimeeo.kandroid.sample.activities.CoordinatorLayoutExample;
 import com.kimeeo.kandroid.sample.model.SampleModel;
 import com.kimeeo.kandroid.sample.projectCore.DefaultVerticalListView;
 import com.kimeeo.library.actions.Action;
+import com.kimeeo.library.actions.Download;
 import com.kimeeo.library.listDataView.recyclerView.BaseItemHolder;
 import com.kimeeo.library.listDataView.dataManagers.PageData;
 import com.kimeeo.kandroid.R;
@@ -45,7 +46,7 @@ public class EasyVerticalListView extends DefaultVerticalListView
             String success="Done";
             String fail="Failed";
 
-            action.downloadFile(link, location, title, aTrue, success, fail, null);
+            action.downloadFile(link,location,true,success,fail,null);
         }
         else if(position==1)
         {
@@ -53,7 +54,7 @@ public class EasyVerticalListView extends DefaultVerticalListView
         }
         else if(position==2)
         {
-            Action action1 =new Action(getActivity(),true,new String[]{"http://www.facebook.com"},null,null,true);
+            Action action1 =new Action(getActivity());
             action1.openChromeTab("http://www.facebook.com");
         }
     }

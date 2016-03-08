@@ -1,6 +1,8 @@
 package com.kimeeo.library.actions;
 
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.graphics.Bitmap;
 import android.support.v4.util.Pair;
 import android.view.View;
 
@@ -279,6 +281,10 @@ public class Action extends BaseAction{
         OpenCharomeTab openCharomeTab = getOpenCharomeTab();
         openCharomeTab.perform(url);
     }
+
+
+
+
     public void mailTo(String url) {
         MailTo mailTo=getMailTo();
         mailTo.perform(url);
@@ -394,9 +400,9 @@ public class Action extends BaseAction{
         Download download=getDownload();
         download.perform(link, location, showProgress, downloadResult);
     }
-    public void downloadFile(String link,String location, boolean aTrue,final String success,final String fail,final Download.DownloadResult downloadResult) {
+    public void downloadFile(String link,String location, boolean showProgress,final String success,final String fail,final Download.DownloadResult downloadResult) {
         Download download=getDownload();
-        download.perform(link, location, aTrue, success, fail, downloadResult);
+        download.perform(link, location, showProgress, success, fail, downloadResult);
     }
 
     public void copy(String data, String sucess)

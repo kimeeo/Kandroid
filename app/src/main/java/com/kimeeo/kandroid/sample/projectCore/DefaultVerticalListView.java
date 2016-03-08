@@ -20,17 +20,6 @@ abstract public class DefaultVerticalListView extends ListView implements Defaul
     protected DataManager createDataManager()
     {
         final DefaultProjectDataManager data=new DefaultProjectDataManager(getActivity(),this);
-        //data.add(getSample("OK","Works"));
-        final Handler handler = new Handler();
-        final Runnable runnablelocal = new Runnable() {
-            @Override
-            public void run() {
-                if(getDataManager()!=null)
-                    getDataManager().remove(1);
-            }
-        };
-        handler.postDelayed(runnablelocal, 5000);
-
         return data;
     }
     private SampleModel getSample(String name, String phone) {
