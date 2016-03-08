@@ -1,4 +1,4 @@
-package com.kimeeo.library.listDataView.dataManagers.volley;
+package com.kimeeo.library.ajax;
 
 import android.text.TextUtils;
 

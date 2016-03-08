@@ -7,16 +7,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.androidquery.AQuery;
-import com.androidquery.callback.AjaxStatus;
 import com.google.gson.Gson;
-import com.kimeeo.library.ajax.ExtendedAjaxCallback;
-import com.kimeeo.library.listDataView.dataManagers.volley.IVolleyRequestProvider;
-import com.kimeeo.library.listDataView.dataManagers.volley.SampleVolleyRequestController;
+import com.kimeeo.library.ajax.IVolleyRequestProvider;
+import com.kimeeo.library.ajax.SampleVolleyRequestController;
 
 import org.apache.http.cookie.Cookie;
 
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 

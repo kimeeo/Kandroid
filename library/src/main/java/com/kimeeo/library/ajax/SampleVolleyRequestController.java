@@ -1,15 +1,10 @@
-package com.kimeeo.library.listDataView.dataManagers.volley;
+package com.kimeeo.library.ajax;
 
 import android.content.Context;
-import android.os.Environment;
 import android.text.TextUtils;
 
-import com.android.volley.Cache;
-import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;

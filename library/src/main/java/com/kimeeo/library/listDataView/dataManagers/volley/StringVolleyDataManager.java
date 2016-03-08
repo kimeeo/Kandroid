@@ -5,15 +5,13 @@ import android.content.Context;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.kimeeo.library.ajax.IVolleyRequestProvider;
 
 import org.apache.http.cookie.Cookie;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Created by bhavinpadhiyar on 2/29/16.

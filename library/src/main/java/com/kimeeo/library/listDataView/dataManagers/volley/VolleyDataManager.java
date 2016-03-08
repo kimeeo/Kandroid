@@ -6,12 +6,10 @@ import android.content.Context;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.kimeeo.library.ajax.IVolleyRequestProvider;
 import com.kimeeo.library.listDataView.dataManagers.DataManager;
 
-import org.apache.http.cookie.Cookie;
-
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

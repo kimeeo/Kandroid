@@ -1,21 +1,16 @@
 package com.kimeeo.kandroid.sample.projectCore;
 
-import com.android.volley.Cache;
-import com.android.volley.Network;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageLoader;
 
 import android.content.Context;
-import android.os.Environment;
 import android.text.TextUtils;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.Volley;
-import com.kimeeo.library.listDataView.dataManagers.volley.IVolleyRequestProvider;
-import com.kimeeo.library.listDataView.dataManagers.volley.LruBitmapCache;
+import com.kimeeo.library.ajax.IVolleyRequestProvider;
+import com.kimeeo.library.ajax.LruBitmapCache;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.OkUrlFactory;
 

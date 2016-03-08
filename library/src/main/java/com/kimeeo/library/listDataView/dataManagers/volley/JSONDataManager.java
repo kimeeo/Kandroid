@@ -4,8 +4,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.kimeeo.library.ajax.IVolleyRequestProvider;
 import com.kimeeo.library.listDataView.dataManagers.BaseDataParser;
-import com.kimeeo.library.listDataView.dataManagers.IConfigurableObject;
 import com.kimeeo.library.listDataView.dataManagers.IParseableObject;
 import com.kimeeo.library.listDataView.dataManagers.PageData;
 

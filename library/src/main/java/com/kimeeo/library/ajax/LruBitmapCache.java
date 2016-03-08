@@ -1,4 +1,4 @@
-package com.kimeeo.library.listDataView.dataManagers.volley;
+package com.kimeeo.library.ajax;
 import com.android.volley.toolbox.ImageLoader.ImageCache;
 
 import android.graphics.Bitmap;
