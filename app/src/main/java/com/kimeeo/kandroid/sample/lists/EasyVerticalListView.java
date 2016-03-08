@@ -46,7 +46,7 @@ public class EasyVerticalListView extends DefaultVerticalListView
             String success="Done";
             String fail="Failed";
 
-            action.downloadFile(link,location,true,success,fail,null);
+            action.download(link,location,true,success,fail,null);
         }
         else if(position==1)
         {

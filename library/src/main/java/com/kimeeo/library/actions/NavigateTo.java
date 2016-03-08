@@ -14,43 +14,50 @@ public class NavigateTo extends BaseAction{
     }
 
     public void perform(long latitude,long longitude,String address) {
-
         try
         {
-            String locationURL;
-            if(latitude==0 || longitude==0)
+            String locationURL = null;
+            if(latitude!=-1 && longitude!=-1)
                 locationURL = "http://maps.google.com/maps?daddr="+latitude+","+longitude+"";
-            else
+            else if(address!=null)
                 locationURL = "http://maps.google.com/maps?daddr="+address;
 
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(locationURL));
-            activity.startActivity(intent);
+            if(locationURL!=null) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(locationURL));
+                activity.startActivity(intent);
+            }
         }
         catch (Exception e)
         {
 
         }
-
-
     }
 
     public void perform(String latitude,String longitude,String address) {
         try
         {
-            String locationURL;
-            if(latitude!=null && longitude!=null)
-                locationURL = "http://maps.google.com/maps?daddr="+latitude+","+longitude+"";
-            else
-                locationURL = "http://maps.google.com/maps?daddr="+address;
-
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(locationURL));
-            activity.startActivity(intent);
+            long latitude1;
+            long longitude1;
+            if(latitude!=null && longitude!=null) {
+                latitude1 = Long.parseLong(latitude);
+                longitude1 = Long.parseLong(longitude);
+                perform(latitude1, longitude1, address);
+            }
         }
         catch (Exception e)
         {
-
+            perform(-1, -1, address);
         }
+    }
 
+    public void perform(String address) {
+        perform(-1, -1, address);
+    }
+    public void perform(long latitude,long longitude) {
+        perform(latitude,longitude,null);
+    }
 
+    public void perform(String latitude,String longitude) {
+        perform(latitude,longitude,null);
     }
 }

@@ -93,30 +93,6 @@ public class AdaptorLayoutView extends LinearLayoutAdapterLayoutView implements 
     {
         super.onItemClick(parent,view,position,id);
 
-        if(action==null)
-            action = new Action(getActivity());
-
-        if(position==0)
-        {
-            String link="http://kmmc.in/wp-content/uploads/2014/01/lesson2.pdf";
-            //String location="/aquery/abc";
-            String location=null;
-            String title="download Test";
-            boolean aTrue=true;
-            String success="Done";
-            String fail="Failed";
-
-            action.downloadFile(link, location, title, aTrue, success, fail, null);
-        }
-        else if(position==1)
-        {
-            action.launchActivity(CoordinatorLayoutExample.class);
-        }
-        else if(position==2)
-        {
-            Action action1 =new Action(getActivity(),true,new String[]{"http://www.facebook.com"},null,null,true);
-            action1.openChromeTab("http://www.facebook.com");
-        }
     }
     public void onItemClick(Object baseObject)
     {

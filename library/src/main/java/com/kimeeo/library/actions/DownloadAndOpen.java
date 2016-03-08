@@ -1,8 +1,16 @@
 package com.kimeeo.library.actions;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 
 import java.io.File;
 
@@ -36,25 +44,35 @@ public class DownloadAndOpen extends Download {
 
         try
         {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(file), getMimeType(file.getPath()));
+            if(title==null)
+                title= "Open File";
 
-
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(file), getMimeType(file.getPath()));
-        if(title==null)
-            title= "Set Image as";
-
-        activity.startActivity(Intent.createChooser(intent, title));
+            activity.startActivity(Intent.createChooser(intent, title));
         }
         catch (Exception e)
         {
 
         }
-
-
     }
-    public void perform(File file) {
+
+    public void perform(Uri uri,String title) {
+        File file = new File(getPath(activity,uri));
+        perform(file,title);
+    }
+    public void perform(Uri uri) {
+        perform(uri,null);
+    }
+
+    public void perform(File file)
+    {
         perform(file,null);
     }
+
+
+
+
 
 
     public static String getMimeType(String filename) {

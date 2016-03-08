@@ -44,8 +44,9 @@ public class OpenInAppBrowser extends BaseAction{
             {
                 Intent intent = new Intent(activity, webActivity);
                 intent.putExtra(Action.ATTRIBUTE_URL, link);
-                if (title != null)
-                    intent.putExtra(Action.ATTRIBUTE_TITLE, title);
+                if (title == null)
+                    title=link;
+                intent.putExtra(Action.ATTRIBUTE_TITLE, title);
 
                 if (subTitle != null)
                     intent.putExtra(Action.ATTRIBUTE_SUB_TITLE, subTitle);

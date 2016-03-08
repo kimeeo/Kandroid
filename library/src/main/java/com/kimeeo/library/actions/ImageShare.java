@@ -46,10 +46,16 @@ public class ImageShare extends Download {
         {
 
         }
-
-
     }
-    public void perform(File file) {
+    public void perform(Uri uri,String title) {
+        File file = new File(getPath(activity,uri));
+        perform(file,title);
+    }
+    public void perform(File file)
+    {
         perform(file,null);
+    }
+    public void perform(Uri uri) {
+        perform(uri,null);
     }
 }

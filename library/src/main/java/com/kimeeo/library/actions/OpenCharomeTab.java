@@ -40,9 +40,20 @@ public class OpenCharomeTab extends OpenInAppBrowser
         super(activity);
         setupCustomTabHelper(null, null, null, true);
     }
+    public OpenCharomeTab(Activity activity,Class webView)
+    {
+        super(activity, webView);
+        setupCustomTabHelper(null, null, null, true);
+    }
+
     public OpenCharomeTab(Activity activity,String[] mayLaunchUrl,Map<String,PendingIntent> menus,Map<Bitmap,PendingIntent> buttons,boolean showClose) {
         super(activity);
-        setupCustomTabHelper(mayLaunchUrl,menus,buttons,showClose);
+        setupCustomTabHelper(mayLaunchUrl, menus, buttons, showClose);
+    }
+
+    public OpenCharomeTab(Activity activity,Class webView,String[] mayLaunchUrl,Map<String,PendingIntent> menus,Map<Bitmap,PendingIntent> buttons,boolean showClose) {
+        super(activity, webView);
+        setupCustomTabHelper(mayLaunchUrl, menus, buttons, showClose);
     }
     public void clear()
     {
@@ -102,10 +113,7 @@ public class OpenCharomeTab extends OpenInAppBrowser
         }
     }
 
-    public OpenCharomeTab(Activity activity,Class webView)
-    {
-        super(activity,webView);
-    }
+
     public void perform(String url) {
         try
         {

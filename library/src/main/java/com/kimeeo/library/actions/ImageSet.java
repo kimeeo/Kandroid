@@ -48,9 +48,19 @@ public class ImageSet extends Download {
         {
 
         }
-
     }
     public void perform(Uri sendUri) {
-        perform(sendUri,null);
+        perform(sendUri, null);
     }
+    public void perform(File file)
+    {
+        perform(Uri.fromFile(file),null);
+    }
+    public void perform(File file,String title)
+    {
+        perform(Uri.fromFile(file),title);
+    }
+
+
+
 }

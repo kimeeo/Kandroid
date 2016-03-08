@@ -371,7 +371,7 @@ public class Action extends BaseAction{
 
 
 
-    public void downloadFileAndOpen(String link,String location,final String shareTitle, boolean aTrue, final String success,final String fail,final Download.DownloadResult downloadResult) {
+    public void downloadAndOpen(String link,String location,final String shareTitle, boolean aTrue, final String success,final String fail,final Download.DownloadResult downloadResult) {
         DownloadAndOpen downloadAndOpen=getDownloadAndOpen();
         downloadAndOpen.perform(link, location, shareTitle, aTrue, success, fail, downloadResult);
     }
@@ -385,22 +385,22 @@ public class Action extends BaseAction{
     }
 
 
-    public void downloadFile(String link,String location,File targetFolder,final Boolean showProgress,final Download.DownloadResult downloadResult,String fileName)
+    public void download(String link,String location,File targetFolder,final Boolean showProgress,final Download.DownloadResult downloadResult,String fileName)
     {
         Download download=getDownload();
         download.perform(link, location,targetFolder, showProgress, downloadResult, fileName);
     }
-    public void downloadFile(String link,String location,final Boolean showProgress,final Download.DownloadResult downloadResult,String fileName)
+    public void download(String link,String location,final Boolean showProgress,final Download.DownloadResult downloadResult,String fileName)
     {
         Download download=getDownload();
         download.perform(link, location, showProgress, downloadResult, fileName);
     }
-    public void downloadFile(String link,String location,final Boolean showProgress,final Download.DownloadResult downloadResult)
+    public void download(String link,String location,final Boolean showProgress,final Download.DownloadResult downloadResult)
     {
         Download download=getDownload();
         download.perform(link, location, showProgress, downloadResult);
     }
-    public void downloadFile(String link,String location, boolean showProgress,final String success,final String fail,final Download.DownloadResult downloadResult) {
+    public void download(String link,String location, boolean showProgress,final String success,final String fail,final Download.DownloadResult downloadResult) {
         Download download=getDownload();
         download.perform(link, location, showProgress, success, fail, downloadResult);
     }
@@ -569,7 +569,7 @@ public class Action extends BaseAction{
                 showProgress="true";
             final String success = actionMap.get(ATTRIBUTE_SUCCESS_MSG);
             final String fail = actionMap.get(ATTRIBUTE_FAIL_MSG);
-            downloadFile(link, null, showProgress.equals("true"), success, fail, null);
+            download(link, null, showProgress.equals("true"), success, fail, null);
         }
         else if(action.equals(ACTION_IMG_SHARE))
         {
@@ -615,7 +615,7 @@ public class Action extends BaseAction{
                 showProgress="true";
             final String success = actionMap.get(ATTRIBUTE_SUCCESS_MSG);
             final String fail = actionMap.get(ATTRIBUTE_FAIL_MSG);
-            downloadFileAndOpen(link, null, title, showProgress.equals("true"), success, fail, null);
+            downloadAndOpen(link, null, title, showProgress.equals("true"), success, fail, null);
         }
         else if(actionType.equals(ACTION_SHOW_BUSY_DIALOG.toLowerCase()))
         {

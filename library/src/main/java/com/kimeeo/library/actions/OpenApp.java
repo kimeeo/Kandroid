@@ -14,6 +14,9 @@ import com.kimeeo.library.R;
  */
 public class OpenApp extends BaseAction{
 
+    private String title;
+    private String playStoreURL="https://play.google.com/store/apps/details?id=";
+
     public OpenApp(Activity activity) {
         super(activity);
     }
@@ -34,14 +37,30 @@ public class OpenApp extends BaseAction{
         }
     }
 
+    public void perform(String classPath)
+    {
+        if(classPath!=null) {
+            try {
+                Intent i = new Intent(Intent.ACTION_MAIN);
+                PackageManager manager = activity.getPackageManager();
+                i = manager.getLaunchIntentForPackage(classPath);
+                i.addCategory(Intent.CATEGORY_LAUNCHER);
+                activity.startActivity(i);
+            } catch (Exception e)
+            {
+
+            }
+        }
+    }
+
     public void downloadApp(final String classPath,final String appName) {
         new AlertDialog.Builder(activity)
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle(R.string._donloadApp)
+                .setTitle(getTitle())
                 .setMessage(appName +"("+classPath+") is not install on your device. Would you like to install it now?")
                 .setPositiveButton(R.string._yesClose, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        String link = "https://play.google.com/store/apps/details?id="+classPath;
+                        String link = getPlayStoreURL()+classPath;
                         openURL(link);
                     }
                 })
@@ -51,5 +70,23 @@ public class OpenApp extends BaseAction{
     }
     protected void openURL(String link) {
         new OpenBrowser(activity).perform(link);
+    }
+
+    public String getTitle() {
+        if(title==null)
+            title="Download APP";
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getPlayStoreURL() {
+        return playStoreURL;
+    }
+
+    public void setPlayStoreURL(String playStoreURL) {
+        this.playStoreURL = playStoreURL;
     }
 }

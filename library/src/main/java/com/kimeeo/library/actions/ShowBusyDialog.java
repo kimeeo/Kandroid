@@ -21,6 +21,13 @@ public class ShowBusyDialog extends BaseAction{
         super.clear();
     }
 
+    Runnable runnablelocal = new Runnable() {
+        @Override
+        public void run() {
+            hideBusy();
+        }
+    };
+    Handler handler;
     private ProgressDialog progressDialog;
     public void perform(String msg) {
         perform(msg,-1);
@@ -39,24 +46,22 @@ public class ShowBusyDialog extends BaseAction{
                 progressDialog.setMessage(details);
             progressDialog.show();
 
+            if(handler!=null)
+            {
+                handler.removeCallbacks(runnablelocal);
+                handler = null;
+            }
+
             if(duration!=-1)
             {
-                final Handler handler = new Handler();
-                final Runnable runnablelocal = new Runnable() {
-                    @Override
-                    public void run() {
-                        hideBusy();
-                    }
-                };
-                handler.postDelayed(runnablelocal,duration);
+                handler = new Handler();
+                handler.postDelayed(runnablelocal, duration);
             }
         }
         catch (Exception e)
         {
 
         }
-
-
     }
 
     public void hideBusy() {

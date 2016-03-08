@@ -13,7 +13,6 @@ public class TextShare extends BaseAction{
     }
 
     public void perform(String data,String title) {
-
         try
         {
             if(data!=null && data.equals("")==false) {
@@ -30,7 +29,8 @@ public class TextShare extends BaseAction{
         {
 
         }
-
-
+    }
+    public void perform(String data) {
+        perform(data,null);
     }
 }

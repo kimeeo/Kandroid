@@ -28,10 +28,19 @@ public class Toast extends BaseAction{
         {
 
         }
-
-
     }
     public void perform(String msg) {
         perform(msg,true);
+    }
+    public void perform(String msg,int duration) {
+        try
+        {
+            if(msg!=null && msg.equals("")==false)
+                android.widget.Toast.makeText(activity, msg, duration).show();
+        }
+        catch (Exception e)
+        {
+
+        }
     }
 }
