@@ -61,7 +61,148 @@ public class Action extends BaseAction{
     public static String ATTRIBUTE_ADDRESS="address";
 
     OpenCharomeTab openCharomeTab;
+    public OpenCharomeTab getOpenCharomeTab() {
+        if(openCharomeTab==null)
+            openCharomeTab = new OpenCharomeTab(activity);
+        return openCharomeTab;
+    }
+
+
+    public ShowBusyDialog getShowBusyDialog() {
+        if(showBusyDialog==null)
+            showBusyDialog = new ShowBusyDialog(activity);
+        return showBusyDialog;
+    }
+
     ShowBusyDialog showBusyDialog;
+
+
+    public SMS getSms() {
+        if(sms==null)
+            sms = new SMS(activity);
+        return sms;
+    }
+    SMS sms;
+
+
+    public OpenBrowser getOpenBrowser() {
+        if(openBrowser==null)
+            openBrowser = new OpenBrowser(activity);
+        return openBrowser;
+    }
+    OpenBrowser openBrowser;
+
+
+    public OpenApp getOpenApp() {
+        if(openApp==null)
+            openApp = new OpenApp(activity);
+        return openApp;
+    }
+    OpenApp openApp;
+
+
+    public OpenInAppBrowser getOpenInAppBrowser() {
+        if(openInAppBrowser==null)
+            openInAppBrowser = new OpenInAppBrowser(activity);
+        return openInAppBrowser;
+    }
+    OpenInAppBrowser openInAppBrowser;
+
+
+    public Toast getToast() {
+        if(toast==null)
+            toast = new Toast(activity);
+        return toast;
+    }
+    Toast toast;
+
+    public TextShare getTextShare() {
+        if(textShare==null)
+            textShare = new TextShare(activity);
+        return textShare;
+    }
+
+    TextShare textShare;
+
+
+    public DownloadAndOpen getDownloadAndOpen() {
+        if(downloadAndOpen==null)
+            downloadAndOpen = new DownloadAndOpen(activity);
+        return downloadAndOpen;
+    }
+    DownloadAndOpen downloadAndOpen;
+
+
+    public ImageSet getImageSet() {
+        if(imageSet==null)
+            imageSet = new ImageSet(activity);
+        return imageSet;
+    }
+
+    ImageSet imageSet;
+
+    public ImageShare getImageShare() {
+        if(imageShare==null)
+            imageShare = new ImageShare(activity);
+        return imageShare;
+    }
+
+    ImageShare imageShare;
+
+    public Download getDownload() {
+        if(download==null)
+            download= new Download(activity);
+        return download;
+    }
+
+    Download download;
+
+
+    public Copy getCopy() {
+        if(copy==null)
+            copy= new Copy(activity);
+        return copy;
+    }
+
+    Copy copy;
+
+
+    public NavigateTo getNavigateTo() {
+        if(navigateTo==null)
+            navigateTo= new NavigateTo(activity);
+        return navigateTo;
+    }
+
+    NavigateTo navigateTo;
+
+
+    public LaunchActivity getLaunchActivity() {
+        if(launchActivity==null)
+            launchActivity= new LaunchActivity(activity);
+        return launchActivity;
+    }
+
+    LaunchActivity launchActivity;
+
+
+    public MailTo getMailTo() {
+        if(mailTo==null)
+            mailTo= new MailTo(activity);
+        return mailTo;
+    }
+
+    MailTo mailTo;
+
+    public Phone getPhone() {
+        if(phone==null)
+            phone= new Phone(activity);
+        return phone;
+    }
+
+    Phone phone;
+
+
+
     public void clear()
     {
         super.clear();
@@ -71,6 +212,61 @@ public class Action extends BaseAction{
         if(openCharomeTab!=null)
             openCharomeTab.clear();
         openCharomeTab=null;
+        if(sms!=null)
+            sms.clear();
+        sms=null;
+        if(openBrowser!=null)
+            openBrowser.clear();
+        openBrowser=null;
+
+        if(openInAppBrowser!=null)
+            openInAppBrowser.clear();
+        openInAppBrowser=null;
+
+        if(toast!=null)
+            toast.clear();
+        toast=null;
+
+        if(textShare!=null)
+            textShare.clear();
+        textShare=null;
+
+        if(downloadAndOpen!=null)
+            downloadAndOpen.clear();
+        downloadAndOpen=null;
+
+
+        if(imageSet!=null)
+            imageSet.clear();
+        imageSet=null;
+
+        if(imageShare!=null)
+            imageShare.clear();
+        imageShare=null;
+
+        if(download!=null)
+            download.clear();
+        download=null;
+
+        if(copy!=null)
+            copy.clear();
+        copy=null;
+
+        if(navigateTo!=null)
+            navigateTo.clear();
+        navigateTo=null;
+
+        if(launchActivity!=null)
+            launchActivity.clear();
+        launchActivity=null;
+        if(mailTo!=null)
+            mailTo.clear();
+        mailTo=null;
+        if(phone!=null)
+            phone.clear();
+        phone=null;
+
+
     }
 
     public Action(Activity activity)
@@ -80,124 +276,164 @@ public class Action extends BaseAction{
 
     public void openChromeTab(String url)
     {
-        if(openCharomeTab==null)
-            openCharomeTab=new OpenCharomeTab(activity);
+        OpenCharomeTab openCharomeTab = getOpenCharomeTab();
         openCharomeTab.perform(url);
     }
     public void mailTo(String url) {
-        new MailTo(activity).perform(url);
+        MailTo mailTo=getMailTo();
+        mailTo.perform(url);
     }
     public void phone(String phoneNo)
     {
-        new Phone(activity).perform(phoneNo);
+        Phone phone=getPhone();
+        phone.perform(phoneNo);
     }
     public void sendSMSDirect(final String phoneNo,final String body,Boolean confirm)
     {
-        new SMS(activity).perform(phoneNo,body,confirm);
+
+        SMS sms =getSms();
+        sms.perform(phoneNo, body, confirm);
     }
     public void sendSMS(String phoneNo,String body)
     {
-        new SMS(activity).perform(phoneNo, body);
+        SMS sms =getSms();
+        sms.perform(phoneNo, body);
     }
     public void openURL(String link) {
-        new OpenBrowser(activity).perform(link);
-
+        OpenBrowser openBrowser =getOpenBrowser();
+        openBrowser.perform(link);
     }
     public void openApp(String classPath, boolean showFailMsg, String appName)
     {
-        new OpenApp(activity).perform(classPath, showFailMsg, appName);
+        OpenApp openApp = getOpenApp();
+        openApp.perform(classPath, showFailMsg, appName);
     }
-    public void openURLInAPP(String link, String title, String subTitle,Class webActivity) {
-        new OpenInAppBrowser(activity).perform(link, title, subTitle, webActivity);
+    public void openURLInAPP(String link, String title, String subTitle,Class webActivity)
+    {
+        OpenInAppBrowser openInAppBrowser=getOpenInAppBrowser();
+        openInAppBrowser.perform(link, title, subTitle, webActivity);
     }
     public void openURLInAPP(String link, String title, String subTitle) {
-        new OpenInAppBrowser(activity).perform(link, title, subTitle);
+        OpenInAppBrowser openInAppBrowser=getOpenInAppBrowser();
+        openInAppBrowser.perform(link, title, subTitle);
     }
     public void openURLInAPP(String link, String title) {
-        new OpenInAppBrowser(activity).perform(link, title);
+        OpenInAppBrowser openInAppBrowser=getOpenInAppBrowser();
+        openInAppBrowser.perform(link, title);
     }
     public void openURLInAPP(String link) {
-        new OpenInAppBrowser(activity).perform(link);
+        OpenInAppBrowser openInAppBrowser=getOpenInAppBrowser();
+        openInAppBrowser.perform(link);
     }
-
 
     public void showBusy(String msg, Integer duration) {
         hideBusy();
-        if(showBusyDialog ==null)
-            showBusyDialog =new ShowBusyDialog(activity);
+        ShowBusyDialog showBusyDialog =getShowBusyDialog();
         showBusyDialog.perform(msg, duration);
     }
     public void showBusy(String msg) {
         hideBusy();
-        if(showBusyDialog ==null)
-            showBusyDialog =new ShowBusyDialog(activity);
+        ShowBusyDialog showBusyDialog =getShowBusyDialog();
         showBusyDialog.perform(msg, -1);
     }
 
     public void showBusy(String msg,String message, Integer duration) {
         hideBusy();
-        if(showBusyDialog ==null)
-            showBusyDialog =new ShowBusyDialog(activity);
+        ShowBusyDialog showBusyDialog =getShowBusyDialog();
         showBusyDialog.perform(msg, message, duration);
     }
 
     public void hideBusy() {
+        ShowBusyDialog showBusyDialog =getShowBusyDialog();
         if(showBusyDialog !=null)
             showBusyDialog.hideBusy();
     }
-    public void showMSG(String msg) {
-        new com.kimeeo.library.actions.Toast(activity).perform(msg);
+    public void showMSG(String msg)
+    {
+        Toast toast = getToast();
+        toast.perform(msg);
     }
     public void showMSG(String msg,boolean isLong) {
-        new com.kimeeo.library.actions.Toast(activity).perform(msg, isLong);
+        Toast toast = getToast();
+        toast.perform(msg, isLong);
     }
     public void textShare(String data, String title) {
-        new TextShare(activity).perform(data, title);
+        TextShare textShare=getTextShare();
+        textShare.perform(data, title);
     }
 
 
 
 
     public void downloadFileAndOpen(String link,String location,final String shareTitle, boolean aTrue, final String success,final String fail,final Download.DownloadResult downloadResult) {
-        new DownloadAndOpen(activity).perform(link, location, shareTitle, aTrue, success, fail, downloadResult);
+        DownloadAndOpen downloadAndOpen=getDownloadAndOpen();
+        downloadAndOpen.perform(link, location, shareTitle, aTrue, success, fail, downloadResult);
     }
     public void setImage(String link,String location,String shareTitle, boolean aTrue, final String success,final String fail,final Download.DownloadResult downloadResult) {
-        new ImageSet(activity).perform(link, location, shareTitle, aTrue, success, fail, downloadResult);
+        ImageSet imageSet = getImageSet();
+        imageSet.perform(link, location, shareTitle, aTrue, success, fail, downloadResult);
     }
     public void shareImage(String link,String location,String shareTitle, boolean aTrue, final String success,final String fail,final Download.DownloadResult downloadResult) {
-        new ImageShare(activity).perform(link, location, shareTitle, aTrue, success, fail, downloadResult);
+        ImageShare imageShare=getImageShare();
+        imageShare.perform(link, location, shareTitle, aTrue, success, fail, downloadResult);
     }
-    public void downloadFile(String link,String location,final Boolean showProgress,final Download.DownloadResult downloadResult,String fileName,File targetFolder)
+
+
+    public void downloadFile(String link,String location,File targetFolder,final Boolean showProgress,final Download.DownloadResult downloadResult,String fileName)
     {
-        new Download(activity).perform(link, location, showProgress, downloadResult, fileName, targetFolder);
+        Download download=getDownload();
+        download.perform(link, location,targetFolder, showProgress, downloadResult, fileName);
     }
     public void downloadFile(String link,String location,final Boolean showProgress,final Download.DownloadResult downloadResult,String fileName)
     {
-        new Download(activity).perform(link, location, showProgress, downloadResult, fileName);
+        Download download=getDownload();
+        download.perform(link, location, showProgress, downloadResult, fileName);
     }
     public void downloadFile(String link,String location,final Boolean showProgress,final Download.DownloadResult downloadResult)
     {
-        new Download(activity).perform(link, location, showProgress, downloadResult);
+        Download download=getDownload();
+        download.perform(link, location, showProgress, downloadResult);
     }
     public void downloadFile(String link,String location, boolean aTrue,final String success,final String fail,final Download.DownloadResult downloadResult) {
-        new Download(activity).perform(link, location, aTrue, success, fail, downloadResult);
+        Download download=getDownload();
+        download.perform(link, location, aTrue, success, fail, downloadResult);
     }
+
     public void copy(String data, String sucess)
     {
-        new Copy(activity).perform(data, sucess);
+        Copy copy=getCopy();
+        copy.perform(data, sucess);
     }
     public void copy(String data)
     {
-        new Copy(activity).perform(data);
+        Copy copy=getCopy();
+        copy.perform(data);
     }
     public void navigateTo(long latitude,long longitude,String address) {
-        new NavigateTo(activity).perform(latitude, longitude, address);
+        NavigateTo navigateTo=getNavigateTo();
+        navigateTo.perform(latitude, longitude, address);
     }
     public void navigateTo(String latitude,String longitude,String address)
     {
-        new NavigateTo(activity).perform(latitude, longitude, address);
+        NavigateTo navigateTo=getNavigateTo();
+        navigateTo.perform(latitude, longitude, address);
     }
-
+    public void launchActivity(Class target,boolean killCurrunt) {
+        LaunchActivity launchActivity=getLaunchActivity();
+        launchActivity.perform(target, killCurrunt);
+    }
+    public void launchActivity(Class target) {
+        LaunchActivity launchActivity=getLaunchActivity();
+        launchActivity.perform(target);
+    }
+    public void launchActivity(Class target,Pair<View, String>[] sharedElements,Map<String,Object> data,boolean killCurrunt) {
+        LaunchActivity launchActivity=getLaunchActivity();
+        launchActivity.perform(target, sharedElements, data, killCurrunt);
+    }
+    public void launchActivity(Activity sourceActivity,Class target,Pair<View, String>[] sharedElements,Map<String,Object> data,boolean killCurrunt) {
+        LaunchActivity launchActivity=getLaunchActivity();
+        launchActivity.perform(sourceActivity, target, sharedElements, data, killCurrunt);
+    }
     public void perform(String action)
     {
         String actionType = action.substring(0, action.indexOf("?"));
@@ -414,20 +650,33 @@ public class Action extends BaseAction{
             perform(actionType,actionMap);
     }
 
-    public void perform(String actionType,Map<String,String> actionMap)
+    public void perform(String type,Map<String,String> params)
     {
 
     }
-    public void launchActivity(Class target,boolean killCurrunt) {
-        new LaunchActivity(activity).perform(target, killCurrunt);
+
+    public ActionData parseAction(String action) {
+        String actionType = action.substring(0, action.indexOf("?"));
+        actionType.toLowerCase();
+        String valuesRaw = action.substring(action.indexOf("?") + 1, action.length());
+        String[] values = action.substring(action.indexOf("?") + 1, action.length()).split("&");
+        String key;
+        String varValue;
+        Map<String, String> actionMap = new HashMap<>();
+        for (String entry : values) {
+            String[] splitVal = entry.split("=");
+            key = splitVal[0];
+            varValue = splitVal[1];
+            actionMap.put(key, varValue);
+        }
+        ActionData actionData=new ActionData();
+        actionData.params=actionMap;
+        actionData.type=actionType;
+        return actionData;
     }
-    public void launchActivity(Class target) {
-        new LaunchActivity(activity).perform(target);
-    }
-    public void launchActivity(Class target,Pair<View, String>[] sharedElements,Map<String,Object> data,boolean killCurrunt) {
-        new LaunchActivity(activity).perform(target,sharedElements,data,killCurrunt);
-    }
-    public void launchActivity(Activity sourceActivity,Class target,Pair<View, String>[] sharedElements,Map<String,Object> data,boolean killCurrunt) {
-        new LaunchActivity(activity).perform(sourceActivity,target,sharedElements,data,killCurrunt);
+    public static class ActionData
+    {
+        String type;
+        Map<String,String> params;
     }
 }

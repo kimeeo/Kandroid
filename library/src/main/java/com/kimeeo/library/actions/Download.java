@@ -35,7 +35,19 @@ public class Download extends BaseAction{
     public static int PROGRESS_BAR_TYPE_NOTIFICATION=1;
     public static int PROGRESS_BAR_TYPE_POPUP=2;
     private Map<Integer,ProgressDialog> progressDialogMap=new HashMap<>();
-    private File downloadFolder = Environment.getExternalStorageDirectory();
+
+    private File downloadFolder;
+    public File getDownloadFolder() {
+        if(downloadFolder==null)
+            downloadFolder = Environment.getExternalStorageDirectory();
+        return downloadFolder;
+    }
+
+    public void setDownloadFolder(File downloadFolder) {
+        this.downloadFolder = downloadFolder;
+    }
+
+
 
 
 
@@ -128,9 +140,9 @@ public class Download extends BaseAction{
     }
     public void perform(String link,String location,Boolean showProgress, DownloadResult downloadResult,String fileName)
     {
-        perform(link,location,showProgress, downloadResult,fileName,null);
+        perform(link,location,null,showProgress, downloadResult,fileName);
     }
-    public void perform(String link,String location,final Boolean showProgress,final DownloadResult downloadResult,String fileName,File targetFolder)
+    public void perform(String link,String location,File targetFolder,final Boolean showProgress,final DownloadResult downloadResult,String fileName)
     {
         try
         {
@@ -144,7 +156,7 @@ public class Download extends BaseAction{
                 location=location.substring(1);
 
             if(targetFolder==null)
-                targetFolder = downloadFolder;
+                targetFolder = getDownloadFolder();
 
             File file = new File(targetFolder.getPath()+"/"+location+"/"+fileName);
             File target = new File(targetFolder, location+"/"+fileName);
