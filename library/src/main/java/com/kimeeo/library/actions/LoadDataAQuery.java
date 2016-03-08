@@ -25,6 +25,17 @@ public class LoadDataAQuery extends BaseAction{
     public LoadDataAQuery(Activity activity) {
         super(activity);
     }
+
+    public LoadDataAQuery(Activity activity,AQuery androidQuery,List<Cookie> cookies) {
+        super(activity);
+        this.cookies=cookies;
+        this.androidQuery=androidQuery;
+    }
+
+    public LoadDataAQuery(Activity activity,List<Cookie> cookies) {
+        super(activity);
+        this.cookies=cookies;
+    }
     protected AQuery androidQuery;
     Gson gson = new Gson();
     //private long cachingTime=1 * 60 * 1000;
@@ -38,14 +49,25 @@ public class LoadDataAQuery extends BaseAction{
         return cachingTime;
     }
 
+    public List<Cookie> getCookies() {
+        return cookies;
+    }
+
+    public void setCookies(List<Cookie> cookies) {
+        this.cookies = cookies;
+    }
+
+    List<Cookie> cookies;
     public void clear()
     {
         androidQuery=null;
         gson=null;
+        cookies=null;
         super.clear();
     }
 
-    public void perform(String url,final Result callResult,Map<String, Object> params,List<Cookie> cookies) {
+    public void perform(String url,final Result callResult,Map<String, Object> params)
+    {
         if(androidQuery==null)
             androidQuery = new AQuery(activity);
 
@@ -60,19 +82,21 @@ public class LoadDataAQuery extends BaseAction{
                 ajaxCallback.cookie(cookie.getName(), cookie.getValue());
             }
         }
-        if(params==null) {
-            ajaxCallback.setClazz(String.class);
-            androidQuery.ajax(url, String.class, getCachingTime(), ajaxCallback);
-        }
-        else {
+
+        if(params!=null && params.entrySet().size()!=0)
+        {
             ajaxCallback.setParams(params);
             ajaxCallback.setClazz(String.class);
             ajaxCallback.expire(getCachingTime());
             androidQuery.ajax(url, params, String.class, ajaxCallback);
         }
+        else {
+            ajaxCallback.setClazz(String.class);
+            androidQuery.ajax(url, String.class, getCachingTime(), ajaxCallback);
+        }
     }
 
-    public void perform(String url,final Result callResult,final Class typeCast,Map<String, Object> params,List<Cookie> cookies) {
+    public void perform(String url,final Result callResult,final Class typeCast,Map<String, Object> params) {
 
         Result resultLocal =new Result()
         {
@@ -92,13 +116,11 @@ public class LoadDataAQuery extends BaseAction{
                     callResult.done(url, null, status);
             }
         };
-        perform(url,resultLocal,params,cookies);
+        perform(url,resultLocal,params);
     }
-    public void perform(String url, Result callResult, Class typeCast,Map<String, Object> params) {
-        perform(url,callResult,typeCast,params,null);
-    }
+
     public void perform(String url, Result callResult, Class typeCast) {
-        perform(url,callResult,typeCast,null,null);
+        perform(url,callResult,typeCast,null);
     }
     public static interface Result
     {

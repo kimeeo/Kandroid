@@ -12,6 +12,7 @@ import com.androidquery.callback.AjaxStatus;
 import com.google.gson.Gson;
 import com.kimeeo.library.ajax.ExtendedAjaxCallback;
 import com.kimeeo.library.listDataView.dataManagers.volley.IVolleyRequestProvider;
+import com.kimeeo.library.listDataView.dataManagers.volley.SampleVolleyRequestController;
 
 import org.apache.http.cookie.Cookie;
 
@@ -26,22 +27,41 @@ public class LoadDataVolley extends BaseAction{
 
     private IVolleyRequestProvider volleyRequestController;
     Gson gson = new Gson();
+    List<Cookie> cookies;
     public LoadDataVolley(Activity activity) {
         super(activity);
+        volleyRequestController = SampleVolleyRequestController.getInstance(activity);
+    }
+    public LoadDataVolley(Activity activity,IVolleyRequestProvider volleyRequestController,List<Cookie> cookies) {
+        super(activity);
+        this.volleyRequestController =volleyRequestController;
+        this.cookies=cookies;
     }
     public LoadDataVolley(Activity activity,IVolleyRequestProvider volleyRequestController) {
         super(activity);
         this.volleyRequestController =volleyRequestController;
     }
 
+
     public void clear()
     {
         super.clear();
         gson=null;
         volleyRequestController=null;
+        cookies=null;
     }
 
-    public void perform(final String url,final Result callResult,Map<String, String> params,List<Cookie> cookies) {
+    public List<Cookie> getCookies() {
+        return cookies;
+    }
+
+    public void setCookies(List<Cookie> cookies) {
+        this.cookies = cookies;
+    }
+
+
+
+    public void perform(final String url,final Result callResult,Map<String, String> params) {
         String tag=url;
         Response.ErrorListener error=new Response.ErrorListener() {
             @Override
@@ -57,15 +77,15 @@ public class LoadDataVolley extends BaseAction{
             }
         };
 
-        Request request;
-        if(params!=null)
-            request = getRequest(url, params, Request.Method.POST,done,error,cookies);
-        else
-            request = getRequest(url, params, Request.Method.GET,done,error,cookies);
-        volleyRequestController.addToRequestQueue(request,tag);
+        int method=Request.Method.GET;
+        if(params!=null && params.entrySet().size()!=0)
+            method=Request.Method.POST;
+
+        Request request = getRequest(url, params,method,done,error);
+        volleyRequestController.addToRequestQueue(request, tag);
     }
    
-    public void perform(String url,final Result callResult,final Class typeCast,Map<String, String> params,List<Cookie> cookies) {
+    public void perform(String url,final Result callResult,final Class typeCast,Map<String, String> params) {
         Result callResultLocal=new Result()
         {
             public void done(String url, Object data)
@@ -76,7 +96,8 @@ public class LoadDataVolley extends BaseAction{
                         try {
                             Object result =gson.fromJson(data.toString(), typeCast);
                             callResult.done(url, result);
-                        }catch (Exception e)
+                        }
+                        catch (Exception e)
                         {
                             callResult.done(url,e);
                         }
@@ -86,13 +107,10 @@ public class LoadDataVolley extends BaseAction{
                 }
             }
         };
-        perform(url,callResultLocal,params,cookies);
-    }
-    public void perform(String url, Result callResult, Class typeCast,Map<String, String> params) {
-        perform(url,callResult,typeCast,params,null);
+        perform(url,callResultLocal,params);
     }
     public void perform(String url, Result callResult, Class typeCast) {
-        perform(url,callResult,typeCast,null,null);
+        perform(url,callResult,typeCast,null);
     }
 
     public static interface Result
@@ -100,7 +118,7 @@ public class LoadDataVolley extends BaseAction{
         void done(String url, Object data);
     }
 
-    protected Request getRequest(final String url,final Map<String, String> params,int method,Response.Listener done,Response.ErrorListener error,final List<Cookie> cookies)
+    protected Request getRequest(final String url,final Map<String, String> params,int method,Response.Listener done,Response.ErrorListener error)
     {
         StringRequest request = new StringRequest(method,url,done ,error){
             @Override
@@ -111,14 +129,13 @@ public class LoadDataVolley extends BaseAction{
             public Map<String, String> getHeaders() throws AuthFailureError
             {
                 Map<String, String> headers = super.getHeaders();
-                if(cookies!=null && cookies.size()!=0) {
-                    for (Cookie cookie : cookies) {
-                        headers.put(cookie.getName(), cookie.getValue());
-                    }
-                }
-                else if(volleyRequestController.getCookies()!=null && volleyRequestController.getCookies().size()!=0)
-                {
-                    for (Cookie cookie : volleyRequestController.getCookies()) {
+
+                List<Cookie> cookiesLocal =cookies;
+                if(cookiesLocal==null || cookiesLocal.size()==0)
+                    cookiesLocal=volleyRequestController.getCookies();
+
+                if(cookiesLocal!=null && cookiesLocal.size()!=0) {
+                    for (Cookie cookie : cookiesLocal) {
                         headers.put(cookie.getName(), cookie.getValue());
                     }
                 }
