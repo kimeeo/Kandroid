@@ -26,7 +26,7 @@ public class LoadDataAQuery extends BaseAction{
         super(activity);
     }
     protected AQuery androidQuery;
-
+    Gson gson = new Gson();
     //private long cachingTime=1 * 60 * 1000;
     private long cachingTime=-1;
     protected void setCachingTime(long value)
@@ -41,6 +41,7 @@ public class LoadDataAQuery extends BaseAction{
     public void clear()
     {
         androidQuery=null;
+        gson=null;
         super.clear();
     }
 
@@ -79,7 +80,7 @@ public class LoadDataAQuery extends BaseAction{
             {
                 if(json!=null && json instanceof String)  {
                     try {
-                        Gson gson = new Gson();
+
                         Object data =gson.fromJson(json.toString(), typeCast);
                         callResult.done(url, data, status);
                     }catch (Exception e)

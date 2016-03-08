@@ -25,7 +25,7 @@ import java.util.Map;
 public class LoadDataVolley extends BaseAction{
 
     private IVolleyRequestProvider volleyRequestController;
-
+    Gson gson = new Gson();
     public LoadDataVolley(Activity activity) {
         super(activity);
     }
@@ -37,6 +37,8 @@ public class LoadDataVolley extends BaseAction{
     public void clear()
     {
         super.clear();
+        gson=null;
+        volleyRequestController=null;
     }
 
     public void perform(final String url,final Result callResult,Map<String, String> params,List<Cookie> cookies) {
@@ -72,7 +74,6 @@ public class LoadDataVolley extends BaseAction{
                 {
                     if(data!=null && data instanceof String)  {
                         try {
-                            Gson gson = new Gson();
                             Object result =gson.fromJson(data.toString(), typeCast);
                             callResult.done(url, result);
                         }catch (Exception e)
