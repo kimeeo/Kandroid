@@ -2,6 +2,7 @@ package com.kimeeo.kandroid.sample.activities;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
 import android.widget.ImageView;
 
@@ -19,6 +20,7 @@ public class BaseActivity extends ActionBarActivity {
     public void onStart() {
         super.onStart();
         //EventBus.getDefault().register(this);
+
     }
 
     @Override
