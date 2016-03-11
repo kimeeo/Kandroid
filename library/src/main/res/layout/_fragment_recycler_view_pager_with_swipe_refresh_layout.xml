@@ -21,7 +21,7 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <include layout="@layout/_fragment_recycler_empty_view"/>
-    <android.support.design.widget.TabLayout
+    <com.kimeeo.library.listDataView.recyclerView.viewPager.TabLayout
         android:id="@+id/indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

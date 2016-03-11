@@ -23,7 +23,8 @@ android {
 }
 
 dependencies {
-    final SUPPORT_LIBRARY_VERSION = '23.1.1'
+    final SUPPORT_LIBRARY_VERSION = '23.2.1'
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     //compile "com.android.support:support-v4:$SUPPORT_LIBRARY_VERSION"
@@ -61,7 +62,7 @@ dependencies {
     compile 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'
     compile 'com.flyco.roundview:FlycoRoundView_Lib:1.1.2@aar'
     compile 'com.flyco.tablayout:FlycoTabLayout_Lib:1.5.0@aar'
-    compile 'com.nshmura:recyclertablayout:0.1.3'
+    compile 'com.nshmura:recyclertablayout:0.1.7'
 
     compile 'com.github.ahorn:android-rss:v1.0-rc1'
     compile 'com.simplecityapps:recyclerview-fastscroll:1.0.5'

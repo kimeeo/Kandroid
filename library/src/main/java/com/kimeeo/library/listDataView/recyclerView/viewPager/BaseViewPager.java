@@ -29,8 +29,12 @@ abstract public class BaseViewPager extends DefaultRecyclerView {
         if(mList instanceof RecyclerViewPager)
         {
             TabLayout tabLayout = createTabLayout(getRootView());
-            if(tabLayout!=null)
+            if(tabLayout!=null) {
                 TabLayoutSupport.setupWithViewPager(tabLayout, (RecyclerViewPager) mList, mAdapter);
+                int selected=tabLayout.getSelectedTabPosition();
+                tabLayout.setScrollPosition(selected, Float.parseFloat("0.1"), true);
+            }
+
         }
     }
 

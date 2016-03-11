@@ -27,7 +27,7 @@ import butterknife.Bind;
  */
 public class HorizontalPageViewWithDefaltAdaptorView extends HorizontalViewPager implements DefaultProjectDataManager.IDataManagerDelegate {
     @Override
-    public String getPageTitle(int position, Object o) {
+    public String getItemTitle(int position, Object o) {
         return position+"";
     }
     /*
