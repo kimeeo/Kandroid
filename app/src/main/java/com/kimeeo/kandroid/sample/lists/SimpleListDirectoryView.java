@@ -18,6 +18,7 @@ import com.kimeeo.library.listDataView.recyclerView.verticalViews.ListView;
 import java.io.File;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by bhavinpadhiyar on 1/27/16.
@@ -83,30 +84,15 @@ public class SimpleListDirectoryView extends ListView
 
         @Bind(R.id.label)TextView label;
         @Bind(R.id.backgroud)ImageView image;
-        //private ViewDataBinding binding;
-
         public VlistItemHolder1(View itemView)
         {
             super(itemView);
-            //binding= DataBindingUtil.bind(itemView);
-
+            ButterKnife.bind(this, itemView);
         }
-        /*
-        public ViewDataBinding getBinding()
-        {
-            return binding;
-        }
-*/
         public void updateItemView(Object item,View view,int position)
         {
             File listObject = (File)item;
             label.setText(position + " -> " + listObject.getAbsolutePath());
-            //AQuery aq = new AQuery(view);
-            //aq.id(R.id.backgroud).image(listObject.image, true, true, 100, 0);
-
-
-            //getBinding().setVariable(BR.myBook, listObject);
-            // getBinding().executePendingBindings();
 
         }
     }
@@ -118,34 +104,15 @@ public class SimpleListDirectoryView extends ListView
 
         @Bind(R.id.label)TextView label;
         @Bind(R.id.backgroud)ImageView image;
-
-
-        //private ViewDataBinding binding;
-
         public VlistItemHolder2(View itemView)
         {
             super(itemView);
-
-            //binding= DataBindingUtil.bind(itemView);
+            ButterKnife.bind(this, itemView);
         }
-        /*
-        public ViewDataBinding getBinding()
-        {
-            return binding;
-        }*/
-
         public void updateItemView(Object item,View view,int position)
         {
             File listObject = (File)item;
             label.setText(position + " -> " + listObject.getAbsolutePath());
-            //AQuery aq = new AQuery(view);
-            //aq.id(R.id.backgroud).image(listObject.image, true, true, 100, 0);
-
-            //getBinding().setVariable(BR.myBook, listObject);
-            //getBinding().executePendingBindings();
         }
     }
-
-
-
 }

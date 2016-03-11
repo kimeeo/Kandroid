@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import com.kimeeo.kandroid.R;
 import com.kimeeo.kandroid.sample.activities.CoordinatorLayoutExample;
+import com.kimeeo.kandroid.sample.lists.holder.RecyncleItemHolder1;
+import com.kimeeo.kandroid.sample.lists.holder.RecyncleItemHolder2;
 import com.kimeeo.kandroid.sample.model.SampleModel;
 import com.kimeeo.kandroid.sample.projectCore.DefaultProjectDataManager;
 import com.kimeeo.kandroid.sample.projectCore.DefaultVerticalListView;
@@ -29,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by bhavinpadhiyar on 12/26/15.
@@ -140,81 +143,8 @@ public class AdaptorLayoutView extends LinearLayoutAdapterLayoutView implements 
     public BaseItemHolder getItemHolder(int viewType,View view)
     {
         if(viewType== ViewTypes.VIEW_ITEM1)
-            return new VlistItemHolder1(view);
+            return new RecyncleItemHolder1(view);
         else
-            return new VlistItemHolder2(view);
+            return new RecyncleItemHolder2(view);
     }
-    // Update View Here
-    public class VlistItemHolder1 extends BaseItemHolder {
-
-        @Bind(R.id.label)TextView label;
-        @Bind(R.id.backgroud)ImageView image;
-        //private ViewDataBinding binding;
-
-        public VlistItemHolder1(View itemView)
-        {
-            super(itemView);
-            //binding= DataBindingUtil.bind(itemView);
-
-        }
-        /*
-        public ViewDataBinding getBinding()
-        {
-            return binding;
-        }
-*/
-        public void updateItemView(Object item,View view,int position)
-        {
-            SampleModel listObject = (SampleModel)item;
-            label.setText(position + " -> " + listObject.name);
-            //AQuery aq = new AQuery(view);
-            //aq.id(R.id.backgroud).image(listObject.image, true, true, 100, 0);
-
-
-            //getBinding().setVariable(BR.myBook, listObject);
-           // getBinding().executePendingBindings();
-
-        }
-    }
-
-
-
-    // Update View Here
-    public class VlistItemHolder2 extends BaseItemHolder {
-
-        @Bind(R.id.label)TextView label;
-        @Bind(R.id.backgroud)ImageView image;
-
-
-        //private ViewDataBinding binding;
-
-        public VlistItemHolder2(View itemView)
-        {
-            super(itemView);
-
-            //binding= DataBindingUtil.bind(itemView);
-        }
-        /*
-        public ViewDataBinding getBinding()
-        {
-            return binding;
-        }*/
-
-        public void updateItemView(Object item,View view,int position)
-        {
-            SampleModel listObject = (SampleModel)item;
-
-            label.setText(position + " -> " + listObject.name);
-            //AQuery aq = new AQuery(view);
-            //aq.id(R.id.backgroud).image(listObject.image, true, true, 100, 0);
-
-            //getBinding().setVariable(BR.myBook, listObject);
-            //getBinding().executePendingBindings();
-        }
-    }
-
-
-
-
-
 }

@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.androidquery.AQuery;
 import com.kimeeo.kandroid.R;
+import com.kimeeo.kandroid.sample.lists.holder.RecyncleItemHolder1;
+import com.kimeeo.kandroid.sample.lists.holder.RecyncleItemHolder2;
 import com.kimeeo.kandroid.sample.model.SampleModel;
 import com.kimeeo.kandroid.sample.projectCore.DefaultVerticalGridView;
 import com.kimeeo.library.listDataView.dataManagers.DataManager;
@@ -76,9 +78,9 @@ public class EasyVerticalGridView extends DefaultVerticalGridView
         if(viewType== BaseRecyclerViewAdapter.ViewTypes.VIEW_HEADER)
             return new HeaderItem(view);
         else if(viewType== ViewTypes.VIEW_ITEM1)
-            return new VlistItemHolder1(view);
+            return new RecyncleItemHolder1(view);
         else
-            return new VlistItemHolder2(view);
+            return new RecyncleItemHolder2(view);
     }
 
     // Update View Here
@@ -95,53 +97,5 @@ public class EasyVerticalGridView extends DefaultVerticalGridView
         }
     }
 
-
-
-
-
-
-    // Update View Here
-    public class VlistItemHolder1 extends BaseItemHolder {
-
-        @Bind(R.id.label)TextView label;
-        @Bind(R.id.backgroud)ImageView image;
-
-        public VlistItemHolder1(View itemView)
-        {
-            super(itemView);
-        }
-
-        public void updateItemView(Object item,View view,int position)
-        {
-            SampleModel listObject = (SampleModel)item;
-            label.setText(position + " -> " + listObject.name);
-            AQuery aq = new AQuery(view);
-            aq.id(R.id.backgroud).image(listObject.image, true, true, 100, 0);
-
-        }
-    }
-
-
-
-    // Update View Here
-    public class VlistItemHolder2 extends BaseItemHolder{
-
-        @Bind(R.id.label)TextView label;
-        @Bind(R.id.backgroud)ImageView image;
-
-        public VlistItemHolder2(View itemView)
-        {
-            super(itemView);
-        }
-
-        public void updateItemView(Object item,View view,int position)
-        {
-            SampleModel listObject = (SampleModel)item;
-            label.setText(position + " -> " + listObject.name);
-            AQuery aq = new AQuery(view);
-            aq.id(R.id.backgroud).image(listObject.image, true, true,100,0);
-
-        }
-    }
 
 }

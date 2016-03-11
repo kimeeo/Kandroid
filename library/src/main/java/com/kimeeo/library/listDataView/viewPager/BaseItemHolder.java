@@ -2,8 +2,6 @@ package com.kimeeo.library.listDataView.viewPager;
 
 import android.view.View;
 
-import butterknife.ButterKnife;
-
 /**
  * Created by bhavinpadhiyar on 1/30/16.
  */
@@ -27,6 +25,5 @@ abstract public class BaseItemHolder {
     public BaseItemHolder(View itemView)
     {
         this.itemView = itemView;
-        ButterKnife.bind(this, itemView);
     }
 }

@@ -3,7 +3,7 @@ package com.kimeeo.library.listDataView.recyclerView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import butterknife.ButterKnife;
+
 
 /**
  * Created by bhavinpadhiyar on 1/30/16.
@@ -37,7 +37,6 @@ abstract public class BaseItemHolder extends RecyclerView.ViewHolder implements 
     public BaseItemHolder(View itemView) {
 
         super(itemView);
-        ButterKnife.bind(this, itemView);
         itemView.setOnClickListener(this);
     }
 

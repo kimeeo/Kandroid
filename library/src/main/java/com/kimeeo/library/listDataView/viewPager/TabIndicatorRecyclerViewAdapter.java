@@ -9,8 +9,6 @@ import com.kimeeo.library.listDataView.dataManagers.DataManager;
 import com.kimeeo.library.listDataView.viewPager.viewPager.BaseViewPagerAdapter;
 import com.nshmura.recyclertablayout.RecyclerTabLayout;
 
-import butterknife.ButterKnife;
-
 /**
  * Created by bhavinpadhiyar on 1/21/16.
  */
@@ -84,7 +82,6 @@ abstract public class TabIndicatorRecyclerViewAdapter extends RecyclerTabLayout.
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
         }
         public void updatedItem(Object o) {
 

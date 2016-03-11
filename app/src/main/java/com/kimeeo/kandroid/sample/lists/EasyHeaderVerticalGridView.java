@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kimeeo.kandroid.R;
+import com.kimeeo.kandroid.sample.lists.holder.RecyncleItemHolder1;
+import com.kimeeo.kandroid.sample.lists.holder.RecyncleItemHolder2;
 import com.kimeeo.kandroid.sample.model.SampleModel;
 import com.kimeeo.kandroid.sample.projectCore.DefaultProjectDataManager;
 import com.kimeeo.library.listDataView.dataManagers.DataManager;
@@ -46,9 +48,9 @@ public class EasyHeaderVerticalGridView extends GridView implements DefaultProje
     public BaseItemHolder getNormalItemHolder(int viewType,View view)
     {
         if(viewType== ViewTypes.VIEW_ITEM1)
-            return new VlistItemHolder1(view);
+            return new RecyncleItemHolder1(view);
         else
-            return new VlistItemHolder2(view);
+            return new RecyncleItemHolder2(view);
     }
     public int getNormalItemViewType(int position,Object item)
     {
@@ -82,55 +84,6 @@ public class EasyHeaderVerticalGridView extends GridView implements DefaultProje
     public Class getLoadedDataParsingAwareClass()
     {
         return SampleDataParser.class;
-    }
-
-
-
-
-
-
-
-
-    // Update View Here
-    public class VlistItemHolder1 extends BaseItemHolder {
-
-        @Bind(R.id.label)TextView label;
-        @Bind(R.id.backgroud)ImageView image;
-
-        public VlistItemHolder1(View itemView)
-        {
-            super(itemView);
-        }
-
-        public void updateItemView(Object item,View view,int position)
-        {
-            SampleModel listObject = (SampleModel)item;
-            label.setText(position + " -> " + listObject.name);
-            label.setTextColor(Color.parseColor("#ff0000"));
-
-        }
-    }
-
-
-
-    // Update View Here
-    public class VlistItemHolder2 extends BaseItemHolder{
-
-        @Bind(R.id.label)TextView label;
-        @Bind(R.id.backgroud)ImageView image;
-
-        public VlistItemHolder2(View itemView)
-        {
-            super(itemView);
-        }
-
-        public void updateItemView(Object item,View view,int position)
-        {
-            SampleModel listObject = (SampleModel)item;
-            label.setText(position + " -> " + listObject.name);
-            label.setTextColor(Color.parseColor("#000000"));
-
-        }
     }
 
 }

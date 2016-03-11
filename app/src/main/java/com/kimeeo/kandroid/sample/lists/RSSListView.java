@@ -18,6 +18,7 @@ import com.kimeeo.library.listDataView.recyclerView.verticalViews.ListView;
 import org.mcsoxford.rss.RSSItem;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by bhavinpadhiyar on 1/27/16.
@@ -97,6 +98,7 @@ public class RSSListView extends ListView
         public VlistItemHolder1(View itemView)
         {
             super(itemView);
+            ButterKnife.bind(this,itemView);
             //binding= DataBindingUtil.bind(itemView);
 
         }
@@ -134,7 +136,7 @@ public class RSSListView extends ListView
         public VlistItemHolder2(View itemView)
         {
             super(itemView);
-
+            ButterKnife.bind(this, itemView);
             //binding= DataBindingUtil.bind(itemView);
         }
         /*
