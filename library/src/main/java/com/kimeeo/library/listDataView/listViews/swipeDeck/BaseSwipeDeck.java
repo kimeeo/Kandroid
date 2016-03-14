@@ -9,7 +9,6 @@ import com.daprlabs.cardstack.SwipeDeck;
 import com.kimeeo.library.R;
 import com.kimeeo.library.listDataView.listViews.BaseListView;
 import com.kimeeo.library.listDataView.listViews.BaseListViewAdapter;
-import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import com.rey.material.widget.ProgressView;
 
 import java.util.ArrayList;
@@ -51,7 +50,7 @@ abstract public class BaseSwipeDeck extends BaseListView {
             configSwipeRefreshLayout(createSwipeRefreshLayout(mRootView));
 
         swipeDeck = createSwipeDeckView(mRootView);
-        mEmptyView= createEmptyView(mRootView);
+        mEmptyViewHelper = createEmptyViewHelper();
         mAdapter = createListViewAdapter();
         mAdapter.supportLoader=false;
 

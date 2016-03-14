@@ -5,60 +5,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kimeeo.kandroid.R;
-import com.kimeeo.kandroid.sample.activities.CoordinatorLayoutExample;
 import com.kimeeo.kandroid.sample.lists.holder.RecyncleItemHolder1;
 import com.kimeeo.kandroid.sample.lists.holder.RecyncleItemHolder2;
 import com.kimeeo.kandroid.sample.model.SampleModel;
 import com.kimeeo.kandroid.sample.projectCore.DefaultProjectDataManager;
-import com.kimeeo.kandroid.sample.projectCore.DefaultVerticalListView;
 import com.kimeeo.library.actions.Action;
-import com.kimeeo.library.listDataView.dataManagers.BaseDataParser;
 import com.kimeeo.library.listDataView.dataManagers.DataManager;
 import com.kimeeo.library.listDataView.dataManagers.IListProvider;
 import com.kimeeo.library.listDataView.dataManagers.PageData;
 import com.kimeeo.library.listDataView.dataManagers.simpleList.ListDataManager;
 import com.kimeeo.library.listDataView.recyclerView.BaseItemHolder;
-import com.kimeeo.library.listDataView.recyclerView.BaseRecyclerViewAdapter;
-import com.kimeeo.library.listDataView.recyclerView.adapterLayout.LinearLayoutAdapterLayoutView;
+import com.kimeeo.library.listDataView.recyclerView.adapterLayout.BaseLinearLayoutAdapterLayoutView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 /**
  * Created by bhavinpadhiyar on 12/26/15.
  */
-public class AdaptorLayoutView extends LinearLayoutAdapterLayoutView implements DefaultProjectDataManager.IDataManagerDelegate
+public class AdaptorLayoutView extends BaseLinearLayoutAdapterLayoutView implements DefaultProjectDataManager.IDataManagerDelegate
 {
-    protected DataManager createDataManager()
-    {
-        final ListDataManager listData1= new ListDataManager(getActivity(),listData);
-        listData1.setRefreshEnabled(false);
-
-        final DefaultProjectDataManager data=new DefaultProjectDataManager(getActivity(),this);
-
-        final Handler handler = new Handler();
-        final Runnable runnablelocal = new Runnable() {
-            @Override
-            public void run() {
-                getDataManager().add(0,getSample("ABC","1"));
-            }
-        };
-        handler.postDelayed(runnablelocal, 5000);
-
-        return data;
-
-       // return listData1;
-    }
-
     IListProvider listData=new IListProvider()
     {
         public List<?> getList(PageData data,Map<String, Object> param)
@@ -80,6 +50,28 @@ public class AdaptorLayoutView extends LinearLayoutAdapterLayoutView implements 
             return null;
         }
     };
+    Action action;
+
+    protected DataManager createDataManager() {
+        final ListDataManager listData1 = new ListDataManager(getActivity(), listData);
+        listData1.setRefreshEnabled(false);
+
+        final DefaultProjectDataManager data = new DefaultProjectDataManager(getActivity(), this);
+
+        final Handler handler = new Handler();
+        final Runnable runnablelocal = new Runnable() {
+            @Override
+            public void run() {
+                getDataManager().add(0, getSample("ABC", "1"));
+            }
+        };
+        handler.postDelayed(runnablelocal, 5000);
+
+        return data;
+
+        // return listData1;
+    }
+
     private SampleModel getSample(String name, String phone) {
         SampleModel o = new SampleModel();
         o.name =name;
@@ -87,21 +79,18 @@ public class AdaptorLayoutView extends LinearLayoutAdapterLayoutView implements 
         return o;
     }
 
-    public static class ViewTypes {
-        public static final int VIEW_ITEM1 = 5;
-        public static final int VIEW_ITEM2 = 10;
-    }
-    Action action;
     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
     {
         super.onItemClick(parent,view,position,id);
 
     }
+
     public void onItemClick(Object baseObject)
     {
         super.onItemClick(baseObject);
         Toast.makeText(getActivity(), baseObject.toString(), Toast.LENGTH_SHORT).show();
     }
+
     //Return View Type here
     @Override
     public int getListItemViewType(int position,Object item)
@@ -111,12 +100,14 @@ public class AdaptorLayoutView extends LinearLayoutAdapterLayoutView implements 
         else
             return ViewTypes.VIEW_ITEM2;
     }
+
     // get View
     @Override
     public View getItemView(int viewType,LayoutInflater inflater,ViewGroup container)
     {
         return inflater.inflate(R.layout._sample_column_cell_fix_width,null);
     }
+
     //END URL
     public String getNextDataURL(PageData pageData)
     {
@@ -134,10 +125,6 @@ public class AdaptorLayoutView extends LinearLayoutAdapterLayoutView implements 
         return SampleDataParser.class;
     }
 
-
-
-
-
     // get New BaseItemHolder
     @Override
     public BaseItemHolder getItemHolder(int viewType,View view)
@@ -146,5 +133,10 @@ public class AdaptorLayoutView extends LinearLayoutAdapterLayoutView implements 
             return new RecyncleItemHolder1(view);
         else
             return new RecyncleItemHolder2(view);
+    }
+
+    public static class ViewTypes {
+        public static final int VIEW_ITEM1 = 5;
+        public static final int VIEW_ITEM2 = 10;
     }
 }

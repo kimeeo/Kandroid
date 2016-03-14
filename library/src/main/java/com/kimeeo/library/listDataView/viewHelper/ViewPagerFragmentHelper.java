@@ -19,6 +19,19 @@ import java.util.List;
 public class ViewPagerFragmentHelper extends ViewPagerHelper {
 
     protected BaseFragmentViewPagerAdapter mFragmentAdapter;
+    protected SegmentTabLayout segmentTabLayout;
+    OnTabSelectListener onTabSelectListener = new OnTabSelectListener() {
+        public void onTabSelect(int position) {
+            gotoItem(position, true);
+            setCurrentItem(position);
+        }
+
+        public void onTabReselect(int position) {
+            gotoItem(position, true);
+            setCurrentItem(position);
+        }
+    };
+
     public ViewPagerFragmentHelper fragmentAdapter(BaseFragmentViewPagerAdapter mFragmentAdapter) {
         this.mFragmentAdapter=mFragmentAdapter;
         this.mFragmentAdapter.setOnCallService(this);
@@ -54,7 +67,7 @@ public class ViewPagerFragmentHelper extends ViewPagerHelper {
     protected void configViewPager(ViewPager mList, BaseFragmentViewPagerAdapter mAdapter, View indicator,DataManager dataManager) {
 
     }
-    protected SegmentTabLayout segmentTabLayout;
+
     protected void setUpIndicator(View indicator, ViewPager viewPager) {
         if (indicator != null && indicator instanceof SegmentTabLayout) {
             segmentTabLayout= (SegmentTabLayout) indicator;
@@ -65,6 +78,7 @@ public class ViewPagerFragmentHelper extends ViewPagerHelper {
         else
             super.setUpIndicator(indicator,viewPager);
     }
+
     protected void setCurrentItem(int value) {
         super.setCurrentItem(value);
         if(segmentTabLayout!=null)
@@ -85,6 +99,7 @@ public class ViewPagerFragmentHelper extends ViewPagerHelper {
             return list;
         }
     }
+
     public void onCallEnd(List<?> dataList, final boolean isRefreshData) {
 
         if(dataList!=null && dataList.size()!=0 && mViewPager!=null)
@@ -110,28 +125,8 @@ public class ViewPagerFragmentHelper extends ViewPagerHelper {
         }
 
 
-
-        if (mEmptyView != null) {
-            if (dataManager.size() == 0)
-                mEmptyView.setVisibility(View.VISIBLE);
-            else
-                mEmptyView.setVisibility(View.GONE);
-        }
-
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.updateView(dataManager);
         updateSwipeRefreshLayout(isRefreshData);
     }
-
-
-    OnTabSelectListener onTabSelectListener = new OnTabSelectListener(){
-        public void onTabSelect(int position)
-        {
-            gotoItem(position,true);
-            setCurrentItem(position);
-        }
-        public void onTabReselect(int position)
-        {
-            gotoItem(position,true);
-            setCurrentItem(position);
-        }
-    };
 }

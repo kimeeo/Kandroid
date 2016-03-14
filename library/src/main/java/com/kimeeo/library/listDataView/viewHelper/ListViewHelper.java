@@ -1,16 +1,14 @@
 package com.kimeeo.library.listDataView.viewHelper;
 
-import android.graphics.drawable.Drawable;
+import android.content.res.Resources;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.kimeeo.library.R;
+import com.kimeeo.library.listDataView.EmptyViewHelper;
 import com.kimeeo.library.listDataView.dataManagers.DataManager;
 import com.kimeeo.library.listDataView.dataManagers.OnCallService;
 import com.kimeeo.library.listDataView.listViews.BaseListViewAdapter;
@@ -21,102 +19,71 @@ import java.util.List;
 /**
  * Created by bhavinpadhiyar on 1/30/16.
  */
-public class ListViewHelper implements AdapterView.OnItemClickListener,OnCallService
+public class ListViewHelper extends BaseHelper implements AdapterView.OnItemClickListener, OnCallService
 {
+    protected EmptyViewHelper mEmptyViewHelper;
+    protected ListView mList;
+    protected BaseListViewAdapter mAdapter;
+    private DataManager dataManager;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private OnItemClick onItemClick;
 
     public ListViewHelper()
     {
 
     }
 
-    protected ListView mList;
+    public Resources getResources()
+    {
+        return mList.getResources();
+    }
+
+    public void retry()
+    {
+        loadNext();
+    }
+
+    public ListViewHelper emptyView(View view)
+    {
+        mEmptyViewHelper = new EmptyViewHelper(view.getContext(), view, this, true, true);
+        return this;
+    }
+
+    public ListViewHelper emptyView(EmptyViewHelper emptyViewHelper)
+    {
+        mEmptyViewHelper = emptyViewHelper;
+        return this;
+    }
+
     public ListViewHelper with(ListView list)
     {
-        this.mList =list;
+        this.mList = list;
         return this;
     }
 
-
-    private DataManager dataManager;
     public ListViewHelper dataManager(DataManager dataManager)
     {
-        this.dataManager =dataManager;
+        this.dataManager = dataManager;
         return this;
     }
 
-    public ListViewHelper loadNext(){
+    public ListViewHelper loadNext() {
         dataManager.loadNext();
         return this;
     }
+
     public ListViewHelper loadRefreshData()
     {
         dataManager.loadRefreshData();
         return this;
     }
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+
     public ListViewHelper swipeRefreshLayout(SwipeRefreshLayout view)
     {
-        mSwipeRefreshLayout =view;
+        mSwipeRefreshLayout = view;
         return this;
     }
 
-
-    protected View mEmptyView;
-    public ListViewHelper emptyView(View view)
-    {
-        mEmptyView=view;
-        if(mEmptyView!=null)
-            mEmptyView.setVisibility(View.GONE);
-
-        return this;
-    }
-
-
-
-
-
-    protected ImageView mEmptyViewImage;
-
-    public ListViewHelper emptyImageView(ImageView view)
-    {
-        mEmptyViewImage=view;
-
-        if(mEmptyViewImage!=null && emptyViewDrawable!=null)
-            mEmptyViewImage.setImageDrawable(emptyViewDrawable);
-
-
-        return this;
-    }
-
-    protected TextView mEmptyViewMessage;
-    public ListViewHelper emptyMessageView(TextView view)
-    {
-        mEmptyViewMessage=view;
-        if(mEmptyViewMessage!=null && emptyViewMessage!=null)
-            mEmptyViewMessage.setText(emptyViewMessage);
-        return this;
-    }
-    Drawable emptyViewDrawable;
-    protected ListViewHelper emptyViewDrawable(Drawable drawable)
-    {
-        emptyViewDrawable=drawable;
-        if(mEmptyViewImage!=null && emptyViewDrawable!=null)
-            mEmptyViewImage.setImageDrawable(emptyViewDrawable);
-        return this;
-    }
-    String emptyViewMessage;
-    protected ListViewHelper emptyViewMessage(String emptyViewMessage)
-    {
-        this.emptyViewMessage = emptyViewMessage;
-        if(mEmptyViewMessage!=null && emptyViewMessage!=null)
-            mEmptyViewMessage.setText(emptyViewMessage);
-        return this;
-    }
-
-
-
-
-    protected BaseListViewAdapter mAdapter;
     public ListViewHelper adapter(BaseListViewAdapter adapter)
     {
         this.mAdapter = adapter;
@@ -125,9 +92,6 @@ public class ListViewHelper implements AdapterView.OnItemClickListener,OnCallSer
         return this;
     }
 
-
-
-    private OnItemClick onItemClick;
     public ListViewHelper setOnItemClick(OnItemClick item) {
         onItemClick=item;
         return this;
@@ -147,11 +111,9 @@ public class ListViewHelper implements AdapterView.OnItemClickListener,OnCallSer
 
         mAdapter =null;
         mList = null;
-        mEmptyView =null;
-        if(mEmptyViewImage!=null)
-            mEmptyViewImage.setImageBitmap(null);
-        mEmptyViewImage=null;
-        mEmptyViewMessage=null;
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.clean();
+        mEmptyViewHelper = null;
         mSwipeRefreshLayout=null;
     }
 
@@ -240,13 +202,8 @@ public class ListViewHelper implements AdapterView.OnItemClickListener,OnCallSer
     }
     public void onDataLoadError(String url, Object status)
     {
-        if(mEmptyView!=null)
-        {
-            if(dataManager.size()==0)
-                mEmptyView.setVisibility(View.VISIBLE);
-            else
-                mEmptyView.setVisibility(View.GONE);
-        }
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.updateView(dataManager);
         updateSwipeRefreshLayout(false);
     }
     public void onDataReceived(String url, Object value,Object status)
@@ -259,14 +216,8 @@ public class ListViewHelper implements AdapterView.OnItemClickListener,OnCallSer
             mList.smoothScrollToPosition(0);
 
 
-        if(mEmptyView!=null)
-        {
-            if(dataManager.size()==0)
-                mEmptyView.setVisibility(View.VISIBLE);
-            else
-                mEmptyView.setVisibility(View.GONE);
-        }
-
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.updateView(dataManager);
         updateSwipeRefreshLayout(isRefreshData);
 
     }
@@ -282,8 +233,8 @@ public class ListViewHelper implements AdapterView.OnItemClickListener,OnCallSer
 
     public void onCallStart()
     {
-        if(mEmptyView!=null)
-            mEmptyView.setVisibility(View.GONE);
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.updatesStart();
     }
 
     public void onFirstCallEnd()
@@ -294,7 +245,8 @@ public class ListViewHelper implements AdapterView.OnItemClickListener,OnCallSer
     {
 
     }
-    public static interface OnItemClick
+
+    public interface OnItemClick
     {
         void onItemClick(Object baseObject);
     }

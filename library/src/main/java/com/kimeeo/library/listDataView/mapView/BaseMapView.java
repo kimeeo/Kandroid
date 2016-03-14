@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -41,8 +40,6 @@ import com.kimeeo.library.listDataView.dataManagers.DataChangeWatcher;
 import com.kimeeo.library.listDataView.dataManagers.DataManager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,11 +75,83 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
     */
 
 
-
+    public static int VIEW_TYPE = GoogleMap.MAP_TYPE_NORMAL;
     protected SupportMapFragment mapFragment;
     protected GoogleMap googleMap;
+    protected HashMap<String, Object> markerInfo = new HashMap<String, Object>();
+    GoogleMap.OnMarkerClickListener onMarkerClickListener = new GoogleMap.OnMarkerClickListener() {
+        @Override
+        public boolean onMarkerClick(final Marker marker) {
+            return onMarkerTouch(markerInfo.get(marker.getId()));
+        }
+    };
+    GoogleMap.OnInfoWindowClickListener onInfoWindowClickListener = new GoogleMap.OnInfoWindowClickListener() {
+        @Override
+        public void onInfoWindowClick(Marker marker) {
+            Object data = markerInfo.get(marker.getId());
+            onInfoWindowTouch(data);
+        }
+    };
+    GoogleMap.OnMarkerDragListener onMarkerDragListener = new GoogleMap.OnMarkerDragListener() {
+        @Override
+        public void onMarkerDragStart(Marker marker) {
+
+        }
+
+        @Override
+        public void onMarkerDragEnd(Marker marker) {
+
+        }
+
+        @Override
+        public void onMarkerDrag(Marker marker) {
+
+        }
+    };
+    ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+        @SuppressWarnings("deprecation")
+        @SuppressLint("NewApi")
+        @Override
+        public void onGlobalLayout() {
+            try {
+                LatLngBounds.Builder bc = new LatLngBounds.Builder();
+                List<Object> dataList = getDataManager();
+                IPOI poi;
+                for (Object item : dataList) {
+                    if (item instanceof IPOI) {
+                        poi = (IPOI) item;
+                        bc.include(poi.getMarker().getPosition());
+                    } else {
+                        poi = getPOIForObject(item);
+                        if (poi != null)
+                            bc.include(poi.getMarker().getPosition());
+                    }
+                }
+                if (dataList.size() > 0) {
+                    LatLngBounds bounds = bc.build();
+                    clearOnGlobalLayoutListener();
+                    if (googleMap != null)
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+                }
+            } catch (Exception e) {
+            }
+        }
+    };
     private Location myLocation;
+    GoogleMap.OnMyLocationChangeListener onMyLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
+        @Override
+        public void onMyLocationChange(Location location) {
+            if (googleMap != null) {
+                myLocation = googleMap.getMyLocation();
+                myLocationChange(myLocation);
+                List<AddressVO> list = MapUtils.getAddress(getActivity(), myLocation, 2);
+                System.out.println(list);
+            }
+        }
+    };
     private View mProgressBar;
+    private List<?> updatePending;
+    private boolean firstItemIn = false;
 
     public HashMap<String, Object> getMarkers() {
         return markerInfo;
@@ -91,28 +160,23 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
     public List<Marker> getMarkersList() {
 
         List<Marker> list = new ArrayList<>();
-        for (Map.Entry<String, Object> entry:markerInfo.entrySet()) {
-            if(entry.getValue() instanceof IPOI)
-            list.add(((IPOI) entry.getValue()).getMarker());
+        for (Map.Entry<String, Object> entry : markerInfo.entrySet()) {
+            if (entry.getValue() instanceof IPOI)
+                list.add(((IPOI) entry.getValue()).getMarker());
         }
         return list;
     }
 
-    public void updateLatLng(Marker marker,LatLng latLng) {
-        marker.setPosition(latLng);
-        marker.notifyAll();
-    }
-    public void updateLatLng(Marker marker,Double latitude,Double longitude) {
-        LatLng latLng = new LatLng(latitude,longitude);
+    public void updateLatLng(Marker marker, LatLng latLng) {
         marker.setPosition(latLng);
         marker.notifyAll();
     }
 
-    protected HashMap<String, Object> markerInfo = new HashMap<String, Object>();
-
-
-    public static int VIEW_TYPE = GoogleMap.MAP_TYPE_NORMAL;
-    private List<?> updatePending;
+    public void updateLatLng(Marker marker, Double latitude, Double longitude) {
+        LatLng latLng = new LatLng(latitude, longitude);
+        marker.setPosition(latLng);
+        marker.notifyAll();
+    }
 
     protected void configDataManager(DataManager dataManager) {
         dataManager.setOnCallService(this);
@@ -138,29 +202,32 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
         markerInfo=null;
     }
 
-
     public void drawLine(IPOI src,IPOI dest,int color)
     {
         LatLng latLng1 = new LatLng(src.getLatitude(),src.getLongitude());
         LatLng latLng2 = new LatLng(dest.getLatitude(),dest.getLongitude());
         getGoogleMap().addPolyline((new PolylineOptions()).add(latLng1).add(latLng2).width(2).color(color).geodesic(true));
     }
+
     public void drawLine(LatLng src,LatLng dest,int color)
     {
         getGoogleMap().addPolyline((new PolylineOptions()).add(src).add(dest).width(2).color(color).geodesic(true));
     }
+
     public void drawLine(Location src,Location dest,int color)
     {
         LatLng latLng1 = new LatLng(src.getLatitude(),src.getLongitude());
         LatLng latLng2 = new LatLng(dest.getLatitude(),dest.getLongitude());
         getGoogleMap().addPolyline((new PolylineOptions()).add(latLng1).add(latLng2).width(2).color(color).geodesic(true));
     }
+
     public void drawLine(IPOI src,Location dest,int color)
     {
         LatLng latLng1 = new LatLng(src.getLatitude(),src.getLongitude());
         LatLng latLng2 = new LatLng(dest.getLatitude(),dest.getLongitude());
         getGoogleMap().addPolyline((new PolylineOptions()).add(latLng1).add(latLng2).width(2).color(color).geodesic(true));
     }
+
     public void drawLine(Location src,IPOI dest,int color)
     {
         LatLng latLng1 = new LatLng(src.getLatitude(),src.getLongitude());
@@ -168,46 +235,48 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
         getGoogleMap().addPolyline((new PolylineOptions()).add(latLng1).add(latLng2).width(2).color(color).geodesic(true));
     }
 
-
     public GoogleMap getGoogleMap()
     {
         return googleMap;
     }
+
     public boolean showMenu()
     {
         return true;
-    };
+    }
 
-    protected View createRootView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    protected View createRootView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout._fregment_map_fragment, container, false);
         return rootView;
     }
+
     protected View createRootMapNotSupportedView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState, boolean debug) {
         View rootView;
-        if(debug)
-            rootView =inflater.inflate(R.layout._fregment_map_fragment_not_support_debug, container, false);
+        if (debug)
+            rootView = inflater.inflate(R.layout._fregment_map_fragment_not_support_debug, container, false);
         else
-            rootView =inflater.inflate(R.layout._fregment_map_fragment_not_support, container, false);
+            rootView = inflater.inflate(R.layout._fregment_map_fragment_not_support, container, false);
         return rootView;
     }
-    protected SupportMapFragment getSupportMapFragment(View rootView,FragmentManager fragmentManager)
+
+    protected SupportMapFragment getSupportMapFragment(View rootView, FragmentManager fragmentManager)
     {
-        return (SupportMapFragment)fragmentManager.findFragmentById(R.id.mapFragment);
+        return (SupportMapFragment) fragmentManager.findFragmentById(R.id.mapFragment);
     }
+
     public boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
         return Environment.MEDIA_MOUNTED.equals(state);
     }
 
     @Override
-    final public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    final public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        try
-        {
+        try {
             configViewParam();
             View rootView = createRootView(inflater, container, savedInstanceState);
             FragmentManager fragmentManager = getChildFragmentManager();
-            mapFragment = getSupportMapFragment(rootView,fragmentManager);
+            mapFragment = getSupportMapFragment(rootView, fragmentManager);
             googleMap = mapFragment.getMap();
             try {
                 MapsInitializer.initialize(getActivity());
@@ -217,46 +286,32 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
             setHasOptionsMenu(showMenu());
             viewCreated(rootView);
 
-            if(rootView.findViewById(R.id.progressBar)!=null)
-                mProgressBar= rootView.findViewById(R.id.progressBar);
+            if (rootView.findViewById(R.id.progressBar) != null)
+                mProgressBar = rootView.findViewById(R.id.progressBar);
 
-            configMapView(googleMap,mapFragment,getDataManager());
+            configMapView(googleMap, mapFragment, getDataManager());
             loadNext();
             return rootView;
-        }catch (Exception e)
-        {
-            View rootView =createRootMapNotSupportedView(inflater, container, savedInstanceState,BuildConfig.DEBUG);
+        } catch (Exception e) {
+            View rootView = createRootMapNotSupportedView(inflater, container, savedInstanceState, BuildConfig.DEBUG);
             viewCreated(rootView);
             return rootView;
         }
     }
 
-    protected Drawable getEmptyViewDrawable()
-    {
-        Drawable drawable =getResources().getDrawable(R.drawable._empty_box);
-        drawable.setColorFilter(getResources().getColor(R.color._emptyViewMessageColor), PorterDuff.Mode.SRC_ATOP);
-        return drawable;
-    }
-    protected String getEmptyViewMessage()
-    {
-        return getResources().getString(R.string._emptyViewMessage);
-    }
-    protected void configMapView(GoogleMap googleMap,SupportMapFragment mapFragment,DataManager dataManager)
-    {
-
-    }
-    protected void viewCreated(View rootView)
-    {
+    protected void configMapView(GoogleMap googleMap, SupportMapFragment mapFragment, DataManager dataManager) {
 
     }
 
-    public void navigateTo(IPOI poi)
-    {
-        String locationURL = "http://maps.google.com/maps?saddr="+myLocation.getLatitude()+","+myLocation.getLongitude()+"&daddr="+poi.getLatitude()+","+poi.getLongitude()+"";
+    protected void viewCreated(View rootView) {
+
+    }
+
+    public void navigateTo(IPOI poi) {
+        String locationURL = "http://maps.google.com/maps?saddr=" + myLocation.getLatitude() + "," + myLocation.getLongitude() + "&daddr=" + poi.getLatitude() + "," + poi.getLongitude() + "";
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(locationURL));
         startActivity(intent);
     }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -264,54 +319,55 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
         setMenuIcons(menu, inflater);
 
 
-        MenuItem item=null;
+        MenuItem item = null;
         if (VIEW_TYPE == GoogleMap.MAP_TYPE_NORMAL)
-            item=menu.findItem(R.id.normal);
+            item = menu.findItem(R.id.normal);
         else if (VIEW_TYPE == GoogleMap.MAP_TYPE_SATELLITE)
-            item=menu.findItem(R.id.satellite);
+            item = menu.findItem(R.id.satellite);
         else if (VIEW_TYPE == GoogleMap.MAP_TYPE_TERRAIN)
-            item=menu.findItem(R.id.terrain);
+            item = menu.findItem(R.id.terrain);
         else if (VIEW_TYPE == GoogleMap.MAP_TYPE_HYBRID)
-            item=menu.findItem(R.id.hybrid);
-        if(item!=null)
+            item = menu.findItem(R.id.hybrid);
+        if (item != null)
             item.setChecked(true);
 
         super.onCreateOptionsMenu(menu, inflater);
     }
+
     public boolean onOptionsItemSelected(MenuItem item) {
         item.setChecked(true);
 
         if (item.getItemId() == R.id.normal) {
-            VIEW_TYPE =GoogleMap.MAP_TYPE_NORMAL;
+            VIEW_TYPE = GoogleMap.MAP_TYPE_NORMAL;
             updateMapView(VIEW_TYPE);
             return true;
-        }
-        else if (item.getItemId() == R.id.satellite) {
-            VIEW_TYPE =GoogleMap.MAP_TYPE_SATELLITE;
+        } else if (item.getItemId() == R.id.satellite) {
+            VIEW_TYPE = GoogleMap.MAP_TYPE_SATELLITE;
             updateMapView(VIEW_TYPE);
             return true;
-        }
-        else if (item.getItemId() == R.id.terrain) {
-            VIEW_TYPE =GoogleMap.MAP_TYPE_TERRAIN;
+        } else if (item.getItemId() == R.id.terrain) {
+            VIEW_TYPE = GoogleMap.MAP_TYPE_TERRAIN;
             updateMapView(VIEW_TYPE);
 
             return true;
-        }
-        else if (item.getItemId() == R.id.hybrid) {
-            VIEW_TYPE =GoogleMap.MAP_TYPE_HYBRID;
+        } else if (item.getItemId() == R.id.hybrid) {
+            VIEW_TYPE = GoogleMap.MAP_TYPE_HYBRID;
             updateMapView(VIEW_TYPE);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
     public void setMenuIcons(Menu menu, MenuInflater inflater) {
 
     }
+
     public void updateMapView(int type) {
-        if(googleMap!=null)
+        if (googleMap != null)
             googleMap.setMapType(type);
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -319,6 +375,7 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
         if (googleMap != null)
             setUpMap(googleMap);
     }
+
     protected void setUpMap(GoogleMap googleMap)
     {
         googleMap.setMyLocationEnabled(true);
@@ -337,61 +394,14 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
 
         updateMapView(VIEW_TYPE);
 
-        if(updatePending!=null)
+        if (updatePending != null)
         {
-            itemsAdded(0,updatePending);
-            updatePending=null;
+            itemsAdded(0, updatePending);
+            updatePending = null;
         }
 
     }
-    GoogleMap.OnMarkerClickListener onMarkerClickListener = new GoogleMap.OnMarkerClickListener()
-    {
-        @Override
-        public boolean onMarkerClick(final Marker marker) {
-            return onMarkerTouch(markerInfo.get(marker.getId()));
-        }
-    };
-    GoogleMap.OnInfoWindowClickListener onInfoWindowClickListener = new GoogleMap.OnInfoWindowClickListener()
-    {
-        @Override
-        public void onInfoWindowClick(Marker marker)
-        {
-            Object data = markerInfo.get(marker.getId());
-            onInfoWindowTouch(data);
-        }
-    };
-    GoogleMap.OnMarkerDragListener onMarkerDragListener = new GoogleMap.OnMarkerDragListener()
-    {
-        @Override
-        public void onMarkerDragStart(Marker marker)
-        {
 
-        }
-
-        @Override
-        public void onMarkerDragEnd(Marker marker) {
-
-        }
-
-        @Override
-        public void onMarkerDrag(Marker marker)
-        {
-
-        }
-    };
-    GoogleMap.OnMyLocationChangeListener onMyLocationChangeListener = new GoogleMap.OnMyLocationChangeListener()
-    {
-        @Override
-        public void onMyLocationChange(Location location)
-        {
-            if(googleMap!=null) {
-                myLocation = googleMap.getMyLocation();
-                myLocationChange(myLocation);
-                List<AddressVO> list=MapUtils.getAddress(getActivity(),myLocation,2);
-                System.out.println(list);
-            }
-        }
-    };
     public void myLocationChange(Location location)
     {
 
@@ -400,6 +410,7 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
     public Distance getDistanceFromMyLocation(Location loc){
         return MapUtils.getDistance(myLocation,loc);
     }
+
     public Distance getDistanceFromMyLocation(IPOI loc){
         return MapUtils.getDistance(myLocation,loc);
     }
@@ -410,12 +421,14 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
     }
+
     public void moveCameraToLocation( Location location) {
         if(location !=null && googleMap!=null) {
             CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(15).build();
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
     }
+
     public void moveCameraToMyLocation() {
         Location location = myLocation;
         if(location !=null && googleMap!=null) {
@@ -424,14 +437,14 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
         }
     }
 
-
     public void onInfoWindowTouch(Object data) {
 
     }
+
     public boolean onMarkerTouch(Object data)
     {
         return false;
-    };
+    }
 
     public void fitMapToPins() {
         try
@@ -452,7 +465,6 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
     public void onLowMemory() {
         super.onLowMemory();
     }
-
 
     protected void removePOIMarker(IPOI poi)
     {
@@ -487,13 +499,13 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
 
 
     }
+
     protected Bitmap getPOIIcon(IPOI poi)
     {
-        Drawable layerDrawable=getActivity().getResources().getDrawable(R.drawable._pin);
+        Drawable layerDrawable = getActivity().getResources().getDrawable(R.drawable._vector_icon_map_pin);
         Bitmap icon=drawableToBitmap(layerDrawable);
         return icon;
     }
-
 
     public Bitmap drawableToBitmap (Drawable drawable) {
         Bitmap bitmap = null;
@@ -521,6 +533,7 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
     {
         return null;
     }
+
     protected MarkerOptions getMarkerOptions(IPOI poi)
     {
         MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(poi.getLatitude(), poi.getLongitude())).title(poi.getTitle()).snippet(poi.getSnippet());
@@ -531,33 +544,32 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
     {
 
     }
+
     public void onDataLoadError(String url, Object status)
     {
 
     }
-    private boolean firstItemIn = false;
+
     public void onCallStart()
     {
         if(mProgressBar!=null && firstItemIn==false)
             mProgressBar.setVisibility(View.VISIBLE);
     }
+
     public void onCallEnd(List<?> dataList,boolean isRefreshPage)
     {
 
     }
+
     public void onLastCallEnd()
     {
 
     }
+
     public void onFirstCallEnd()
     {
 
     }
-
-
-
-
-
 
     public void clearOnGlobalLayoutListener() {
         if(mapFragment!=null && mapFragment.getView()!=null)
@@ -566,36 +578,6 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
             else
                 mapFragment.getView().getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
     }
-    ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
-        @SuppressWarnings("deprecation")
-        @SuppressLint("NewApi")
-        @Override
-        public void onGlobalLayout() {
-            try {
-                LatLngBounds.Builder bc = new LatLngBounds.Builder();
-                List<Object> dataList = getDataManager();
-                IPOI poi;
-                for (Object item : dataList) {
-                    if (item instanceof IPOI) {
-                        poi = (IPOI) item;
-                        bc.include(poi.getMarker().getPosition());
-                    }
-                    else
-                    {
-                        poi= getPOIForObject(item);
-                        if(poi!=null)
-                            bc.include(poi.getMarker().getPosition());
-                    }
-                }
-                if (dataList.size() > 0) {
-                    LatLngBounds bounds = bc.build();
-                    clearOnGlobalLayoutListener();
-                    if(googleMap!=null)
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
-                }
-            }catch(Exception e){}
-        }
-    };
 
     public void itemsAdded(int pos,List dataList)
     {

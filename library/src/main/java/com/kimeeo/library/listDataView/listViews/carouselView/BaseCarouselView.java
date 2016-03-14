@@ -19,19 +19,19 @@ import java.util.List;
 abstract public class BaseCarouselView extends BaseListView
 {
 
+    private CoverFlowCarousel mCoverFlow;
+    private ProgressView mProgressBar;
+    private boolean firstItemIn = false;
+    private boolean firstDataIn = true;
+
     protected void garbageCollectorCall() {
         super.garbageCollectorCall();
         mRootView=null;
-        mEmptyView=null;
         if(mAdapter!=null)
             mAdapter.garbageCollectorCall();
         mAdapter=null;
         mCoverFlow=null;
-        mEmptyViewImage= null;
-        mEmptyViewMessage= null;
     }
-
-
 
     protected View createRootView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View rootView;
@@ -46,12 +46,6 @@ abstract public class BaseCarouselView extends BaseListView
         return mCoverFlow;
     }
 
-    private CoverFlowCarousel mCoverFlow;
-    private ProgressView mProgressBar;
-    private boolean firstItemIn = false;
-    private boolean firstDataIn = true;
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         configViewParam();
@@ -62,7 +56,7 @@ abstract public class BaseCarouselView extends BaseListView
             configSwipeRefreshLayout(createSwipeRefreshLayout(mRootView));
 
         mCoverFlow = createCoverFlowCarouselView(mRootView);
-        mEmptyView= createEmptyView(mRootView);
+        mEmptyViewHelper = createEmptyViewHelper();
 
         mAdapter = createListViewAdapter();
         mAdapter.supportLoader=false;

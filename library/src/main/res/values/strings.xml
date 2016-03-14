@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Kandroid_lib</string>
     <string name="_emptyViewMessage">No Records Found</string>
-
+    <string name="_emptyViewInterntMessage">Internet Connection Required</string>
+    <string name="_emptyRetry">Retry</string>
 
     <string name="_donloadApp">Download The App</string>
     <string name="_yesClose">Yes</string>

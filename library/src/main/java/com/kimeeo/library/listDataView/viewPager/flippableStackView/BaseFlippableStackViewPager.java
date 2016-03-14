@@ -59,7 +59,7 @@ abstract public class BaseFlippableStackViewPager extends BaseViewPager
         mViewPager.setOffscreenPageLimit(4);
         mViewPager.initStack(4, getOrientation());
 
-        mEmptyView = createEmptyView(mRootView);
+        mEmptyViewHelper = createEmptyViewHelper();
         createAdapter(mViewPager);
 
 

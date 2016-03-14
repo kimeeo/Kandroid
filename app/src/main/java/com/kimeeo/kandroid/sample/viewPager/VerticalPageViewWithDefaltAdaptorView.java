@@ -2,30 +2,26 @@ package com.kimeeo.kandroid.sample.viewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.kimeeo.kandroid.R;
 import com.kimeeo.kandroid.sample.lists.SampleDataParser;
 import com.kimeeo.kandroid.sample.lists.holder.ViewPagerItemHolder1;
 import com.kimeeo.kandroid.sample.lists.holder.ViewPagerItemHolder2;
-import com.kimeeo.kandroid.sample.model.SampleModel;
 import com.kimeeo.kandroid.sample.projectCore.DefaultProjectDataManager;
 import com.kimeeo.library.listDataView.dataManagers.DataManager;
 import com.kimeeo.library.listDataView.dataManagers.PageData;
 import com.kimeeo.library.listDataView.viewPager.BaseItemHolder;
 import com.kimeeo.library.listDataView.viewPager.viewPager.VerticalViewPager;
 
-import butterknife.Bind;
-
 /**
  * Created by bhavinpadhiyar on 1/20/16.
  */
 public class VerticalPageViewWithDefaltAdaptorView extends VerticalViewPager implements DefaultProjectDataManager.IDataManagerDelegate {
     @Override
-    public String getPageTitle(int position, Object o) {
+    public String getItemTitle(int position, Object o) {
         return position+"";
     }
+
     @Override
     public View getView(int position, Object data) {
         LayoutInflater inflater = getActivity().getLayoutInflater();

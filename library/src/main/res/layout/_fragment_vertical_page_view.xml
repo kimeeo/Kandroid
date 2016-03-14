@@ -10,22 +10,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".RecyclerFragment">
 
+    <include layout="@layout/_default_pager_indicator" />
     <com.kimeeo.library.listDataView.viewPager.directionalviewpager.VerticalViewPager
         android:id="@+id/viewPager"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/indicator"
+        android:orientation="vertical" />
 
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/indicator"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tabGravity="fill"
-        app:tabMode="scrollable"/>
     <!--
     <com.nshmura.recyclertablayout.RecyclerTabLayout
         android:id="@+id/indicator"
@@ -43,7 +38,7 @@
         app_tabPaddingEnd="12dp"
         app_tabPaddingBottom="0dp"
         app_tabPadding="0dp"/>
--->ß
+-->
     <include layout="@layout/_fragment_recycler_empty_view"/>
 
 </RelativeLayout>

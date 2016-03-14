@@ -2,14 +2,10 @@ package com.kimeeo.kandroid.sample.lists;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kimeeo.kandroid.R;
@@ -30,14 +26,31 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 /**
  * Created by bhavinpadhiyar on 1/30/16.
  */
 public class BaseViewListView extends BaseFragment implements com.kimeeo.library.listDataView.listViews.IViewProvider {
 
+
+    IListProvider listData = new IListProvider() {
+        public List<?> getList(PageData data, Map<String, Object> param) {
+            if (data.curruntPage == 1) {
+                List<SampleModel> list = new ArrayList<>();
+                list.add(getSample("B1", "534534"));
+                list.add(getSample("B2", "534534"));
+                list.add(getSample("B3", "534534"));
+                list.add(getSample("B4", "534534"));
+                list.add(getSample("B5", "534534"));
+                list.add(getSample("B6", "534534"));
+                list.add(getSample("B7", "534534"));
+                list.add(getSample("B8", "534534"));
+                list.add(getSample("B9", "534534"));
+                list.add(getSample("B10", "534534"));
+                return list;
+            }
+            return null;
+        }
+    };
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState)
     {
@@ -62,20 +75,6 @@ public class BaseViewListView extends BaseFragment implements com.kimeeo.library
             helper.emptyView(emptyView);
 
 
-        if(rootView.findViewById(com.kimeeo.library.R.id.emptyViewImage)!=null) {
-            ImageView emptyViewImage = (ImageView) rootView.findViewById(com.kimeeo.library.R.id.emptyViewImage);
-            if (emptyViewImage != null)
-                helper.emptyImageView(emptyViewImage);
-        }
-
-        if(rootView.findViewById(com.kimeeo.library.R.id.emptyViewMessage)!=null) {
-            TextView emptyViewMessage = (TextView) rootView.findViewById(com.kimeeo.library.R.id.emptyViewMessage);
-            if (emptyViewMessage != null)
-                helper.emptyMessageView(emptyViewMessage);
-        }
-
-
-
         BaseListViewAdapter adapter=createListViewAdapter(dataManager);
         helper.adapter(adapter);
 
@@ -96,6 +95,7 @@ public class BaseViewListView extends BaseFragment implements com.kimeeo.library
 
         return rootView;
     }
+
     protected void garbageCollectorCall()
     {
 
@@ -109,27 +109,6 @@ public class BaseViewListView extends BaseFragment implements com.kimeeo.library
         return listData1;
     }
 
-    IListProvider listData=new IListProvider()
-    {
-        public List<?> getList(PageData data,Map<String, Object> param)
-        {
-            if(data.curruntPage==1) {
-                List<SampleModel> list = new ArrayList<>();
-                list.add(getSample("B1", "534534"));
-                list.add(getSample("B2", "534534"));
-                list.add(getSample("B3", "534534"));
-                list.add(getSample("B4", "534534"));
-                list.add(getSample("B5", "534534"));
-                list.add(getSample("B6", "534534"));
-                list.add(getSample("B7", "534534"));
-                list.add(getSample("B8", "534534"));
-                list.add(getSample("B9", "534534"));
-                list.add(getSample("B10", "534534"));
-                return list;
-            }
-            return null;
-        }
-    };
     private SampleModel getSample(String name, String phone) {
         SampleModel o = new SampleModel();
         o.name =name;
@@ -141,10 +120,6 @@ public class BaseViewListView extends BaseFragment implements com.kimeeo.library
     {
         return new DefaultListViewAdapter(dataManager,null,this);
     }
-    public static class ViewTypes {
-        public static final int VIEW_ITEM1 = 1;
-        public static final int VIEW_ITEM2 = 2;
-    }
 
     public int getListItemViewType(int position,Object item)
     {
@@ -153,6 +128,7 @@ public class BaseViewListView extends BaseFragment implements com.kimeeo.library
         else
             return ViewTypes.VIEW_ITEM2;
     }
+
     public int getTotalViewTypeCount()
     {
         return 2;
@@ -170,6 +146,11 @@ public class BaseViewListView extends BaseFragment implements com.kimeeo.library
             return new ListItemHolder1(view);
         else
             return new ListItemHolder2(view);
+    }
+
+    public static class ViewTypes {
+        public static final int VIEW_ITEM1 = 1;
+        public static final int VIEW_ITEM2 = 2;
     }
 
 }

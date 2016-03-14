@@ -8,18 +8,16 @@
 
 package com.kimeeo.library.listDataView.recyclerView.adapterLayout;
 
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.TextView;
+
 import com.kimeeo.library.R;
 import com.kimeeo.library.listDataView.BaseListDataView;
+import com.kimeeo.library.listDataView.EmptyViewHelper;
 import com.kimeeo.library.listDataView.recyclerView.BaseRecyclerViewAdapter;
 
 import java.util.List;
@@ -27,22 +25,18 @@ import java.util.List;
 
 abstract public class BaseAdapterLayoutView extends BaseListDataView implements AdapterView.OnItemClickListener
 {
-    abstract protected BaseRecyclerViewAdapter createListViewAdapter();
+    protected View mRootView;
+    protected EmptyViewHelper mEmptyViewHelper;
+    protected BaseRecyclerViewAdapter mAdapter;
+    protected ViewGroup mViewGroup;
+    protected IAdapterLayoutView mAdapterLayout;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
+    abstract protected BaseRecyclerViewAdapter createListViewAdapter();
 
     public View getRootView() {
         return mRootView;
     }
-
-    protected View mRootView;
-    protected View mEmptyView;
-    protected ImageView mEmptyViewImage;
-    protected TextView mEmptyViewMessage;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    protected BaseRecyclerViewAdapter mAdapter;
-
-    protected ViewGroup mViewGroup;
-    protected IAdapterLayoutView mAdapterLayout;
 
     protected void garbageCollectorCall()
     {
@@ -51,12 +45,9 @@ abstract public class BaseAdapterLayoutView extends BaseListDataView implements 
             mAdapter.garbageCollectorCall();
 
         mAdapter =null;
-        mEmptyView =null;
         mViewGroup=null;
-        if(mEmptyViewImage!=null)
-            mEmptyViewImage.setImageBitmap(null);
-        mEmptyViewImage=null;
-        mEmptyViewMessage=null;
+
+
         mSwipeRefreshLayout=null;
     }
     protected ViewGroup getViewGroup()
@@ -80,7 +71,7 @@ abstract public class BaseAdapterLayoutView extends BaseListDataView implements 
         mViewGroup = createViewGroup(mRootView);
 
 
-        mEmptyView= createEmptyView(mRootView);
+        mEmptyViewHelper = createEmptyViewHelper();
         mAdapter = createListViewAdapter();
         mAdapter.setOnItemClickListener(this);
         mAdapter.supportLoader=false;
@@ -98,6 +89,9 @@ abstract public class BaseAdapterLayoutView extends BaseListDataView implements 
 
     }
 
+    protected EmptyViewHelper createEmptyViewHelper() {
+        return new EmptyViewHelper(getActivity(), createEmptyView(mRootView), this, true, true);
+    }
     //Confgi Your RecycleVIew Here
     protected void configViewGroup(ViewGroup view,BaseRecyclerViewAdapter mAdapter)
     {
@@ -114,50 +108,9 @@ abstract public class BaseAdapterLayoutView extends BaseListDataView implements 
             return inflater.inflate(R.layout._fragment_recycler, container, false);
     }
     */
-
-
-
-    protected Drawable getEmptyViewDrawable()
-    {
-        Drawable drawable =getResources().getDrawable(R.drawable._empty_box);
-        drawable.setColorFilter(getResources().getColor(R.color._emptyViewMessageColor), PorterDuff.Mode.SRC_ATOP);
-        return drawable;
-    }
-    protected String getEmptyViewMessage()
-    {
-        return getResources().getString(R.string._emptyViewMessage);
-    }
-    public ImageView getEmptyImageView(View rootView)
-    {
-        return mEmptyViewImage;
-    }
-    public TextView getEmptyMessageView(View rootView)
-    {
-        return mEmptyViewMessage;
-    }
-    public View getEmptyView()
-    {
-        return mEmptyView;
-    }
-
-
-
     protected View createEmptyView(View rootView)
     {
         View emptyView = rootView.findViewById(R.id.emptyView);
-
-        if(rootView.findViewById(R.id.emptyViewImage)!=null && rootView.findViewById(R.id.emptyViewImage) instanceof ImageView) {
-            mEmptyViewImage = (ImageView) rootView.findViewById(R.id.emptyViewImage);
-            mEmptyViewImage.setImageDrawable(getEmptyViewDrawable());
-        }
-
-        if(rootView.findViewById(R.id.emptyViewMessage)!=null && rootView.findViewById(R.id.emptyViewMessage) instanceof TextView) {
-            mEmptyViewMessage = (TextView) rootView.findViewById(R.id.emptyViewMessage);
-            mEmptyViewMessage.setText(getEmptyViewMessage());
-        }
-
-        if(emptyView!=null)
-            emptyView.setVisibility(View.GONE);
         return emptyView;
     }
     protected SwipeRefreshLayout getSwipeRefreshLayout()
@@ -208,13 +161,8 @@ abstract public class BaseAdapterLayoutView extends BaseListDataView implements 
     }
     public void onDataLoadError(String url, Object status)
     {
-        if(mEmptyView!=null)
-        {
-            if(getDataManager().size()==0)
-                mEmptyView.setVisibility(View.VISIBLE);
-            else
-                mEmptyView.setVisibility(View.GONE);
-        }
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.updateView(getDataManager());
         updateSwipeRefreshLayout(false);
     }
     public void onDataReceived(String url, Object value,Object status)
@@ -223,14 +171,8 @@ abstract public class BaseAdapterLayoutView extends BaseListDataView implements 
     }
     public void onCallEnd(List<?> dataList,final boolean isRefreshData)
     {
-        if(mEmptyView!=null)
-        {
-            if(getDataManager().size()==0)
-                mEmptyView.setVisibility(View.VISIBLE);
-            else
-                mEmptyView.setVisibility(View.GONE);
-        }
-
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.updateView(getDataManager());
         updateSwipeRefreshLayout(isRefreshData);
 
     }
@@ -249,8 +191,8 @@ abstract public class BaseAdapterLayoutView extends BaseListDataView implements 
 
     public void onCallStart()
     {
-        if(mEmptyView!=null)
-            mEmptyView.setVisibility(View.GONE);
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.updatesStart();
     }
 
     public void onFirstCallEnd()

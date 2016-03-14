@@ -5,8 +5,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.kimeeo.kandroid.R;
 import com.kimeeo.kandroid.sample.lists.holder.ViewPagerItemHolder1;
@@ -27,23 +25,42 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
-
 /**
  * Created by bhavinpadhiyar on 1/30/16.
  */
 public class HeaderHelper implements IViewProvider
 {
 
-    private View rootView;
     ViewPager viewPager;
     DataManager dataManager;
     Activity activity;
+    ListDataManager listData1;
+    IListProvider listData = new IListProvider() {
+        public List<?> getList(PageData data, Map<String, Object> param) {
+            if (data.curruntPage == 1) {
+                List<SampleModel> list = new ArrayList<>();
+                list.add(getSample("B1", "534534"));
+                list.add(getSample("B2", "534534"));
+                list.add(getSample("B3", "534534"));
+                list.add(getSample("B4", "534534"));
+                list.add(getSample("B5", "534534"));
+                list.add(getSample("B6", "534534"));
+                list.add(getSample("B7", "534534"));
+                list.add(getSample("B8", "534534"));
+                list.add(getSample("B9", "534534"));
+                list.add(getSample("B10", "534534"));
+                return list;
+            }
+            return null;
+        }
+    };
+    private View rootView;
     public HeaderHelper(View rootView,Activity activity)
     {
         this.activity=activity;
         this.rootView=rootView;
     }
+
     public void create()
     {
         ViewPagerHelper viewPagerHelper = new ViewPagerHelper();
@@ -65,18 +82,6 @@ public class HeaderHelper implements IViewProvider
             viewPagerHelper.emptyView(emptyView);
 
 
-        if(rootView.findViewById(com.kimeeo.library.R.id.emptyViewImage)!=null) {
-            ImageView emptyViewImage = (ImageView) rootView.findViewById(com.kimeeo.library.R.id.emptyViewImage);
-            if (emptyViewImage != null)
-                viewPagerHelper.emptyImageView(emptyViewImage);
-        }
-
-        if(rootView.findViewById(com.kimeeo.library.R.id.emptyViewMessage)!=null) {
-            TextView emptyViewMessage = (TextView) rootView.findViewById(com.kimeeo.library.R.id.emptyViewMessage);
-            if (emptyViewMessage != null)
-                viewPagerHelper.emptyMessageView(emptyViewMessage);
-        }
-
         View indicator = rootView.findViewById(com.kimeeo.library.R.id.indicator);
         if(indicator!=null)
             viewPagerHelper.indicator(indicator);
@@ -87,6 +92,7 @@ public class HeaderHelper implements IViewProvider
             viewPagerHelper.create();
         }catch (Exception e){}
     }
+
     public ViewPager getViewPager()
     {
         return viewPager;
@@ -97,17 +103,16 @@ public class HeaderHelper implements IViewProvider
         viewPager=null;
         dataManager=null;
     }
+
     public void removeView(View view, int position, BaseItemHolder itemHolder) {
 
     }
-
 
     protected BaseViewPagerAdapter createViewPagerAdapter()
     {
         return new DefaultViewPagerAdapter(dataManager,this,null);
     }
 
-    ListDataManager listData1;
     // Data Manager
     protected DataManager createDataManager()
     {
@@ -116,27 +121,6 @@ public class HeaderHelper implements IViewProvider
         return listData1;
     }
 
-    IListProvider listData=new IListProvider()
-    {
-        public List<?> getList(PageData data,Map<String, Object> param)
-        {
-            if(data.curruntPage==1) {
-                List<SampleModel> list = new ArrayList<>();
-                list.add(getSample("B1", "534534"));
-                list.add(getSample("B2", "534534"));
-                list.add(getSample("B3", "534534"));
-                list.add(getSample("B4", "534534"));
-                list.add(getSample("B5", "534534"));
-                list.add(getSample("B6", "534534"));
-                list.add(getSample("B7", "534534"));
-                list.add(getSample("B8", "534534"));
-                list.add(getSample("B9", "534534"));
-                list.add(getSample("B10", "534534"));
-                return list;
-            }
-            return null;
-        }
-    };
     private SampleModel getSample(String name, String phone) {
         SampleModel o = new SampleModel();
         o.name =name;

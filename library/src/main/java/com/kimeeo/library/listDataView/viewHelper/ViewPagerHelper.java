@@ -1,16 +1,14 @@
 package com.kimeeo.library.listDataView.viewHelper;
 
-import android.graphics.drawable.Drawable;
+import android.content.res.Resources;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.kimeeo.library.R;
+import com.kimeeo.library.listDataView.EmptyViewHelper;
 import com.kimeeo.library.listDataView.dataManagers.DataManager;
 import com.kimeeo.library.listDataView.dataManagers.OnCallService;
 import com.kimeeo.library.listDataView.viewPager.directionalviewpager.DirectionalViewPager;
@@ -25,82 +23,73 @@ import java.util.List;
 /**
  * Created by bhavinpadhiyar on 1/30/16.
  */
-public class ViewPagerHelper implements OnCallService, ViewPager.OnPageChangeListener{
-
-
+public class ViewPagerHelper extends BaseHelper implements OnCallService, ViewPager.OnPageChangeListener {
+    protected EmptyViewHelper mEmptyViewHelper;
     protected SwipeRefreshLayout mSwipeRefreshLayout;
-    public ViewPagerHelper swipeRefreshLayout(SwipeRefreshLayout view)
-    {
-        mSwipeRefreshLayout =view;
-        return this;
-    }
     protected DataManager dataManager;
-    public ViewPagerHelper dataManager(DataManager dataManager)
-    {
-        this.dataManager =dataManager;
-        return this;
-    }
-
     protected JazzyViewPager.TransitionEffect transition;
-    public ViewPagerHelper transitionEffect(JazzyViewPager.TransitionEffect transition) {
-        this.transition =transition;
-        return this;
+    protected BaseViewPagerAdapter mAdapter;
+    protected ViewPager mViewPager;
+    protected View mIndicator;
+    private SmartTabLayout.TabProvider tabProvider;
+    private RecyclerTabLayout.Adapter<?> recyclerViewTabProvider;
+    private boolean isIndicatorSet = false;
+    private int currentItem;
+
+    public Resources getResources()
+    {
+        return mViewPager.getResources();
     }
 
+    public void retry() {
+        loadNext();
+    }
 
-    protected View mEmptyView;
     public ViewPagerHelper emptyView(View view)
     {
-        mEmptyView=view;
-        if(mEmptyView!=null)
-            mEmptyView.setVisibility(View.GONE);
-
+        mEmptyViewHelper = new EmptyViewHelper(view.getContext(), view, this, true, true);
         return this;
     }
 
+    public ViewPagerHelper emptyView(EmptyViewHelper emptyViewHelper) {
+        mEmptyViewHelper = emptyViewHelper;
+        return this;
+    }
 
-
-
-
-    protected ImageView mEmptyViewImage;
-
-    public ViewPagerHelper emptyImageView(ImageView view)
+    protected void clear()
     {
-        mEmptyViewImage=view;
+        if (dataManager != null) {
+            dataManager.garbageCollectorCall();
+            dataManager = null;
+        }
+        if (mAdapter != null)
+            mAdapter.garbageCollectorCall();
 
-        if(mEmptyViewImage!=null && emptyViewDrawable!=null)
-            mEmptyViewImage.setImageDrawable(emptyViewDrawable);
-
-
-        return this;
+        mAdapter = null;
+        mViewPager = null;
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.clean();
+        mEmptyViewHelper = null;
+        mSwipeRefreshLayout = null;
     }
 
-    protected TextView mEmptyViewMessage;
-    public ViewPagerHelper emptyMessageView(TextView view)
+    public ViewPagerHelper swipeRefreshLayout(SwipeRefreshLayout view)
     {
-        mEmptyViewMessage=view;
-        if(mEmptyViewMessage!=null && emptyViewMessage!=null)
-            mEmptyViewMessage.setText(emptyViewMessage);
-        return this;
-    }
-    Drawable emptyViewDrawable;
-    protected ViewPagerHelper emptyViewDrawable(Drawable drawable)
-    {
-        emptyViewDrawable=drawable;
-        if(mEmptyViewImage!=null && emptyViewDrawable!=null)
-            mEmptyViewImage.setImageDrawable(emptyViewDrawable);
-        return this;
-    }
-    String emptyViewMessage;
-    protected ViewPagerHelper emptyViewMessage(String emptyViewMessage)
-    {
-        this.emptyViewMessage = emptyViewMessage;
-        if(mEmptyViewMessage!=null && emptyViewMessage!=null)
-            mEmptyViewMessage.setText(emptyViewMessage);
+        mSwipeRefreshLayout = view;
         return this;
     }
 
-    protected BaseViewPagerAdapter mAdapter;
+    public ViewPagerHelper dataManager(DataManager dataManager)
+    {
+        this.dataManager = dataManager;
+        return this;
+    }
+
+    public ViewPagerHelper transitionEffect(JazzyViewPager.TransitionEffect transition) {
+        this.transition = transition;
+        return this;
+    }
+
     public ViewPagerHelper adapter(BaseViewPagerAdapter adapter)
     {
         this.mAdapter = adapter;
@@ -108,20 +97,17 @@ public class ViewPagerHelper implements OnCallService, ViewPager.OnPageChangeLis
         return this;
     }
 
-
-    protected ViewPager mViewPager;
     public ViewPagerHelper with(ViewPager view)
     {
         this.mViewPager =view;
         return this;
     }
-    protected View mIndicator;
+
     public ViewPagerHelper indicator(View view)
     {
         mIndicator = view;
         return this;
     }
-
 
     public void create() throws Exception{
 
@@ -149,9 +135,11 @@ public class ViewPagerHelper implements OnCallService, ViewPager.OnPageChangeLis
         if(mViewPager instanceof JazzyViewPager && transition!=null)
             configJazzyViewPager(((JazzyViewPager) mViewPager));
     }
+
     protected void configJazzyViewPager(JazzyViewPager mJazzy) {
         mJazzy.setTransitionEffect(transition);
     }
+
     protected void configSwipeRefreshLayout(SwipeRefreshLayout view) {
         mSwipeRefreshLayout = view;
         if (mSwipeRefreshLayout != null) {
@@ -171,35 +159,34 @@ public class ViewPagerHelper implements OnCallService, ViewPager.OnPageChangeLis
             mSwipeRefreshLayout.setColorSchemeColors(R.array.progressColors);
         }
     }
+
     public ViewPagerHelper loadNext(){
         dataManager.loadNext();
         return this;
     }
+
     public ViewPagerHelper loadRefreshData()
     {
         dataManager.loadRefreshData();
         return this;
     }
-    private SmartTabLayout.TabProvider tabProvider;
+
     public ViewPagerHelper tabProvider(SmartTabLayout.TabProvider tabProvider)
     {
         this.tabProvider = tabProvider;
         return this;
     }
+
     protected void configViewPager(ViewPager mList, BaseViewPagerAdapter mAdapter, View indicator,DataManager dataManager) {
 
     }
 
-
-
-    private RecyclerTabLayout.Adapter<?> recyclerViewTabProvider;
     public ViewPagerHelper tabProvider(RecyclerTabLayout.Adapter<?> tabProvider)
     {
         this.recyclerViewTabProvider = tabProvider;
         return this;
     }
 
-    private boolean isIndicatorSet=false;
     protected void setUpIndicator(View indicator, ViewPager viewPager) {
         if(indicator!=null) {
             if(isIndicatorSet==false) {
@@ -246,27 +233,30 @@ public class ViewPagerHelper implements OnCallService, ViewPager.OnPageChangeLis
 
         }
     }
+
     protected void configTabLayout(TabLayout tabLayout,ViewPager viewPager)
     {
 
     }
+
     public void onPageScrolled(int arg0, float arg1, int arg2) {
     }
 
     public void onPageScrollStateChanged(int arg0) {
     }
+
     protected void onPageChange(Object itemPosition, int position) {
 
-    }
-    private int currentItem;
-
-    protected void setCurrentItem(int value) {
-        currentItem = value;
     }
 
     protected int getCurrentItem() {
         return currentItem;
     }
+
+    protected void setCurrentItem(int value) {
+        currentItem = value;
+    }
+
     public void onPageSelected(int position) {
         if (mViewPager != null) {
             Object iBaseObject = dataManager.get(position);
@@ -330,8 +320,8 @@ public class ViewPagerHelper implements OnCallService, ViewPager.OnPageChangeLis
     }
 
     public void onCallStart() {
-        if (mEmptyView != null)
-            mEmptyView.setVisibility(View.GONE);
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.updatesStart();
     }
 
     public void onFirstCallEnd() {
@@ -353,12 +343,9 @@ public class ViewPagerHelper implements OnCallService, ViewPager.OnPageChangeLis
     }
 
     public void onDataLoadError(String url, Object status) {
-        if (mEmptyView != null) {
-            if (dataManager.size() == 0)
-                mEmptyView.setVisibility(View.VISIBLE);
-            else
-                mEmptyView.setVisibility(View.GONE);
-        }
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.updateView(dataManager);
+
         updateSwipeRefreshLayout(false);
     }
 
@@ -387,13 +374,8 @@ public class ViewPagerHelper implements OnCallService, ViewPager.OnPageChangeLis
         }
 
 
-
-        if (mEmptyView != null) {
-            if (dataManager.size() == 0)
-                mEmptyView.setVisibility(View.VISIBLE);
-            else
-                mEmptyView.setVisibility(View.GONE);
-        }
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.updateView(dataManager);
 
         updateSwipeRefreshLayout(isRefreshData);
     }

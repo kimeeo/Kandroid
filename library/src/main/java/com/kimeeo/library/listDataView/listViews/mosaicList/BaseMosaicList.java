@@ -23,13 +23,11 @@ abstract public class BaseMosaicList extends BaseListView implements OnItemClick
     private boolean firstItemIn = false;
     private boolean firstDataIn = true;
     private ProgressView mProgressBar;
+    private MosaicLayout mMosaicLayout;
 
     public MosaicLayout getMosaicLayout() {
         return mMosaicLayout;
     }
-
-    private MosaicLayout mMosaicLayout;
-
 
     protected void garbageCollectorCall() {
         super.garbageCollectorCall();
@@ -58,7 +56,7 @@ abstract public class BaseMosaicList extends BaseListView implements OnItemClick
             configSwipeRefreshLayout(createSwipeRefreshLayout(mRootView));
 
         mMosaicLayout = createMosaicLayout(mRootView);
-        mEmptyView = createEmptyView(mRootView);
+        mEmptyViewHelper = createEmptyViewHelper();
         mAdapter = createListViewAdapter();
         mAdapter.supportLoader = false;
 

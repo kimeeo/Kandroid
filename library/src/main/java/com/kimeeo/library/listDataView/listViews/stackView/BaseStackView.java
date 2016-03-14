@@ -52,7 +52,7 @@ abstract public class BaseStackView extends BaseListView {
             configSwipeRefreshLayout(createSwipeRefreshLayout(mRootView));
 
         mStackView = createStackView(mRootView);
-        mEmptyView= createEmptyView(mRootView);
+        mEmptyViewHelper = createEmptyViewHelper();
         mAdapter = createListViewAdapter();
         mAdapter.supportLoader=false;
         getDataManager().setRefreshEnabled(false);

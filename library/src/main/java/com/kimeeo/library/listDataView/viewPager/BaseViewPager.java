@@ -1,7 +1,5 @@
 package com.kimeeo.library.listDataView.viewPager;
 
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
@@ -10,11 +8,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.kimeeo.library.R;
 import com.kimeeo.library.listDataView.BaseListDataView;
+import com.kimeeo.library.listDataView.EmptyViewHelper;
 import com.kimeeo.library.listDataView.viewPager.directionalviewpager.DirectionalViewPager;
 import com.kimeeo.library.listDataView.viewPager.jazzyViewPager.JazzyViewPager;
 import com.kimeeo.library.listDataView.viewPager.viewPager.BaseViewPagerAdapter;
@@ -29,13 +26,11 @@ import java.util.List;
  */
 abstract public class BaseViewPager extends BaseListDataView implements ViewPager.OnPageChangeListener {
     protected View mRootView;
-    protected View mEmptyView;
     protected BaseViewPagerAdapter mAdapter;
     protected ViewPager mViewPager;
     protected JazzyViewPager.TransitionEffect transition = null;
     protected View mIndicator;
-    protected ImageView mEmptyViewImage;
-    protected TextView mEmptyViewMessage;
+    protected EmptyViewHelper mEmptyViewHelper;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private boolean isIndicatorSet = false;
     private int currentItem;
@@ -43,7 +38,6 @@ abstract public class BaseViewPager extends BaseListDataView implements ViewPage
     protected void garbageCollectorCall() {
         super.garbageCollectorCall();
         mRootView = null;
-        mEmptyView = null;
         if (mAdapter != null)
             mAdapter.garbageCollectorCall();
         mAdapter = null;
@@ -51,8 +45,10 @@ abstract public class BaseViewPager extends BaseListDataView implements ViewPage
         mSwipeRefreshLayout = null;
         transition = null;
         mIndicator = null;
-        mEmptyViewImage = null;
-        mEmptyViewMessage = null;
+
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.clean();
+        mEmptyViewHelper = null;
     }
 
     public View getRootView() {
@@ -86,7 +82,7 @@ abstract public class BaseViewPager extends BaseListDataView implements ViewPage
             configSwipeRefreshLayout(createSwipeRefreshLayout(mRootView));
 
         mViewPager = createViewPager(mRootView);
-        mEmptyView = createEmptyView(mRootView);
+        mEmptyViewHelper = createEmptyViewHelper();
         createAdapter(mViewPager);
 
         mIndicator = createIndicator(mRootView);
@@ -104,6 +100,9 @@ abstract public class BaseViewPager extends BaseListDataView implements ViewPage
         return mRootView;
     }
 
+    protected EmptyViewHelper createEmptyViewHelper() {
+        return new EmptyViewHelper(getActivity(), createEmptyView(mRootView), this, true, true);
+    }
     protected JazzyViewPager.TransitionEffect createTransitionEffect() {
         return null;
     }
@@ -121,43 +120,8 @@ abstract public class BaseViewPager extends BaseListDataView implements ViewPage
     public void onViewCreated(View view) {
 
     }
-
-    protected Drawable getEmptyViewDrawable() {
-        Drawable drawable = getResources().getDrawable(R.drawable._empty_box);
-        drawable.setColorFilter(getResources().getColor(R.color._emptyViewMessageColor), PorterDuff.Mode.SRC_ATOP);
-        return drawable;
-    }
-
-    protected String getEmptyViewMessage() {
-        return getResources().getString(R.string._emptyViewMessage);
-    }
-
-    public ImageView getEmptyImageView(View rootView) {
-        return mEmptyViewImage;
-    }
-
-    public TextView getEmptyMessageView(View rootView) {
-        return mEmptyViewMessage;
-    }
-
-    public View getEmptyView() {
-        return mEmptyView;
-    }
-
     protected View createEmptyView(View rootView) {
         View emptyView = rootView.findViewById(R.id.emptyView);
-        if (rootView.findViewById(R.id.emptyViewImage) != null && rootView.findViewById(R.id.emptyViewImage) instanceof ImageView) {
-            mEmptyViewImage = (ImageView) rootView.findViewById(R.id.emptyViewImage);
-            mEmptyViewImage.setImageDrawable(getEmptyViewDrawable());
-        }
-
-        if (rootView.findViewById(R.id.emptyViewMessage) != null && rootView.findViewById(R.id.emptyViewMessage) instanceof TextView) {
-            mEmptyViewMessage = (TextView) rootView.findViewById(R.id.emptyViewMessage);
-            mEmptyViewMessage.setText(getEmptyViewMessage());
-        }
-
-        if (emptyView != null)
-            emptyView.setVisibility(View.GONE);
         return emptyView;
     }
 
@@ -430,8 +394,8 @@ abstract public class BaseViewPager extends BaseListDataView implements ViewPage
     }
 
     public void onCallStart() {
-        if (mEmptyView != null)
-            mEmptyView.setVisibility(View.GONE);
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.updatesStart();
     }
 
     public void onFirstCallEnd() {
@@ -453,12 +417,8 @@ abstract public class BaseViewPager extends BaseListDataView implements ViewPage
     }
 
     public void onDataLoadError(String url, Object status) {
-        if (mEmptyView != null) {
-            if (getDataManager().size() == 0)
-                mEmptyView.setVisibility(View.VISIBLE);
-            else
-                mEmptyView.setVisibility(View.GONE);
-        }
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.updateView(getDataManager());
         updateSwipeRefreshLayout(false);
     }
 
@@ -485,16 +445,8 @@ abstract public class BaseViewPager extends BaseListDataView implements ViewPage
             } else
                 setUpIndicator(mIndicator, mViewPager);
         }
-
-
-
-        if (mEmptyView != null) {
-            if (getDataManager().size() == 0)
-                mEmptyView.setVisibility(View.VISIBLE);
-            else
-                mEmptyView.setVisibility(View.GONE);
-        }
-
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.updateView(getDataManager());
         updateSwipeRefreshLayout(isRefreshData);
     }
 

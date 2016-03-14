@@ -49,7 +49,7 @@ abstract public class BaseSwipeCards extends BaseListView {
             configSwipeRefreshLayout(createSwipeRefreshLayout(mRootView));
 
         mFlingAdapterView = createFlingAdapterView(mRootView);
-        mEmptyView= createEmptyView(mRootView);
+        mEmptyViewHelper = createEmptyViewHelper();
         mAdapter = createListViewAdapter();
         mAdapter.supportLoader=false;
 

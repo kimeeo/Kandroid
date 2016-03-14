@@ -1,55 +1,78 @@
 package com.kimeeo.library.listDataView.viewHelper;
-import android.graphics.drawable.Drawable;
+
+import android.content.res.Resources;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.kimeeo.library.R;
+import com.kimeeo.library.listDataView.EmptyViewHelper;
 import com.kimeeo.library.listDataView.dataManagers.DataManager;
 import com.kimeeo.library.listDataView.dataManagers.OnCallService;
 import com.kimeeo.library.listDataView.recyclerView.BaseRecyclerViewAdapter;
 import com.kimeeo.library.listDataView.recyclerView.EndlessRecyclerOnScrollListener;
+
 import java.util.List;
 
 /**
  * Created by bhavinpadhiyar on 1/30/16.
  */
-public class RecyclerViewHelper implements AdapterView.OnItemClickListener,OnCallService
+public class RecyclerViewHelper extends BaseHelper implements AdapterView.OnItemClickListener, OnCallService
 {
+    protected EmptyViewHelper mEmptyViewHelper;
+    protected BaseRecyclerViewAdapter mAdapter;
+    private RecyclerView.ItemAnimator itemAnimator;
+    private int animatorDuration = 200;
+    private RecyclerView recyclerView;
+    private DataManager dataManager;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView.ItemDecoration itemDecoration;
+    private OnItemClick onItemClick;
+
 
     public RecyclerViewHelper()
     {
 
     }
 
-    private RecyclerView.ItemAnimator itemAnimator;
+    public Resources getResources() {
+        return recyclerView.getResources();
+    }
+
+    public void retry() {
+        loadNext();
+    }
+
+    public RecyclerViewHelper emptyView(View view) {
+        mEmptyViewHelper = new EmptyViewHelper(view.getContext(), view, this, true, true);
+        return this;
+    }
+
+    public RecyclerViewHelper emptyView(EmptyViewHelper emptyViewHelper) {
+        mEmptyViewHelper = emptyViewHelper;
+        return this;
+    }
+
     public RecyclerViewHelper animator(RecyclerView.ItemAnimator itemAnimator)
     {
         this.itemAnimator=itemAnimator;
         return this;
     }
 
-    private int animatorDuration=200;
     public RecyclerViewHelper animatorDuration(int value)
     {
         animatorDuration=value;
         return this;
     }
 
-
-
-    private RecyclerView recyclerView;
     public RecyclerViewHelper with(RecyclerView recyclerView)
     {
         this.recyclerView =recyclerView;
         return this;
     }
 
-
-    private DataManager dataManager;
     public RecyclerViewHelper dataManager(DataManager dataManager)
     {
         this.dataManager =dataManager;
@@ -60,81 +83,25 @@ public class RecyclerViewHelper implements AdapterView.OnItemClickListener,OnCal
         dataManager.loadNext();
         return this;
     }
+
     public RecyclerViewHelper loadRefreshData()
     {
         dataManager.loadRefreshData();
         return this;
     }
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+
     public RecyclerViewHelper swipeRefreshLayout(SwipeRefreshLayout view)
     {
         mSwipeRefreshLayout =view;
         return this;
     }
-    private RecyclerView.LayoutManager layoutManager;
+
     public RecyclerViewHelper layoutManager(RecyclerView.LayoutManager layoutManager)
     {
         this.layoutManager = layoutManager;
         return this;
     }
 
-
-    protected View mEmptyView;
-    public RecyclerViewHelper emptyView(View view)
-    {
-        mEmptyView=view;
-        if(mEmptyView!=null)
-            mEmptyView.setVisibility(View.GONE);
-
-        return this;
-    }
-
-
-
-
-
-    protected ImageView mEmptyViewImage;
-
-    public RecyclerViewHelper emptyImageView(ImageView view)
-    {
-        mEmptyViewImage=view;
-
-        if(mEmptyViewImage!=null && emptyViewDrawable!=null)
-            mEmptyViewImage.setImageDrawable(emptyViewDrawable);
-
-
-        return this;
-    }
-
-    protected TextView mEmptyViewMessage;
-    public RecyclerViewHelper emptyMessageView(TextView view)
-    {
-        mEmptyViewMessage=view;
-        if(mEmptyViewMessage!=null && emptyViewMessage!=null)
-            mEmptyViewMessage.setText(emptyViewMessage);
-        return this;
-    }
-    Drawable emptyViewDrawable;
-    protected RecyclerViewHelper emptyViewDrawable(Drawable drawable)
-    {
-        emptyViewDrawable=drawable;
-        if(mEmptyViewImage!=null && emptyViewDrawable!=null)
-            mEmptyViewImage.setImageDrawable(emptyViewDrawable);
-        return this;
-    }
-    String emptyViewMessage;
-    protected RecyclerViewHelper emptyViewMessage(String emptyViewMessage)
-    {
-        this.emptyViewMessage = emptyViewMessage;
-        if(mEmptyViewMessage!=null && emptyViewMessage!=null)
-            mEmptyViewMessage.setText(emptyViewMessage);
-        return this;
-    }
-
-
-
-
-    protected BaseRecyclerViewAdapter mAdapter;
     public RecyclerViewHelper adapter(BaseRecyclerViewAdapter adapter)
     {
         this.mAdapter = adapter;
@@ -142,14 +109,11 @@ public class RecyclerViewHelper implements AdapterView.OnItemClickListener,OnCal
         return this;
     }
 
-
-    private RecyclerView.ItemDecoration itemDecoration;
     public RecyclerViewHelper decoration(RecyclerView.ItemDecoration item) {
         this.itemDecoration = item;
         return this;
     }
 
-    private OnItemClick onItemClick;
     public RecyclerViewHelper setOnItemClick(OnItemClick item) {
         onItemClick=item;
         return this;
@@ -169,11 +133,10 @@ public class RecyclerViewHelper implements AdapterView.OnItemClickListener,OnCal
 
         mAdapter =null;
         recyclerView = null;
-        mEmptyView =null;
-        if(mEmptyViewImage!=null)
-            mEmptyViewImage.setImageBitmap(null);
-        mEmptyViewImage=null;
-        mEmptyViewMessage=null;
+
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.clean();
+        mEmptyViewHelper = null;
         mSwipeRefreshLayout=null;
     }
 
@@ -286,13 +249,8 @@ public class RecyclerViewHelper implements AdapterView.OnItemClickListener,OnCal
     }
     public void onDataLoadError(String url, Object status)
     {
-        if(mEmptyView!=null)
-        {
-            if(dataManager.size()==0)
-                mEmptyView.setVisibility(View.VISIBLE);
-            else
-                mEmptyView.setVisibility(View.GONE);
-        }
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.updateView(dataManager);
         updateSwipeRefreshLayout(false);
     }
     public void onDataReceived(String url, Object value,Object status)
@@ -305,13 +263,8 @@ public class RecyclerViewHelper implements AdapterView.OnItemClickListener,OnCal
             recyclerView.scrollToPosition(0);
 
 
-        if(mEmptyView!=null)
-        {
-            if(dataManager.size()==0)
-                mEmptyView.setVisibility(View.VISIBLE);
-            else
-                mEmptyView.setVisibility(View.GONE);
-        }
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.updateView(dataManager);
 
         updateSwipeRefreshLayout(isRefreshData);
 
@@ -328,8 +281,8 @@ public class RecyclerViewHelper implements AdapterView.OnItemClickListener,OnCal
 
     public void onCallStart()
     {
-        if(mEmptyView!=null)
-            mEmptyView.setVisibility(View.GONE);
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.updatesStart();
     }
 
     public void onFirstCallEnd()
@@ -340,7 +293,8 @@ public class RecyclerViewHelper implements AdapterView.OnItemClickListener,OnCal
     {
 
     }
-    public static interface OnItemClick
+
+    public interface OnItemClick
     {
         void onItemClick(Object baseObject);
     }

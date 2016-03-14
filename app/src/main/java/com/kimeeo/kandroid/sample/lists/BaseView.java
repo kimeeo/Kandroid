@@ -7,8 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kimeeo.kandroid.R;
@@ -31,13 +29,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 /**
  * Created by bhavinpadhiyar on 1/30/16.
  */
 public class BaseView extends BaseFragment implements IViewProvider {
+    IListProvider listData = new IListProvider() {
+        public List<?> getList(PageData data, Map<String, Object> param) {
+            if (data.curruntPage == 1) {
+                List<SampleModel> list = new ArrayList<>();
+                list.add(getSample("B1", "534534"));
+                list.add(getSample("B2", "534534"));
+                list.add(getSample("B3", "534534"));
+                list.add(getSample("B4", "534534"));
+                list.add(getSample("B5", "534534"));
+                list.add(getSample("B6", "534534"));
+                list.add(getSample("B7", "534534"));
+                list.add(getSample("B8", "534534"));
+                list.add(getSample("B9", "534534"));
+                list.add(getSample("B10", "534534"));
+                return list;
+            }
+            return null;
+        }
+    };
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState)
     {
         DataManager dataManager= createDataManager();
@@ -60,19 +75,6 @@ public class BaseView extends BaseFragment implements IViewProvider {
         View emptyView = rootView.findViewById(com.kimeeo.library.R.id.emptyView);
         if(emptyView!=null)
             helper.emptyView(emptyView);
-
-
-        if(rootView.findViewById(com.kimeeo.library.R.id.emptyViewImage)!=null) {
-            ImageView emptyViewImage = (ImageView) rootView.findViewById(com.kimeeo.library.R.id.emptyViewImage);
-            if (emptyViewImage != null)
-                helper.emptyImageView(emptyViewImage);
-        }
-
-        if(rootView.findViewById(com.kimeeo.library.R.id.emptyViewMessage)!=null) {
-            TextView emptyViewMessage = (TextView) rootView.findViewById(com.kimeeo.library.R.id.emptyViewMessage);
-            if (emptyViewMessage != null)
-                helper.emptyMessageView(emptyViewMessage);
-        }
 
         helper.layoutManager(createLayoutManager());
         helper.decoration(getDividerDecoration());
@@ -98,6 +100,7 @@ public class BaseView extends BaseFragment implements IViewProvider {
 
         return rootView;
     }
+
     protected void garbageCollectorCall()
     {
 
@@ -111,27 +114,6 @@ public class BaseView extends BaseFragment implements IViewProvider {
         return listData1;
     }
 
-    IListProvider listData=new IListProvider()
-    {
-        public List<?> getList(PageData data,Map<String, Object> param)
-        {
-            if(data.curruntPage==1) {
-                List<SampleModel> list = new ArrayList<>();
-                list.add(getSample("B1", "534534"));
-                list.add(getSample("B2", "534534"));
-                list.add(getSample("B3", "534534"));
-                list.add(getSample("B4", "534534"));
-                list.add(getSample("B5", "534534"));
-                list.add(getSample("B6", "534534"));
-                list.add(getSample("B7", "534534"));
-                list.add(getSample("B8", "534534"));
-                list.add(getSample("B9", "534534"));
-                list.add(getSample("B10", "534534"));
-                return list;
-            }
-            return null;
-        }
-    };
     private SampleModel getSample(String name, String phone) {
         SampleModel o = new SampleModel();
         o.name =name;
@@ -152,12 +134,6 @@ public class BaseView extends BaseFragment implements IViewProvider {
         return linearLayoutManager;
     }
 
-
-
-    public static class ViewTypes {
-        public static final int VIEW_ITEM1 = 5;
-        public static final int VIEW_ITEM2 = 10;
-    }
     public int getListItemViewType(int position,Object item)
     {
         if(position<4)
@@ -165,6 +141,7 @@ public class BaseView extends BaseFragment implements IViewProvider {
         else
             return ViewTypes.VIEW_ITEM2;
     }
+
     public View getItemView(int viewType,LayoutInflater inflater,ViewGroup container)
     {
         return inflater.inflate(R.layout._sample_column_cell,null);
@@ -178,5 +155,10 @@ public class BaseView extends BaseFragment implements IViewProvider {
             return new RecyncleItemHolder1(view);
         else
             return new RecyncleItemHolder2(view);
+    }
+
+    public static class ViewTypes {
+        public static final int VIEW_ITEM1 = 5;
+        public static final int VIEW_ITEM2 = 10;
     }
 }

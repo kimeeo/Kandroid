@@ -1,7 +1,5 @@
 package com.kimeeo.library.listDataView.listViews;
 
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -9,12 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.kimeeo.library.R;
 import com.kimeeo.library.listDataView.BaseListDataView;
+import com.kimeeo.library.listDataView.EmptyViewHelper;
 
 import java.util.List;
 
@@ -22,21 +19,17 @@ import java.util.List;
  * Created by bhavinpadhiyar on 1/20/16.
  */
 abstract public class BaseListView extends BaseListDataView implements AdapterView.OnItemClickListener{
-    abstract protected BaseListViewAdapter createListViewAdapter();
-
     protected ListView mList;
+    protected View mRootView;
+    protected EmptyViewHelper mEmptyViewHelper;
+    protected BaseListViewAdapter mAdapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    abstract protected BaseListViewAdapter createListViewAdapter();
 
     public View getRootView() {
         return mRootView;
     }
-
-    protected View mRootView;
-    protected View mEmptyView;
-    protected ImageView mEmptyViewImage;
-    protected TextView mEmptyViewMessage;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    protected BaseListViewAdapter mAdapter;
-
 
     protected void garbageCollectorCall()
     {
@@ -45,11 +38,10 @@ abstract public class BaseListView extends BaseListDataView implements AdapterVi
         if(mAdapter!=null)
             mAdapter.garbageCollectorCall();
         mAdapter =null;
-        mEmptyView =null;
-        if(mEmptyViewImage!=null)
-            mEmptyViewImage.setImageBitmap(null);
-        mEmptyViewImage=null;
-        mEmptyViewMessage=null;
+
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.clean();
+        mEmptyViewHelper = null;
         mSwipeRefreshLayout=null;
     }
     protected ListView getListView()
@@ -60,9 +52,6 @@ abstract public class BaseListView extends BaseListDataView implements AdapterVi
     {
         return mAdapter;
     }
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         configViewParam();
@@ -71,7 +60,7 @@ abstract public class BaseListView extends BaseListDataView implements AdapterVi
             configSwipeRefreshLayout(createSwipeRefreshLayout(mRootView));
 
         mList = createListView(mRootView);
-        mEmptyView= createEmptyView(mRootView);
+        mEmptyViewHelper = createEmptyViewHelper();
 
         mAdapter = createListViewAdapter();
         mList.setOnItemClickListener(this);
@@ -83,6 +72,9 @@ abstract public class BaseListView extends BaseListDataView implements AdapterVi
         return mRootView;
     }
 
+    protected EmptyViewHelper createEmptyViewHelper() {
+        return new EmptyViewHelper(getActivity(), createEmptyView(mRootView), this, true, true);
+    }
     public void onViewCreated(View view) {
 
     }
@@ -91,9 +83,6 @@ abstract public class BaseListView extends BaseListDataView implements AdapterVi
     {
 
     }
-
-
-
     protected void setOnScrollListener(ListView mList)
     {
         mList.setOnScrollListener(new EndlessListScrollListener() {
@@ -109,7 +98,6 @@ abstract public class BaseListView extends BaseListDataView implements AdapterVi
             }
         });
     }
-
     protected View createRootView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View rootView;
         if(getDataManager().getRefreshEnabled())
@@ -123,50 +111,11 @@ abstract public class BaseListView extends BaseListDataView implements AdapterVi
         ListView recyclerView = (ListView) rootView.findViewById(R.id.listView);
         return recyclerView;
     }
-
-    protected Drawable getEmptyViewDrawable()
-    {
-        Drawable drawable =getResources().getDrawable(R.drawable._empty_box);
-        drawable.setColorFilter(getResources().getColor(R.color._emptyViewMessageColor), PorterDuff.Mode.SRC_ATOP);
-        return drawable;
-    }
-    protected String getEmptyViewMessage()
-    {
-        return getResources().getString(R.string._emptyViewMessage);
-    }
-    public ImageView getEmptyImageView(View rootView)
-    {
-        return mEmptyViewImage;
-    }
-    public TextView getEmptyMessageView(View rootView)
-    {
-        return mEmptyViewMessage;
-    }
-    public View getEmptyView()
-    {
-        return mEmptyView;
-    }
-
-
-
     protected View createEmptyView(View rootView)
     {
         View emptyView = rootView.findViewById(R.id.emptyView);
-        if(rootView.findViewById(R.id.emptyViewImage)!=null && rootView.findViewById(R.id.emptyViewImage) instanceof ImageView) {
-            mEmptyViewImage = (ImageView) rootView.findViewById(R.id.emptyViewImage);
-            mEmptyViewImage.setImageDrawable(getEmptyViewDrawable());
-        }
-
-        if(rootView.findViewById(R.id.emptyViewMessage)!=null && rootView.findViewById(R.id.emptyViewMessage) instanceof TextView) {
-            mEmptyViewMessage = (TextView) rootView.findViewById(R.id.emptyViewMessage);
-            mEmptyViewMessage.setText(getEmptyViewMessage());
-        }
-
-        if(emptyView!=null)
-            emptyView.setVisibility(View.GONE);
         return emptyView;
     }
-
     protected void onDataScroll(ListView listView, int dx, int dy)
     {
 
@@ -214,13 +163,8 @@ abstract public class BaseListView extends BaseListDataView implements AdapterVi
     }
     public void onDataLoadError(String url, Object status)
     {
-        if(mEmptyView!=null)
-        {
-            if(getDataManager().size()==0)
-                mEmptyView.setVisibility(View.VISIBLE);
-            else
-                mEmptyView.setVisibility(View.GONE);
-        }
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.updateView(getDataManager());
         updateSwipeRefreshLayout(false);
     }
     public void onDataReceived(String url, Object value,Object status)
@@ -233,34 +177,23 @@ abstract public class BaseListView extends BaseListDataView implements AdapterVi
             mList.smoothScrollToPosition(0);
 
 
-        if(mEmptyView!=null)
-        {
-            if(getDataManager().size()==0)
-                mEmptyView.setVisibility(View.VISIBLE);
-            else
-                mEmptyView.setVisibility(View.GONE);
-        }
-
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.updateView(getDataManager());
         updateSwipeRefreshLayout(isRefreshData);
-
     }
-
     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
     {
         Object baseObject = getDataManager().get(position);
         onItemClick(baseObject);
     }
-
     public void onItemClick(Object baseObject)
     {
 
     }
-
-
     public void onCallStart()
     {
-        if(mEmptyView!=null)
-            mEmptyView.setVisibility(View.GONE);
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.updatesStart();
     }
 
     public void onFirstCallEnd()

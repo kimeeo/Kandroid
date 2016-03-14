@@ -8,8 +8,6 @@
 
 package com.kimeeo.library.listDataView.recyclerView;
 
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -17,37 +15,36 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.kimeeo.library.R;
 import com.kimeeo.library.listDataView.BaseListDataView;
+import com.kimeeo.library.listDataView.EmptyViewHelper;
 
 import java.util.List;
+
 import jp.wasabeef.recyclerview.animators.FadeInAnimator;
 
 
 abstract public class BaseRecyclerView extends BaseListDataView implements AdapterView.OnItemClickListener
 {
+    protected RecyclerView recyclerView;
+    protected View mRootView;
+    protected BaseRecyclerViewAdapter mAdapter;
+    protected EmptyViewHelper mEmptyViewHelper;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
     abstract protected RecyclerView.LayoutManager createLayoutManager();
+
     abstract protected BaseRecyclerViewAdapter createListViewAdapter();
+
     protected RecyclerView.ItemAnimator createItemAnimator()
     {
         return  new FadeInAnimator();
     }
-    protected RecyclerView recyclerView;
 
     public View getRootView() {
         return mRootView;
     }
-
-    protected View mRootView;
-    protected View mEmptyView;
-    protected ImageView mEmptyViewImage;
-    protected TextView mEmptyViewMessage;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    protected BaseRecyclerViewAdapter mAdapter;
-
 
     protected void garbageCollectorCall()
     {
@@ -57,11 +54,9 @@ abstract public class BaseRecyclerView extends BaseListDataView implements Adapt
 
         mAdapter =null;
         recyclerView = null;
-        mEmptyView =null;
-        if(mEmptyViewImage!=null)
-            mEmptyViewImage.setImageBitmap(null);
-        mEmptyViewImage=null;
-        mEmptyViewMessage=null;
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.clean();
+        mEmptyViewHelper = null;
         mSwipeRefreshLayout=null;
     }
     protected RecyclerView.ItemDecoration createItemDecoration() {
@@ -86,7 +81,7 @@ abstract public class BaseRecyclerView extends BaseListDataView implements Adapt
             configSwipeRefreshLayout(createSwipeRefreshLayout(mRootView));
 
         recyclerView = createRecyclerView(mRootView);
-        mEmptyView= createEmptyView(mRootView);
+        mEmptyViewHelper = createEmptyViewHelper();
 
         RecyclerView.LayoutManager layoutManager= createLayoutManager();
         configLayoutManager(layoutManager);
@@ -103,6 +98,11 @@ abstract public class BaseRecyclerView extends BaseListDataView implements Adapt
         onViewCreated(mRootView);
         return mRootView;
     }
+
+    protected EmptyViewHelper createEmptyViewHelper() {
+        return new EmptyViewHelper(getActivity(), createEmptyView(mRootView), this, true, true);
+    }
+
     public void onViewCreated(View view) {
 
     }
@@ -143,11 +143,11 @@ abstract public class BaseRecyclerView extends BaseListDataView implements Adapt
         mList.setOnScrollListener(new EndlessRecyclerOnScrollListener(mList.getLayoutManager()) {
             @Override
             public void onLoadMore() {
-                if(getDataManager().canLoadNext())
+                if (getDataManager().canLoadNext())
                     loadNext();
             }
-            public void onScroll(RecyclerView recyclerView, int dx, int dy)
-            {
+
+            public void onScroll(RecyclerView recyclerView, int dx, int dy) {
                 onDataScroll(recyclerView, dx, dy);
             }
         });
@@ -165,47 +165,12 @@ abstract public class BaseRecyclerView extends BaseListDataView implements Adapt
         return recyclerView;
     }
 
-    protected Drawable getEmptyViewDrawable()
-    {
-        Drawable drawable =getResources().getDrawable(R.drawable._empty_box);
-        drawable.setColorFilter(getResources().getColor(R.color._emptyViewMessageColor), PorterDuff.Mode.SRC_ATOP);
-        return drawable;
-    }
-    protected String getEmptyViewMessage()
-    {
-        return getResources().getString(R.string._emptyViewMessage);
-    }
-    public ImageView getEmptyImageView(View rootView)
-    {
-        return mEmptyViewImage;
-    }
-    public TextView getEmptyMessageView(View rootView)
-    {
-        return mEmptyViewMessage;
-    }
-    public View getEmptyView()
-    {
-        return mEmptyView;
-    }
 
 
 
     protected View createEmptyView(View rootView)
     {
         View emptyView = rootView.findViewById(R.id.emptyView);
-
-        if(rootView.findViewById(R.id.emptyViewImage)!=null && rootView.findViewById(R.id.emptyViewImage) instanceof ImageView) {
-            mEmptyViewImage = (ImageView) rootView.findViewById(R.id.emptyViewImage);
-            mEmptyViewImage.setImageDrawable(getEmptyViewDrawable());
-        }
-
-        if(rootView.findViewById(R.id.emptyViewMessage)!=null && rootView.findViewById(R.id.emptyViewMessage) instanceof TextView) {
-            mEmptyViewMessage = (TextView) rootView.findViewById(R.id.emptyViewMessage);
-            mEmptyViewMessage.setText(getEmptyViewMessage());
-        }
-
-        if(emptyView!=null)
-            emptyView.setVisibility(View.GONE);
         return emptyView;
     }
 
@@ -256,13 +221,8 @@ abstract public class BaseRecyclerView extends BaseListDataView implements Adapt
     }
     public void onDataLoadError(String url, Object status)
     {
-        if(mEmptyView!=null)
-        {
-            if(getDataManager().size()==0)
-                mEmptyView.setVisibility(View.VISIBLE);
-            else
-                mEmptyView.setVisibility(View.GONE);
-        }
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.updateView(getDataManager());
         updateSwipeRefreshLayout(false);
     }
     public void onDataReceived(String url, Object value,Object status)
@@ -274,16 +234,9 @@ abstract public class BaseRecyclerView extends BaseListDataView implements Adapt
         if (isRefreshData)
             recyclerView.scrollToPosition(0);
 
-        if(mEmptyView!=null)
-        {
-            if(getDataManager().size()==0)
-                mEmptyView.setVisibility(View.VISIBLE);
-            else
-                mEmptyView.setVisibility(View.GONE);
-        }
-
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.updateView(getDataManager());
         updateSwipeRefreshLayout(isRefreshData);
-
     }
 
     @Override
@@ -296,14 +249,11 @@ abstract public class BaseRecyclerView extends BaseListDataView implements Adapt
     {
 
     }
-
-
     public void onCallStart()
     {
-        if(mEmptyView!=null)
-            mEmptyView.setVisibility(View.GONE);
+        if (mEmptyViewHelper != null)
+            mEmptyViewHelper.updatesStart();
     }
-
     public void onFirstCallEnd()
     {
 
@@ -312,6 +262,4 @@ abstract public class BaseRecyclerView extends BaseListDataView implements Adapt
     {
 
     }
-
-
 }

@@ -20,22 +20,25 @@ import com.kimeeo.library.listDataView.recyclerView.viewProfiles.BaseViewProfile
 
 abstract public class BaseProfileRecyclerView extends BaseRecyclerView implements AdapterView.OnItemClickListener
 {
+    protected RecyclerView.ItemDecoration itemDecoration;
+
     final protected RecyclerView.LayoutManager createLayoutManager()
     {
         return null;
     }
+
     final protected BaseRecyclerViewAdapter createListViewAdapter()
     {
         return null;
     }
-    protected RecyclerView.ItemDecoration itemDecoration;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View rootView = createRootView(inflater, container, savedInstanceState);
         if(getDataManager().getRefreshEnabled())
             configSwipeRefreshLayout(createSwipeRefreshLayout(rootView));
         recyclerView = createRecyclerView(rootView);
-        mEmptyView= createEmptyView(rootView);
+        View mEmptyView = createEmptyView(rootView);
         onViewCreated(rootView);
         return rootView;
     }

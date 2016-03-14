@@ -20,6 +20,8 @@
         <item>#FFF2AF3A</item>
         <item>#FF279B5E</item>
     </array>
-    <color name="_emptyViewMessageColor">#000000</color>
+    <color name="_emptyViewMessageColor">@color/colorPrimary</color>
+
+    <color name="_indicator_background_color">#ffffff</color>
 
 </resources>

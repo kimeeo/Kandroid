@@ -20,27 +20,23 @@ import se.emilsjolander.flipview.OverFlipMode;
  */
 abstract public class BaseFlipView extends BaseListView {
 
+    public static final String ORIENTATION_VERTICAL = "vertical";
+    public static final String ORIENTATION_HORIZONTAL = "horizontal";
     private boolean loadingRefreshData = false;
     private boolean loadingNextData = false;
     private boolean firstItemIn = false;
-
     private ProgressView mProgressBar;
     private ProgressView mProgressBarBottom;
     private ProgressView mProgressBarTop;
+    private FlipView mFlipView;
 
     public String getOrientation() {
         return ORIENTATION_VERTICAL;
     }
 
-    public static final String ORIENTATION_VERTICAL="vertical";
-    public static final String ORIENTATION_HORIZONTAL="horizontal";
-
-
     public FlipView getFlipView() {
         return mFlipView;
     }
-
-    private FlipView mFlipView;
 
     protected void garbageCollectorCall()
     {
@@ -70,12 +66,8 @@ abstract public class BaseFlipView extends BaseListView {
         mRootView = createRootView(inflater, container, savedInstanceState);
 
         mFlipView = createFlipView(mRootView);
-        mEmptyView= createEmptyView(mRootView);
+        mEmptyViewHelper = createEmptyViewHelper();
         mAdapter = createListViewAdapter();
-
-
-
-
         mFlipView.setAdapter(mAdapter);
 
         mFlipView.setOnFlipListener(new FlipView.OnFlipListener() {

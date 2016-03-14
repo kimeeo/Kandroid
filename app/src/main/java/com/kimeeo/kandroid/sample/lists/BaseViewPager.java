@@ -6,8 +6,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.kimeeo.kandroid.R;
 import com.kimeeo.kandroid.sample.lists.holder.ViewPagerItemHolder1;
@@ -28,9 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 /**
  * Created by bhavinpadhiyar on 1/30/16.
  */
@@ -38,6 +33,26 @@ public class BaseViewPager extends BaseFragment implements IViewProvider
 {
 
     ViewPager viewPager;
+    IListProvider listData = new IListProvider() {
+        public List<?> getList(PageData data, Map<String, Object> param) {
+            if (data.curruntPage == 1) {
+                List<SampleModel> list = new ArrayList<>();
+                list.add(getSample("B1", "534534"));
+                list.add(getSample("B2", "534534"));
+                list.add(getSample("B3", "534534"));
+                list.add(getSample("B4", "534534"));
+                list.add(getSample("B5", "534534"));
+                list.add(getSample("B6", "534534"));
+                list.add(getSample("B7", "534534"));
+                list.add(getSample("B8", "534534"));
+                list.add(getSample("B9", "534534"));
+                list.add(getSample("B10", "534534"));
+                return list;
+            }
+            return null;
+        }
+    };
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState)
     {
         DataManager dataManager= createDataManager();
@@ -62,20 +77,6 @@ public class BaseViewPager extends BaseFragment implements IViewProvider
         View emptyView = rootView.findViewById(com.kimeeo.library.R.id.emptyView);
         if(emptyView!=null)
             viewPagerHelper.emptyView(emptyView);
-
-
-        if(rootView.findViewById(com.kimeeo.library.R.id.emptyViewImage)!=null) {
-            ImageView emptyViewImage = (ImageView) rootView.findViewById(com.kimeeo.library.R.id.emptyViewImage);
-            if (emptyViewImage != null)
-                viewPagerHelper.emptyImageView(emptyViewImage);
-        }
-
-        if(rootView.findViewById(com.kimeeo.library.R.id.emptyViewMessage)!=null) {
-            TextView emptyViewMessage = (TextView) rootView.findViewById(com.kimeeo.library.R.id.emptyViewMessage);
-            if (emptyViewMessage != null)
-                viewPagerHelper.emptyMessageView(emptyViewMessage);
-        }
-
         View indicator = rootView.findViewById(com.kimeeo.library.R.id.indicator);
         if(indicator!=null)
             viewPagerHelper.indicator(indicator);
@@ -90,6 +91,7 @@ public class BaseViewPager extends BaseFragment implements IViewProvider
 
         return rootView;
     }
+
     public ViewPager getViewPager()
     {
         return viewPager;
@@ -99,10 +101,10 @@ public class BaseViewPager extends BaseFragment implements IViewProvider
     {
         viewPager=null;
     }
+
     public void removeView(View view, int position, BaseItemHolder itemHolder) {
 
     }
-
 
     protected BaseViewPagerAdapter createViewPagerAdapter(DataManager dataManager)
     {
@@ -117,27 +119,6 @@ public class BaseViewPager extends BaseFragment implements IViewProvider
         return listData1;
     }
 
-    IListProvider listData=new IListProvider()
-    {
-        public List<?> getList(PageData data,Map<String, Object> param)
-        {
-            if(data.curruntPage==1) {
-                List<SampleModel> list = new ArrayList<>();
-                list.add(getSample("B1", "534534"));
-                list.add(getSample("B2", "534534"));
-                list.add(getSample("B3", "534534"));
-                list.add(getSample("B4", "534534"));
-                list.add(getSample("B5", "534534"));
-                list.add(getSample("B6", "534534"));
-                list.add(getSample("B7", "534534"));
-                list.add(getSample("B8", "534534"));
-                list.add(getSample("B9", "534534"));
-                list.add(getSample("B10", "534534"));
-                return list;
-            }
-            return null;
-        }
-    };
     private SampleModel getSample(String name, String phone) {
         SampleModel o = new SampleModel();
         o.name =name;
