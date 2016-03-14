@@ -101,7 +101,7 @@ abstract public class BaseViewPager extends BaseListDataView implements ViewPage
     }
 
     protected EmptyViewHelper createEmptyViewHelper() {
-        return new EmptyViewHelper(getActivity(), createEmptyView(mRootView), this, true, true);
+        return new EmptyViewHelper(getActivity(), createEmptyView(mRootView), this, showInternetError(), showInternetRetryButton());
     }
     protected JazzyViewPager.TransitionEffect createTransitionEffect() {
         return null;

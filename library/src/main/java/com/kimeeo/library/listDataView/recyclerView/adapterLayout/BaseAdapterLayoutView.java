@@ -90,7 +90,7 @@ abstract public class BaseAdapterLayoutView extends BaseListDataView implements 
     }
 
     protected EmptyViewHelper createEmptyViewHelper() {
-        return new EmptyViewHelper(getActivity(), createEmptyView(mRootView), this, true, true);
+        return new EmptyViewHelper(getActivity(), createEmptyView(mRootView), this, showInternetError(), showInternetRetryButton());
     }
     //Confgi Your RecycleVIew Here
     protected void configViewGroup(ViewGroup view,BaseRecyclerViewAdapter mAdapter)

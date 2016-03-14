@@ -22,6 +22,8 @@ public class RecyclerViewHelper extends BaseHelper implements AdapterView.OnItem
 {
     protected EmptyViewHelper mEmptyViewHelper;
     protected BaseRecyclerViewAdapter mAdapter;
+    boolean showInternetError = true;
+    boolean showInternetRetry = true;
     private RecyclerView.ItemAnimator itemAnimator;
     private int animatorDuration = 200;
     private RecyclerView recyclerView;
@@ -30,7 +32,6 @@ public class RecyclerViewHelper extends BaseHelper implements AdapterView.OnItem
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.ItemDecoration itemDecoration;
     private OnItemClick onItemClick;
-
 
     public RecyclerViewHelper()
     {
@@ -46,7 +47,17 @@ public class RecyclerViewHelper extends BaseHelper implements AdapterView.OnItem
     }
 
     public RecyclerViewHelper emptyView(View view) {
-        mEmptyViewHelper = new EmptyViewHelper(view.getContext(), view, this, true, true);
+        mEmptyViewHelper = new EmptyViewHelper(view.getContext(), view, this, showInternetError, showInternetRetry);
+        return this;
+    }
+
+    public RecyclerViewHelper showInternetError(boolean showInternetError) {
+        this.showInternetError = showInternetError;
+        return this;
+    }
+
+    public RecyclerViewHelper showInternetRetry(boolean showInternetRetry) {
+        this.showInternetRetry = showInternetRetry;
         return this;
     }
 

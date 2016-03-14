@@ -100,7 +100,7 @@ abstract public class BaseRecyclerView extends BaseListDataView implements Adapt
     }
 
     protected EmptyViewHelper createEmptyViewHelper() {
-        return new EmptyViewHelper(getActivity(), createEmptyView(mRootView), this, true, true);
+        return new EmptyViewHelper(getActivity(), createEmptyView(mRootView), this, showInternetError(), showInternetRetryButton());
     }
 
     public void onViewCreated(View view) {

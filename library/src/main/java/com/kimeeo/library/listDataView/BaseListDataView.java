@@ -75,6 +75,13 @@ abstract public class BaseListDataView extends BaseFragment implements OnCallSer
         loadNext();
     }
 
+    public boolean showInternetError() {
+        return true;
+    }
+
+    public boolean showInternetRetryButton() {
+        return true;
+    }
 
     public class DefaultErrorHandlerLocal extends DefaultErrorHandler {
         public Resources getResources() {

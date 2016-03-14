@@ -24,6 +24,8 @@ public class ListViewHelper extends BaseHelper implements AdapterView.OnItemClic
     protected EmptyViewHelper mEmptyViewHelper;
     protected ListView mList;
     protected BaseListViewAdapter mAdapter;
+    boolean showInternetError = true;
+    boolean showInternetRetry = true;
     private DataManager dataManager;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private OnItemClick onItemClick;
@@ -45,7 +47,17 @@ public class ListViewHelper extends BaseHelper implements AdapterView.OnItemClic
 
     public ListViewHelper emptyView(View view)
     {
-        mEmptyViewHelper = new EmptyViewHelper(view.getContext(), view, this, true, true);
+        mEmptyViewHelper = new EmptyViewHelper(view.getContext(), view, this, showInternetError, showInternetRetry);
+        return this;
+    }
+
+    public ListViewHelper showInternetError(boolean showInternetError) {
+        this.showInternetError = showInternetError;
+        return this;
+    }
+
+    public ListViewHelper showInternetRetry(boolean showInternetRetry) {
+        this.showInternetRetry = showInternetRetry;
         return this;
     }
 

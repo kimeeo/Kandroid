@@ -31,6 +31,8 @@ public class ViewPagerHelper extends BaseHelper implements OnCallService, ViewPa
     protected BaseViewPagerAdapter mAdapter;
     protected ViewPager mViewPager;
     protected View mIndicator;
+    boolean showInternetError = true;
+    boolean showInternetRetry = true;
     private SmartTabLayout.TabProvider tabProvider;
     private RecyclerTabLayout.Adapter<?> recyclerViewTabProvider;
     private boolean isIndicatorSet = false;
@@ -47,11 +49,24 @@ public class ViewPagerHelper extends BaseHelper implements OnCallService, ViewPa
 
     public ViewPagerHelper emptyView(View view)
     {
-        mEmptyViewHelper = new EmptyViewHelper(view.getContext(), view, this, true, true);
+        mEmptyViewHelper = new EmptyViewHelper(view.getContext(), view, this, showInternetError, showInternetRetry);
         return this;
     }
 
-    public ViewPagerHelper emptyView(EmptyViewHelper emptyViewHelper) {
+    public ViewPagerHelper showInternetError(boolean showInternetError) {
+        this.showInternetError = showInternetError;
+        return this;
+    }
+
+    public ViewPagerHelper showInternetRetry(boolean showInternetRetry) {
+        this.showInternetRetry = showInternetRetry;
+        return this;
+    }
+
+    public ViewPagerHelper
+
+
+    emptyView(EmptyViewHelper emptyViewHelper) {
         mEmptyViewHelper = emptyViewHelper;
         return this;
     }
