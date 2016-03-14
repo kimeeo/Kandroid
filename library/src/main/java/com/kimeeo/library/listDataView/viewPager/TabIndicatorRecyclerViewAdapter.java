@@ -16,13 +16,14 @@ abstract public class TabIndicatorRecyclerViewAdapter extends RecyclerTabLayout.
 
     private final DataManager dataManager;
 
+    public TabIndicatorRecyclerViewAdapter(ViewPager viewPager, DataManager dataManager) {
+        super(viewPager);
+        this.dataManager = dataManager;
+    }
+
     public DataManager getDataManager()
     {
         return dataManager;
-    }
-    public TabIndicatorRecyclerViewAdapter(ViewPager viewPager, DataManager dataManager) {
-        super(viewPager);
-        this.dataManager=dataManager;
     }
 
     @Override
@@ -103,15 +104,12 @@ abstract public class TabIndicatorRecyclerViewAdapter extends RecyclerTabLayout.
         public void updateProgressView(Object item) {
 
         }
-
         public void updateFirst(Object item) {
 
         }
-
         public void updateLast(Object item) {
 
         }
-
         public void updateMiddel(Object item) {
 
         }

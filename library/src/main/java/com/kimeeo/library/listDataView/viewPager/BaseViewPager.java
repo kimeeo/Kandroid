@@ -282,6 +282,9 @@ abstract public class BaseViewPager extends BaseListDataView implements ViewPage
                 if (selected > 0) {
                     tabLayout.setVisibility(View.INVISIBLE);
                     tabLayout.getTabAt(selected).select();
+                    tabLayout.setScrollPosition(selected, Float.parseFloat("0.3"), true);
+                    tabLayout.setVisibility(View.VISIBLE);
+
                     final Handler handler = new Handler();
                     final Runnable runnablelocal = new Runnable() {
                         @Override
@@ -290,7 +293,7 @@ abstract public class BaseViewPager extends BaseListDataView implements ViewPage
                             tabLayout.setVisibility(View.VISIBLE);
                         }
                     };
-                    handler.postDelayed(runnablelocal, 200);
+                    handler.postDelayed(runnablelocal, 100);
                 }
 
                 configTabLayout(tabLayout, viewPager);
