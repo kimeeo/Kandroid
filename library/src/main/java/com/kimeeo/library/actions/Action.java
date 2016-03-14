@@ -1,8 +1,6 @@
 package com.kimeeo.library.actions;
 
 import android.app.Activity;
-import android.app.PendingIntent;
-import android.graphics.Bitmap;
 import android.support.v4.util.Pair;
 import android.view.View;
 
@@ -63,12 +61,32 @@ public class Action extends BaseAction{
     public static String ATTRIBUTE_ADDRESS="address";
 
     OpenCharomeTab openCharomeTab;
+    ShowBusyDialog showBusyDialog;
+    SMS sms;
+    OpenBrowser openBrowser;
+    OpenApp openApp;
+    OpenInAppBrowser openInAppBrowser;
+    Toast toast;
+    TextShare textShare;
+    DownloadAndOpen downloadAndOpen;
+    ImageSet imageSet;
+    ImageShare imageShare;
+    Download download;
+    Copy copy;
+    NavigateTo navigateTo;
+    LaunchActivity launchActivity;
+    MailTo mailTo;
+    Phone phone;
+
+    public Action(Activity activity) {
+        super(activity);
+    }
+
     public OpenCharomeTab getOpenCharomeTab() {
         if(openCharomeTab==null)
             openCharomeTab = new OpenCharomeTab(activity);
         return openCharomeTab;
     }
-
 
     public ShowBusyDialog getShowBusyDialog() {
         if(showBusyDialog==null)
@@ -76,47 +94,35 @@ public class Action extends BaseAction{
         return showBusyDialog;
     }
 
-    ShowBusyDialog showBusyDialog;
-
-
     public SMS getSms() {
         if(sms==null)
             sms = new SMS(activity);
         return sms;
     }
-    SMS sms;
-
 
     public OpenBrowser getOpenBrowser() {
         if(openBrowser==null)
             openBrowser = new OpenBrowser(activity);
         return openBrowser;
     }
-    OpenBrowser openBrowser;
-
 
     public OpenApp getOpenApp() {
         if(openApp==null)
             openApp = new OpenApp(activity);
         return openApp;
     }
-    OpenApp openApp;
-
 
     public OpenInAppBrowser getOpenInAppBrowser() {
         if(openInAppBrowser==null)
             openInAppBrowser = new OpenInAppBrowser(activity);
         return openInAppBrowser;
     }
-    OpenInAppBrowser openInAppBrowser;
-
 
     public Toast getToast() {
         if(toast==null)
             toast = new Toast(activity);
         return toast;
     }
-    Toast toast;
 
     public TextShare getTextShare() {
         if(textShare==null)
@@ -124,16 +130,11 @@ public class Action extends BaseAction{
         return textShare;
     }
 
-    TextShare textShare;
-
-
     public DownloadAndOpen getDownloadAndOpen() {
         if(downloadAndOpen==null)
             downloadAndOpen = new DownloadAndOpen(activity);
         return downloadAndOpen;
     }
-    DownloadAndOpen downloadAndOpen;
-
 
     public ImageSet getImageSet() {
         if(imageSet==null)
@@ -141,15 +142,11 @@ public class Action extends BaseAction{
         return imageSet;
     }
 
-    ImageSet imageSet;
-
     public ImageShare getImageShare() {
         if(imageShare==null)
             imageShare = new ImageShare(activity);
         return imageShare;
     }
-
-    ImageShare imageShare;
 
     public Download getDownload() {
         if(download==null)
@@ -157,17 +154,11 @@ public class Action extends BaseAction{
         return download;
     }
 
-    Download download;
-
-
     public Copy getCopy() {
         if(copy==null)
             copy= new Copy(activity);
         return copy;
     }
-
-    Copy copy;
-
 
     public NavigateTo getNavigateTo() {
         if(navigateTo==null)
@@ -175,17 +166,11 @@ public class Action extends BaseAction{
         return navigateTo;
     }
 
-    NavigateTo navigateTo;
-
-
     public LaunchActivity getLaunchActivity() {
         if(launchActivity==null)
             launchActivity= new LaunchActivity(activity);
         return launchActivity;
     }
-
-    LaunchActivity launchActivity;
-
 
     public MailTo getMailTo() {
         if(mailTo==null)
@@ -193,17 +178,11 @@ public class Action extends BaseAction{
         return mailTo;
     }
 
-    MailTo mailTo;
-
     public Phone getPhone() {
         if(phone==null)
             phone= new Phone(activity);
         return phone;
     }
-
-    Phone phone;
-
-
 
     public void clear()
     {
@@ -269,11 +248,6 @@ public class Action extends BaseAction{
         phone=null;
 
 
-    }
-
-    public Action(Activity activity)
-    {
-        super(activity);
     }
 
     public void openChromeTab(String url)
@@ -369,11 +343,9 @@ public class Action extends BaseAction{
     }
 
 
-
-
-    public void downloadAndOpen(String link,String location,final String shareTitle, boolean aTrue, final String success,final String fail,final Download.DownloadResult downloadResult) {
+    public void downloadAndOpen(String link, String location, final String shareTitle, boolean showProgress, final String success, final String fail, final Download.DownloadResult downloadResult) {
         DownloadAndOpen downloadAndOpen=getDownloadAndOpen();
-        downloadAndOpen.perform(link, location, shareTitle, aTrue, success, fail, downloadResult);
+        downloadAndOpen.perform(link, location, shareTitle, showProgress, success, fail, downloadResult);
     }
     public void setImage(String link,String location,String shareTitle, boolean aTrue, final String success,final String fail,final Download.DownloadResult downloadResult) {
         ImageSet imageSet = getImageSet();
