@@ -1,6 +1,7 @@
 package com.kimeeo.library.listDataView.recyclerView.viewPager;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,14 +29,34 @@ abstract public class BaseViewPager extends DefaultRecyclerView {
     {
         if(mList instanceof RecyclerViewPager)
         {
-            TabLayout tabLayout = createTabLayout(getRootView());
+            final TabLayout tabLayout = createTabLayout(getRootView());
             if(tabLayout!=null) {
+
+                final int selected = tabLayout.getSelectedTabPosition();
                 TabLayoutSupport.setupWithViewPager(tabLayout, (RecyclerViewPager) mList, mAdapter);
-                int selected=tabLayout.getSelectedTabPosition();
-                tabLayout.setScrollPosition(selected, Float.parseFloat("0.1"), true);
+
+                if (selected > 0) {
+                    tabLayout.setVisibility(View.INVISIBLE);
+                    tabLayout.getTabAt(selected).select();
+                    final Handler handler = new Handler();
+                    final Runnable runnablelocal = new Runnable() {
+                        @Override
+                        public void run() {
+                            tabLayout.setScrollPosition(selected, Float.parseFloat("0.3"), true);
+                            tabLayout.setVisibility(View.VISIBLE);
+                        }
+                    };
+                    handler.postDelayed(runnablelocal, 200);
+                }
+
+                configTabLayout(tabLayout, (RecyclerViewPager) mList);
             }
 
         }
+    }
+
+    protected void configTabLayout(TabLayout tabLayout, RecyclerViewPager mList) {
+
     }
 
     public void onCallEnd(List<?> dataList,final boolean isRefreshData) {

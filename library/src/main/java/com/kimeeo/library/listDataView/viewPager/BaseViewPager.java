@@ -28,48 +28,49 @@ import java.util.List;
  * Created by bhavinpadhiyar on 1/20/16.
  */
 abstract public class BaseViewPager extends BaseListDataView implements ViewPager.OnPageChangeListener {
+    protected View mRootView;
+    protected View mEmptyView;
+    protected BaseViewPagerAdapter mAdapter;
+    protected ViewPager mViewPager;
+    protected JazzyViewPager.TransitionEffect transition = null;
+    protected View mIndicator;
+    protected ImageView mEmptyViewImage;
+    protected TextView mEmptyViewMessage;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private boolean isIndicatorSet = false;
+    private int currentItem;
+
     protected void garbageCollectorCall() {
         super.garbageCollectorCall();
-        mRootView=null;
-        mEmptyView=null;
-        if(mAdapter!=null)
+        mRootView = null;
+        mEmptyView = null;
+        if (mAdapter != null)
             mAdapter.garbageCollectorCall();
-        mAdapter=null;
-        mViewPager=null;
-        mSwipeRefreshLayout=null;
+        mAdapter = null;
+        mViewPager = null;
+        mSwipeRefreshLayout = null;
         transition = null;
-        mIndicator= null;
-        mEmptyViewImage= null;
-        mEmptyViewMessage= null;
+        mIndicator = null;
+        mEmptyViewImage = null;
+        mEmptyViewMessage = null;
     }
 
     public View getRootView() {
         return mRootView;
     }
 
-    protected View mRootView;
-    protected View mEmptyView;
-
     public BaseViewPagerAdapter getAdapter() {
         return mAdapter;
     }
-
-    protected BaseViewPagerAdapter mAdapter;
-    protected ViewPager mViewPager;
 
     public ViewPager getViewPager() {
         return mViewPager;
     }
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     public SwipeRefreshLayout getSwipeRefreshLayout()
     {
         return mSwipeRefreshLayout;
     }
-    protected JazzyViewPager.TransitionEffect transition = null;
-    protected View mIndicator;
-    protected ImageView mEmptyViewImage;
-    protected TextView mEmptyViewMessage;
 
     public String getItemTitle(int position,Object navigationObject)
     {
@@ -205,8 +206,8 @@ abstract public class BaseViewPager extends BaseListDataView implements ViewPage
         return rootView;
     }
 
-
     abstract protected BaseViewPagerAdapter createViewPagerAdapter();
+
     public String getPageTitle(int position, Object o)
     {
         return "";
@@ -232,7 +233,7 @@ abstract public class BaseViewPager extends BaseListDataView implements ViewPage
         ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.viewPager);
         return viewPager;
     }
-    private boolean isIndicatorSet=false;
+
     protected void setUpIndicator(View indicator, ViewPager viewPager) {
         if(indicator!=null) {
             if(isIndicatorSet==false) {
@@ -274,27 +275,39 @@ abstract public class BaseViewPager extends BaseListDataView implements ViewPage
                 pageIndicator.notifyDataSetChanged();
             }
             else if (indicator instanceof TabLayout  && getDataManager().size()!=0) {
-                TabLayout tabLayout = (TabLayout) indicator;
+                final TabLayout tabLayout = (TabLayout) indicator;
+                final int selected = tabLayout.getSelectedTabPosition();
                 tabLayout.setupWithViewPager(viewPager);
+
+                if (selected > 0) {
+                    tabLayout.setVisibility(View.INVISIBLE);
+                    tabLayout.getTabAt(selected).select();
+                    final Handler handler = new Handler();
+                    final Runnable runnablelocal = new Runnable() {
+                        @Override
+                        public void run() {
+                            tabLayout.setScrollPosition(selected, Float.parseFloat("0.3"), true);
+                            tabLayout.setVisibility(View.VISIBLE);
+                        }
+                    };
+                    handler.postDelayed(runnablelocal, 200);
+                }
+
                 configTabLayout(tabLayout, viewPager);
             }
         }
 
     }
+
     protected void configTabLayout(TabLayout tabLayout,ViewPager viewPager)
     {
 
     }
+    //SegmentTabLayout segmentTabLayout;
 
     protected RecyclerTabLayout.Adapter<?> getRecyclerViewTabProvider(ViewPager viewPager) {
         return null;
     }
-    //SegmentTabLayout segmentTabLayout;
-
-
-
-
-
 
     protected SmartTabLayout.TabProvider getTabProvider() {
         /*
@@ -333,7 +346,6 @@ abstract public class BaseViewPager extends BaseListDataView implements ViewPage
         return rootView.findViewById(R.id.indicator);
     }
 
-
     protected void onPageChange(Object itemPosition, int position) {
 
     }
@@ -363,7 +375,6 @@ abstract public class BaseViewPager extends BaseListDataView implements ViewPage
         else if (mSwipeRefreshLayout != null)
             mSwipeRefreshLayout.setEnabled(false);
     }
-
 
     public void onPageScrolled(int arg0, float arg1, int arg2) {
     }
@@ -403,18 +414,13 @@ abstract public class BaseViewPager extends BaseListDataView implements ViewPage
         gotoItem(index, true);
     }
 
-    private int currentItem;
-
-    protected void setCurrentItem(int value) {
-        currentItem = value;
-    }
-
     protected int getCurrentItem() {
         return currentItem;
     }
 
-
-
+    protected void setCurrentItem(int value) {
+        currentItem = value;
+    }
 
     public void onDataReceived(String url, Object value, Object status) {
 
@@ -457,25 +463,24 @@ abstract public class BaseViewPager extends BaseListDataView implements ViewPage
 
         if(dataList!=null && dataList.size()!=0 && getViewPager()!=null)
         {
-            final Handler handler = new Handler();
-            final Runnable runnablelocal = new Runnable() {
-                @Override
-                public void run() {
-
-
-                    setUpIndicator(mIndicator, mViewPager);
-
-                    if (isRefreshData) {
-                        if(getViewPager() instanceof DirectionalViewPager==false)
-                        {
-                            //getViewPager().setAdapter(null);
-                            getViewPager().setAdapter(getAdapter());
-                            gotoItem(0, true);
+            if (isRefreshData) {
+                final Handler handler = new Handler();
+                final Runnable runnablelocal = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (isRefreshData) {
+                            if (getViewPager() instanceof DirectionalViewPager == false) {
+                                //getViewPager().setAdapter(null);
+                                getViewPager().setAdapter(getAdapter());
+                                gotoItem(0, true);
+                                setUpIndicator(mIndicator, mViewPager);
+                            }
                         }
                     }
-                }
-            };
-            handler.postDelayed(runnablelocal, 1000);
+                };
+                handler.postDelayed(runnablelocal, 1000);
+            } else
+                setUpIndicator(mIndicator, mViewPager);
         }
 
 
