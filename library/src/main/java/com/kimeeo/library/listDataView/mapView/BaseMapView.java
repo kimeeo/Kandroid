@@ -502,8 +502,17 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
 
     protected Bitmap getPOIIcon(IPOI poi)
     {
-        Drawable layerDrawable = getActivity().getResources().getDrawable(R.drawable._vector_icon_map_pin);
-        Bitmap icon=drawableToBitmap(layerDrawable);
+
+        Drawable pin = getActivity().getResources().getDrawable(R.drawable._vector_icon_map_pin);
+        /*
+        com.kimeeo.library.listDataView.mapView.TextDrawable d= new com.kimeeo.library.listDataView.mapView.TextDrawable(getActivity());
+        d.setText(poi.getTitle().substring(0,1));
+        d.setTextAlign(Layout.Alignment.ALIGN_CENTER);
+        d.setTextSize(12);
+
+        LayerDrawable layerDrawable= new LayerDrawable(new Drawable[]{d,pin});
+        */
+        Bitmap icon = drawableToBitmap(pin);
         return icon;
     }
 
