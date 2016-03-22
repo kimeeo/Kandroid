@@ -56,7 +56,9 @@ abstract public class BaseViewPagerAdapter extends PagerAdapter implements OnCal
 
     public int getCount()
     {
-        return dataManager.size();
+        if(dataManager!=null)
+            return dataManager.size();
+        return 0;
     }
     public Object instantiateItem(ViewGroup container, int position)
     {
