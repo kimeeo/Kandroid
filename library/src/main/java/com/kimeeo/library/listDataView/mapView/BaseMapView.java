@@ -179,8 +179,12 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
     }
 
     protected void configDataManager(DataManager dataManager) {
-        dataManager.setOnCallService(this);
-        dataManager.setDataChangeWatcher(this);
+        if (dataManager != null) {
+            dataManager.setOnCallService(this);
+            dataManager.setDataChangeWatcher(this);
+            if (dataManager.size() != 0)
+                itemsAdded(0, dataManager);
+        }
     }
 
     protected void garbageCollectorCall()
