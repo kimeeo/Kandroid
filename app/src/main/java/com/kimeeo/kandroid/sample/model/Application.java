@@ -61,6 +61,7 @@ public class Application extends BaseApplication {
         FragmentData fragmentData=new FragmentData("02","H Page","","",HorizontalPageViewWithDefaltAdaptorView.class,"");
         data.add(fragmentData);
 
+
         fragmentData=new FragmentData("02","V Page","","",VerticalPageViewWithDefaltAdaptorView.class,"");
         data.add(fragmentData);
 

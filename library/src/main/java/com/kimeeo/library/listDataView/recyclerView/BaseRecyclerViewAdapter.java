@@ -131,9 +131,9 @@ abstract public class BaseRecyclerViewAdapter extends RecyclerView.Adapter<BaseI
 
     @Override
     public int getItemCount() {
-
-        return getDataManager().size();
-
+        if(getDataManager()!=null)
+            return getDataManager().size();
+        return 0;
     }
 
     @Override

@@ -156,7 +156,9 @@ abstract public class BaseFragmentViewPagerAdapter extends FragmentStatePagerAda
     // Returns total number of pages
     @Override
     public int getCount() {
-        return getDataManager().size();
+        if(getDataManager()!=null)
+            return getDataManager().size();
+        return 0;
     }
 
     // Returns the fragment to display for that page

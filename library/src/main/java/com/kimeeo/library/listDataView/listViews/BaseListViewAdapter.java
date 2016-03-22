@@ -63,7 +63,9 @@ abstract public class BaseListViewAdapter extends BaseAdapter implements OnCallS
     }
     @Override
     public int getCount() {
-        return getDataManager().size();
+        if(getDataManager()!=null)
+            return getDataManager().size();
+        return 0;
     }
 
 

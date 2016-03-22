@@ -26,33 +26,33 @@ public class EmptyViewHelper {
 
     public EmptyViewHelper(Context context, View emptyView, IEmptyViewHelper emptyViewHelper, boolean showInetnetError, boolean showRetryButton) {
         this.context = context;
-        mEmptyView = emptyView;
-        this.showInetnetError = showInetnetError;
-        this.showRetryButton = showRetryButton;
-        this.mEmptyViewHelper = emptyViewHelper;
+        if(emptyView!=null)
+        {
+            mEmptyView = emptyView;
+            this.showInetnetError = showInetnetError;
+            this.showRetryButton = showRetryButton;
+            this.mEmptyViewHelper = emptyViewHelper;
+            if (emptyView.findViewById(R.id.emptyViewImage) != null && emptyView.findViewById(R.id.emptyViewImage) instanceof ImageView) {
+                mEmptyViewImage = (ImageView) emptyView.findViewById(R.id.emptyViewImage);
+                mEmptyViewImage.setImageDrawable(emptyViewHelper.getEmptyViewDrawable());
+            }
 
-        if (emptyView.findViewById(R.id.emptyViewImage) != null && emptyView.findViewById(R.id.emptyViewImage) instanceof ImageView) {
-            mEmptyViewImage = (ImageView) emptyView.findViewById(R.id.emptyViewImage);
-            mEmptyViewImage.setImageDrawable(emptyViewHelper.getEmptyViewDrawable());
+            if (emptyView.findViewById(R.id.emptyViewMessage) != null && emptyView.findViewById(R.id.emptyViewMessage) instanceof TextView) {
+                mEmptyViewMessage = (TextView) emptyView.findViewById(R.id.emptyViewMessage);
+                mEmptyViewMessage.setText(emptyViewHelper.getEmptyViewMessage());
+            }
+            if (emptyView.findViewById(R.id.retry) != null && emptyView.findViewById(R.id.retry) instanceof TextView) {
+                mRetry = emptyView.findViewById(R.id.retry);
+                mRetry.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mEmptyViewHelper.retry();
+                    }
+                });
+            }
+            if (emptyView != null)
+                emptyView.setVisibility(View.GONE);
         }
-
-        if (emptyView.findViewById(R.id.emptyViewMessage) != null && emptyView.findViewById(R.id.emptyViewMessage) instanceof TextView) {
-            mEmptyViewMessage = (TextView) emptyView.findViewById(R.id.emptyViewMessage);
-            mEmptyViewMessage.setText(emptyViewHelper.getEmptyViewMessage());
-        }
-        if (emptyView.findViewById(R.id.retry) != null && emptyView.findViewById(R.id.retry) instanceof TextView) {
-            mRetry = emptyView.findViewById(R.id.retry);
-            mRetry.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mEmptyViewHelper.retry();
-                }
-            });
-        }
-
-
-        if (emptyView != null)
-            emptyView.setVisibility(View.GONE);
     }
 
     public void clean() {
