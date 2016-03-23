@@ -24,8 +24,11 @@ import com.squareup.picasso.Picasso;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -183,13 +186,13 @@ public class SelectImage extends BaseAction
     }
 
     public void takeAPicture() {
-        String fileName = generateId()+".jpg";
+        String fileName = getPhotoBaseName()+new Date().getTime()+".jpg";
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, fileName);
         values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
         values.put(MediaStore.Images.Media.DESCRIPTION,"Image capture by camera");
 
-        File dir= Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+        File dir= getRootFolder();
         dir = new File(dir,getFolderLocation());
         if(!dir.exists())
             dir.mkdir();
@@ -203,38 +206,58 @@ public class SelectImage extends BaseAction
         activity.startActivityForResult(intent, PICK_CAMERA_IMAGE);
     }
 
+    File rootFolder = Environment.getExternalStorageDirectory();
+    public File getRootFolder() {
+        return rootFolder;
+    }
+    public void setRootFolder(File f) {
+        rootFolder = f;
+    }
     public boolean isValid()
     {
         return file!=null;
     }
-    public void imageLoaded(Bitmap bitmap,File file,int method) {
+    public void imageLoaded(Bitmap bitmap,File incomingFile,int method) {
+
+        File processedFile;
         if(getMaxSize()!=-1)
         {
             if((bitmap.getHeight()>getMaxSize() || bitmap.getWidth()>getMaxSize()))
-                this.file = resizeAndSave(bitmap, file,getMaxSize());
+                processedFile = resizeAndSave(bitmap, incomingFile,getMaxSize());
             else
-                this.file = file;
+                processedFile = incomingFile;
         }
         else
-            this.file = file;
+            processedFile = incomingFile;
+        fileLoaded(processedFile);
+        selectedMethod = method;
+    }
+
+    private void fileLoaded(File processedFile) {
+
+        this.file = processedFile;
 
         if(holder!=null)
-            Picasso.with(activity).load(this.file).into(holder);
+            Picasso.with(activity).load(file).into(holder);
+
 
         if(getOnResult()!=null)
             getOnResult().selected(file);
 
         if(file!=null &&  file.exists() && file.canRead())
         {
+            try {
+                MediaStore.Images.Media.insertImage(activity.getContentResolver(), file.getAbsolutePath(), file.getName(), file.getName());
+            }catch (Exception e)
+            {
+
+            }
             if(triger!=null)
                 triger.setVisibility(View.GONE);
 
             if(holder!=null)
                 holder.setVisibility(View.VISIBLE);
-
-            selectedMethod = method;
         }
-
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -302,14 +325,14 @@ public class SelectImage extends BaseAction
     }
 
 
-    private File resizeAndSave(Bitmap bMap, File targetFile, int maxSize) {
-        File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
-        dir = new File(dir, "folderLocation");
+    private File resizeAndSave(Bitmap sourceBitmap, File targetFile, int maxSize) {
+        File dir = getRootFolder();
+        dir = new File(dir, getFolderLocation());
         if (!dir.exists())
             dir.mkdir();
 
-        int originalWidth = bMap.getWidth();
-        int originalHeight = bMap.getHeight();
+        int originalWidth = sourceBitmap.getWidth();
+        int originalHeight = sourceBitmap.getHeight();
         int newWidth = -1;
         int newHeight = -1;
         float multFactor = -1.0F;
@@ -327,30 +350,37 @@ public class SelectImage extends BaseAction
         }
 
 
-        String fileName = getPhotoBaseName() + generateId() + ".jpg";
-        Bitmap out = Bitmap.createScaledBitmap(bMap, newWidth, newHeight, false);
+        String fileName = getPhotoBaseName() + new Date().getTime() + ".jpg";
+        Bitmap resizeBitmaped = Bitmap.createScaledBitmap(sourceBitmap, newWidth, newHeight, false);
         File resizedFile = new File(dir, fileName);
         try {
             if (!resizedFile.exists())
                 resizedFile.createNewFile();
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
+            System.out.println(e);
         }
 
 
-        OutputStream fOut = null;
         try {
-            fOut = new BufferedOutputStream(new FileOutputStream(resizedFile));
-            out.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-            fOut.flush();
-            fOut.close();
-        } catch (Exception e) {
-
+            FileOutputStream fs=new FileOutputStream(resizedFile,false);
+            resizeBitmaped.compress(Bitmap.CompressFormat.JPEG, 100, fs);
+            fs.flush();
+            fs.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        if (isCameraActive)
-            targetFile.delete();
-        out.recycle();
-        bMap.recycle();
-        return resizedFile;
+        resizeBitmaped.recycle();
+        sourceBitmap.recycle();
+        if(resizedFile.exists())
+        {
+            if (isCameraActive)
+                targetFile.delete();
+            return resizedFile;
+        }
+        return targetFile;
     }
 
     public void setOptions(Item[] options) {
@@ -517,18 +547,5 @@ public class SelectImage extends BaseAction
      */
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
-    }
-
-
-    private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
-    public static int generateId() {
-        for (;;) {
-            final int result = sNextGeneratedId.get();
-            int newValue = result + 1;
-            if (newValue > 0x00FFFFFF) newValue = 1; // Roll over to 1, not 0.
-            if (sNextGeneratedId.compareAndSet(result, newValue)) {
-                return result;
-            }
-        }
     }
 }
