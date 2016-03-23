@@ -45,6 +45,7 @@ public class SelectImage extends BaseAction
     protected boolean isCameraActive;
     protected int selectedMethod;
     private String  title="Select Uploading Method";
+    private String photoBaseName="photo";
 
     public OnResult getOnResult() {
         return onResult;
@@ -125,6 +126,14 @@ public class SelectImage extends BaseAction
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getPhotoBaseName() {
+        return photoBaseName;
+    }
+
+    public void setPhotoBaseName(String photoBaseName) {
+        this.photoBaseName = photoBaseName;
     }
 
     public static class Item{
@@ -293,11 +302,10 @@ public class SelectImage extends BaseAction
     }
 
 
-    private File resizeAndSave(Bitmap bMap,File targetFile,int maxSize)
-    {
-        File dir=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
-        dir = new File(dir,"folderLocation");
-        if(!dir.exists())
+    private File resizeAndSave(Bitmap bMap, File targetFile, int maxSize) {
+        File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+        dir = new File(dir, "folderLocation");
+        if (!dir.exists())
             dir.mkdir();
 
         int originalWidth = bMap.getWidth();
@@ -305,31 +313,31 @@ public class SelectImage extends BaseAction
         int newWidth = -1;
         int newHeight = -1;
         float multFactor = -1.0F;
-        if(originalHeight > originalWidth) {
+        if (originalHeight > originalWidth) {
             newHeight = maxSize;
-            multFactor = (float) originalWidth/(float) originalHeight;
+            multFactor = (float) originalWidth / (float) originalHeight;
             newWidth = (int) (newHeight * multFactor);
-        } else if(originalWidth > originalHeight) {
+        } else if (originalWidth > originalHeight) {
             newWidth = maxSize;
-            multFactor = (float) originalHeight/ (float)originalWidth;
-            newHeight = (int) (newWidth*multFactor);
-        } else if(originalHeight == originalWidth) {
+            multFactor = (float) originalHeight / (float) originalWidth;
+            newHeight = (int) (newWidth * multFactor);
+        } else if (originalHeight == originalWidth) {
             newHeight = maxSize;
             newWidth = maxSize;
         }
 
 
-
-        String fileName = "goldadorn_social_post_"+ generateId()+".jpg";
+        String fileName = getPhotoBaseName() + generateId() + ".jpg";
         Bitmap out = Bitmap.createScaledBitmap(bMap, newWidth, newHeight, false);
-        File resizedFile = new File(dir,fileName);
+        File resizedFile = new File(dir, fileName);
         try {
-            if(!resizedFile.exists())
+            if (!resizedFile.exists())
                 resizedFile.createNewFile();
-        }catch(Exception e){}
+        } catch (Exception e) {
+        }
 
 
-        OutputStream fOut=null;
+        OutputStream fOut = null;
         try {
             fOut = new BufferedOutputStream(new FileOutputStream(resizedFile));
             out.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
@@ -338,7 +346,7 @@ public class SelectImage extends BaseAction
         } catch (Exception e) {
 
         }
-        if(isCameraActive)
+        if (isCameraActive)
             targetFile.delete();
         out.recycle();
         bMap.recycle();
