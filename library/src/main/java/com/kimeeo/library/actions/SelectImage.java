@@ -46,6 +46,15 @@ public class SelectImage extends BaseAction
     protected int selectedMethod;
     private String  title="Select Uploading Method";
 
+    public OnResult getOnResult() {
+        return onResult;
+    }
+
+    public void setOnResult(OnResult onResult) {
+        this.onResult = onResult;
+    }
+
+    private  OnResult onResult;
     public void setFolderLocation(String folderLocation) {
         this.folderLocation = folderLocation;
     }
@@ -203,6 +212,9 @@ public class SelectImage extends BaseAction
         if(holder!=null)
             Picasso.with(activity).load(this.file).into(holder);
 
+        if(getOnResult()!=null)
+            getOnResult().selected(file);
+
         if(file!=null &&  file.exists() && file.canRead())
         {
             if(triger!=null)
@@ -218,6 +230,9 @@ public class SelectImage extends BaseAction
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Uri selectedImageUri = null;
+
+        if(resultCode!=Activity.RESULT_OK && getOnResult()!=null)
+            getOnResult().fail();
 
         switch (requestCode) {
             case PICK_IMAGE:
@@ -350,6 +365,11 @@ public class SelectImage extends BaseAction
         void unRegisterImageUploadCallBack(SelectImage imageSelector);
     }
 
+    public static interface OnResult
+    {
+        void selected(Object file);
+        void fail();
+    }
 
     /**
      * Method for return file path of Gallery image
