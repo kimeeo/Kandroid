@@ -1,6 +1,8 @@
 package com.kimeeo.kandroid.sample.model;
 
 
+import android.support.annotation.DrawableRes;
+
 import com.google.gson.internal.LinkedTreeMap;
 import com.kimeeo.library.listDataView.dataManagers.BaseDataParser;
 import com.kimeeo.library.listDataView.dataManagers.IJSONParseableObject;
@@ -18,6 +20,8 @@ public class SampleModel extends Object implements IJSONParseableObject,IParseab
     public String subTitle;
     public String icon;
     public String id;
+    @DrawableRes
+    public int resID;
     public String image;
     public String details;
     public List<SampleModel> children;

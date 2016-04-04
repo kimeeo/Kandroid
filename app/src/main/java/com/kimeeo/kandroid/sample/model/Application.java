@@ -17,7 +17,11 @@ import com.kimeeo.kandroid.sample.lists.EasyVerticalListViewFastScroll2;
 import com.kimeeo.kandroid.sample.lists.LiteListView;
 import com.kimeeo.kandroid.sample.lists.MapView;
 import com.kimeeo.kandroid.sample.lists.MosaicListWithAdaptor;
+import com.kimeeo.kandroid.sample.lists.OldVList;
+import com.kimeeo.kandroid.sample.lists.ProfileBasedListView;
 import com.kimeeo.kandroid.sample.lists.RSSListView;
+import com.kimeeo.kandroid.sample.lists.RecycleViewBasicHorizontal;
+import com.kimeeo.kandroid.sample.lists.SimpleList500pxStyleView;
 import com.kimeeo.kandroid.sample.lists.SimpleListAssetsView;
 import com.kimeeo.kandroid.sample.lists.SimpleListDirectoryView;
 import com.kimeeo.kandroid.sample.lists.SimpleListView;
@@ -26,9 +30,6 @@ import com.kimeeo.kandroid.sample.lists.StickyVerticalListView;
 import com.kimeeo.kandroid.sample.lists.SwipeCards;
 import com.kimeeo.kandroid.sample.lists.SwipeCardsDeck;
 import com.kimeeo.kandroid.sample.lists.VerticalFlipViewWithDefaultAdaptor;
-import com.kimeeo.kandroid.sample.lists.OldVList;
-import com.kimeeo.kandroid.sample.lists.ProfileBasedListView;
-import com.kimeeo.kandroid.sample.lists.RecycleViewBasicHorizontal;
 import com.kimeeo.kandroid.sample.viewPager.HFragmentPager;
 import com.kimeeo.kandroid.sample.viewPager.HorizontalFlipableViewWithDefaltAdaptorView;
 import com.kimeeo.kandroid.sample.viewPager.HorizontalPageViewWithDefaltAdaptorView;
@@ -72,6 +73,8 @@ public class Application extends BaseApplication {
         fragmentData=new FragmentData("02","RecycleViewBasicHorizontal Pager","","",RecycleViewBasicHorizontal.class,"");
         data.add(fragmentData);
 
+        fragmentData = new FragmentData("01", "500 px", "", "", SimpleList500pxStyleView.class, "");
+        data.add(fragmentData);
 
 
         fragmentData=new FragmentData("01","V List","","",EasyVerticalListView.class,"");

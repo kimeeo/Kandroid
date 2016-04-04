@@ -15,8 +15,7 @@ abstract public class GreedoView extends DefaultRecyclerView {
 
     /*
     private void calculateImageAspectRatios() {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
+
 
         for (int i = 0; i < mImageResIds.length; i++) {
             BitmapFactory.decodeResource(getActivity().getResources(), mImageResIds[i], options);
