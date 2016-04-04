@@ -12,6 +12,30 @@ import com.kimeeo.library.listDataView.recyclerView.DefaultRecyclerView;
  * Created by bhavinpadhiyar on 7/17/15.
  */
 abstract public class GreedoView extends DefaultRecyclerView {
+
+    /*
+    private void calculateImageAspectRatios() {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+
+        for (int i = 0; i < mImageResIds.length; i++) {
+            BitmapFactory.decodeResource(getActivity().getResources(), mImageResIds[i], options);
+            mImageAspectRatios[i] = options.outWidth / (double) options.outHeight;
+        }
+    }
+    */
+
+    GreedoLayoutSizeCalculator.SizeCalculatorDelegate sizeCalculatorDelegate = new GreedoLayoutSizeCalculator.SizeCalculatorDelegate() {
+        @Override
+        public double aspectRatioForIndex(int index) {
+            if (index >= getDataManager().size())
+                return 1.0;
+            return getAspectRatioFor(index, getDataManager().get(index));
+        }
+    };
+
+    protected abstract double getAspectRatioFor(int index, Object o);
+
     @Override
     protected RecyclerView.LayoutManager createLayoutManager() {
         GreedoLayoutManager layoutManager = new GreedoLayoutManager(createSizeCalculatorDelegate(getAdapter()));
@@ -35,17 +59,7 @@ abstract public class GreedoView extends DefaultRecyclerView {
         return 130;
     }
 
-    abstract protected GreedoLayoutSizeCalculator.SizeCalculatorDelegate createSizeCalculatorDelegate(BaseRecyclerViewAdapter adapter);
-
-    /*
-    private void calculateImageAspectRatios() {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-
-        for (int i = 0; i < mImageResIds.length; i++) {
-            BitmapFactory.decodeResource(getActivity().getResources(), mImageResIds[i], options);
-            mImageAspectRatios[i] = options.outWidth / (double) options.outHeight;
-        }
+    protected GreedoLayoutSizeCalculator.SizeCalculatorDelegate createSizeCalculatorDelegate(BaseRecyclerViewAdapter adapter) {
+        return sizeCalculatorDelegate;
     }
-    */
 }
