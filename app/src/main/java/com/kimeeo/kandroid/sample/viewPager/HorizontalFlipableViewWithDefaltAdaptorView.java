@@ -4,7 +4,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -16,8 +15,8 @@ import com.kimeeo.kandroid.sample.model.SampleModel;
 import com.kimeeo.kandroid.sample.projectCore.DefaultProjectDataManager;
 import com.kimeeo.library.listDataView.dataManagers.DataManager;
 import com.kimeeo.library.listDataView.dataManagers.PageData;
-import com.kimeeo.library.listDataView.viewPager.flippableStackView.VerticalFlippableStackViewPager;
 import com.kimeeo.library.listDataView.viewPager.BaseItemHolder;
+import com.kimeeo.library.listDataView.viewPager.flippableStackView.VerticalFlippableStackViewPager;
 import com.nshmura.recyclertablayout.RecyclerTabLayout;
 
 import butterknife.Bind;
@@ -99,11 +98,13 @@ public class HorizontalFlipableViewWithDefaltAdaptorView extends VerticalFlippab
         public TabIndicatorRecyclerViewAdapter(ViewPager viewPager, DataManager dataManager) {
             super(viewPager,dataManager);
         }
-        protected  ViewHolder getViewHolder(View view)
+
+        protected ViewHolder getViewHolder(View view, int pos)
         {
             return new MyViewHolder(view);
         }
-        protected View getView(ViewGroup parent)
+
+        protected View getView(ViewGroup parent, int pos)
         {
             return LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_custom_tab_view, parent, false);
         }
@@ -124,35 +125,47 @@ public class HorizontalFlipableViewWithDefaltAdaptorView extends VerticalFlippab
             public MyViewHolder(View itemView) {
                 super(itemView);
             }
-            public void updatedSelectedItem(Object o) {
-                SampleModel data= (SampleModel) o;
+
+            @Override
+            public void udateItem(int position, Object item) {
+                SampleModel data = (SampleModel) item;
                 textView.setText(data.name);
+            }
+
+            @Override
+            public void updatedSelectedItem(Object o) {
                 textView.setTextColor(textView.getContext().getResources().getColor(R.color.actionBarBackgroundStart));
             }
+
+            @Override
             public void updatedNormalItem(Object o)
             {
-                SampleModel data= (SampleModel) o;
-                textView.setText(data.name);
                 textView.setTextColor(textView.getContext().getResources().getColor(R.color.colorAccent));
             }
-            public void hide() {
+
+            @Override
+            public void configProgressItem() {
                 progressBar2.setVisibility(View.GONE);
                 textView.setVisibility(View.GONE);
             }
 
-            public void show() {
+            @Override
+            public void configNormalItem() {
                 progressBar2.setVisibility(View.GONE);
                 textView.setVisibility(View.VISIBLE);
             }
 
+            @Override
             public void updateFirst(Object item) {
                 textView.setText("F - >"+textView.getText());
             }
 
+            @Override
             public void updateLast(Object item) {
                 textView.setText("L - >"+textView.getText());
             }
 
+            @Override
             public void updateMiddel(Object item) {
                 textView.setText(textView.getText());
             }

@@ -15,11 +15,15 @@ import com.nshmura.recyclertablayout.RecyclerTabLayout;
 abstract public class TabIndicatorRecyclerViewAdapter extends RecyclerTabLayout.Adapter<TabIndicatorRecyclerViewAdapter.ViewHolder> {
 
     private final DataManager dataManager;
-
+    private OnItemClick onItemClick;
     public TabIndicatorRecyclerViewAdapter(ViewPager viewPager, DataManager dataManager) {
         super(viewPager);
         this.dataManager = dataManager;
     }
+
+    protected abstract ViewHolder getViewHolder(View view, int viewType);
+
+    protected abstract View getView(ViewGroup parent, int viewType);
 
     public DataManager getDataManager()
     {
@@ -28,29 +32,29 @@ abstract public class TabIndicatorRecyclerViewAdapter extends RecyclerTabLayout.
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = getView(parent);
-        return getViewHolder(view);
+        View view = getView(parent, viewType);
+        return getViewHolder(view, viewType);
     }
 
-    protected abstract ViewHolder getViewHolder(View view);
-
-    protected abstract View getView(ViewGroup parent);
-
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
         Object item =dataManager.get(position);
-
-
         if(item instanceof BaseViewPagerAdapter.ProgressItem) {
-            holder.hide();
+            holder.configProgressItem();
             holder.updateProgressView(item);
         }
         else
         {
-            holder.show();
-            holder.updatedItem(item);
+            holder.configNormalItem();
+
+            holder.udateItem(position, item);
+            holder.configItem(position, item);
+
             if (position == getCurrentIndicatorPosition())
                 holder.updatedSelectedItem(item);
             else
@@ -68,9 +72,27 @@ abstract public class TabIndicatorRecyclerViewAdapter extends RecyclerTabLayout.
                     holder.updateLast(item);
                 else
                     holder.updateMiddel(item);
+
+
             }
         }
 
+    }
+
+    protected void gotoItem(Object item, int position, boolean isSmooth) {
+        if (getViewPager() != null)
+            getViewPager().setCurrentItem(position, isSmooth);
+
+        if (onItemClick != null)
+            onItemClick.onItemClick(item, position, isSmooth);
+    }
+
+    public OnItemClick getOnItemClick() {
+        return onItemClick;
+    }
+
+    public void setOnItemClick(OnItemClick onItemClick) {
+        this.onItemClick = onItemClick;
     }
 
     public int getItemCount() {
@@ -78,29 +100,56 @@ abstract public class TabIndicatorRecyclerViewAdapter extends RecyclerTabLayout.
     }
 
 
+    protected boolean isClickSupport() {
+        return true;
+    }
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public interface OnItemClick {
+        void onItemClick(Object item, int position, boolean isSmooth);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        protected Object item;
+        protected int position;
+        private View.OnClickListener onItemClick;
+
         public ViewHolder(View itemView) {
             super(itemView);
+            if (isClickSupport()) {
+                onItemClick = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        gotoItem(item, position, false);
+                    }
+                };
+                itemView.setOnClickListener(onItemClick);
+            }
         }
-        public void updatedItem(Object o) {
+
+        public void configItem(int position, Object item) {
+            this.item = item;
+            this.position = position;
+        }
+
+        public void udateItem(int position, Object item) {
 
         }
+
         public void updatedSelectedItem(Object o) {
 
         }
         public void updatedNormalItem(Object o) {
         }
 
-        public void hide() {
+        public void configProgressItem() {
             itemView.setVisibility(View.GONE);
         }
 
-        public void show() {
+        public void configNormalItem() {
             itemView.setVisibility(View.VISIBLE);
         }
-
         public void updateProgressView(Object item) {
 
         }
@@ -114,4 +163,6 @@ abstract public class TabIndicatorRecyclerViewAdapter extends RecyclerTabLayout.
 
         }
     }
+
+
 }
