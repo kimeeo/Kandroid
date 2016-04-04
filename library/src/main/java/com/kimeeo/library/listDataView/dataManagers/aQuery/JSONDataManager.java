@@ -6,7 +6,6 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.kimeeo.library.ajax.ExtendedAjaxCallback;
 import com.kimeeo.library.listDataView.dataManagers.BaseDataParser;
-import com.kimeeo.library.listDataView.dataManagers.IConfigurableObject;
 import com.kimeeo.library.listDataView.dataManagers.IParseableObject;
 import com.kimeeo.library.listDataView.dataManagers.PageData;
 
@@ -22,12 +21,12 @@ import java.util.Map;
 abstract public class JSONDataManager extends AQueryDataManager {
 
     private static final String LOG_TAG= "JSONDataManager";
-
-
+    protected BaseDataParser loadedDataVO;
     public JSONDataManager(Context context)
     {
         super(context);
     }
+
     protected void callService(String url)
     {
         ExtendedAjaxCallback ajaxCallback =getAjaxCallback();
@@ -54,7 +53,7 @@ abstract public class JSONDataManager extends AQueryDataManager {
     {
 
     }
-    protected BaseDataParser loadedDataVO;
+
     public void garbageCollectorCall() {
         super.garbageCollectorCall();
         loadedDataVO=null;
@@ -73,6 +72,7 @@ abstract public class JSONDataManager extends AQueryDataManager {
 
             Gson gson= new Gson();
             loadedDataVO = gson.fromJson(data, type);
+
             loadedDataVO.typeCastData();
             dataIn(loadedDataVO);
 

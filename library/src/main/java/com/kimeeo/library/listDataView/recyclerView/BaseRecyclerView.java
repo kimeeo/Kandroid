@@ -82,13 +82,15 @@ abstract public class BaseRecyclerView extends BaseListDataView implements Adapt
 
         recyclerView = createRecyclerView(mRootView);
         mEmptyViewHelper = createEmptyViewHelper();
+        mAdapter = createListViewAdapter();
 
         RecyclerView.LayoutManager layoutManager= createLayoutManager();
         configLayoutManager(layoutManager);
         recyclerView.setLayoutManager(layoutManager);
+
         recyclerView.addItemDecoration(createItemDecoration());
 
-        mAdapter = createListViewAdapter();
+
         mAdapter.setOnItemClickListener(this);
         recyclerView.setAdapter(mAdapter);
         configRecyclerView(recyclerView, mAdapter);
