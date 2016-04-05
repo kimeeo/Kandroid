@@ -1,5 +1,6 @@
 package com.kimeeo.library.actions;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.NotificationManager;
@@ -21,8 +22,10 @@ import android.support.v4.app.NotificationCompat;
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxCallback;
 import com.androidquery.callback.AjaxStatus;
+import com.gun0912.tedpermission.PermissionListener;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -35,7 +38,6 @@ public class Download extends BaseAction{
     public Download(Activity activity) {
         super(activity);
     }
-
     private String folderLocation=null;
     private AQuery aq;
     private int progressBarType=PROGRESS_BAR_TYPE_NOTIFICATION;
@@ -53,11 +55,6 @@ public class Download extends BaseAction{
     public void setDownloadFolder(File downloadFolder) {
         this.downloadFolder = downloadFolder;
     }
-
-
-
-
-
 
     public String getTitle() {
         return title;
@@ -143,13 +140,32 @@ public class Download extends BaseAction{
         {
             fileName =System.currentTimeMillis()+"";
         }
-        perform(link,location,showProgress, downloadResult,fileName);
+        perform(link, location, showProgress, downloadResult, fileName);
     }
     public void perform(String link,String location,Boolean showProgress, DownloadResult downloadResult,String fileName)
     {
         perform(link,location,null,showProgress, downloadResult,fileName);
     }
-    public void perform(String link,String location,File targetFolder,final Boolean showProgress,final DownloadResult downloadResult,String fileName)
+    public void perform(final String link,final String location,final File targetFolder,final Boolean showProgress,final DownloadResult downloadResult,final String fileName)
+    {
+        PermissionListener permissionListener = new PermissionListener()
+        {
+            @Override
+            public void onPermissionGranted() {
+                permissionGranted(link, location, targetFolder, showProgress, downloadResult, fileName);
+            }
+            @Override
+            public void onPermissionDenied(ArrayList<String> arrayList) {
+                downloadResult.fail(arrayList);
+            }
+        };
+        invokePermission(permissionListener);
+    }
+    @Override
+    public String[] getPermissions() {
+        return new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+    }
+    public void permissionGranted(final String link, String location, File targetFolder,final Boolean showProgress,final DownloadResult downloadResult,final String fileName)
     {
         try
         {
@@ -166,17 +182,15 @@ public class Download extends BaseAction{
                 targetFolder = getDownloadFolder();
 
             File file = new File(targetFolder.getPath()+"/"+location+"/"+fileName);
-            File target = new File(targetFolder, location+"/"+fileName);
+            final File target = new File(targetFolder, location+"/"+fileName);
 
             if (file.exists())
                 downloadResult.success(file);
             else {
-
                 int showProgressID=-1;
                 if(showProgress)
                     showProgressID=showNotificationProgress(getTitle(),getDetails());
                 final int showProgressIDFinal=showProgressID;
-
                 AjaxCallback callback=new AjaxCallback<File>() {
                     public void callback(String url, File file, AjaxStatus status) {
                         if (showProgress && showProgressIDFinal!=-1)
@@ -189,14 +203,13 @@ public class Download extends BaseAction{
                     }
                 };
 
-                aq.download(link, target,callback);
+                aq.download(link, target, callback);
+
             }
         }
-        catch (Exception e)
-        {
-
-        }
+        catch (Exception e){}
     }
+
 
     public int showNotificationProgress(String title,String text)
     {
@@ -287,7 +300,11 @@ public class Download extends BaseAction{
         void fail(Object file);
     }
 
-
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    public static String getPath(Context context, File file)
+    {
+        return getPath(context,Uri.fromFile(file));
+    }
 
     /**
      * Method for return file path of Gallery image

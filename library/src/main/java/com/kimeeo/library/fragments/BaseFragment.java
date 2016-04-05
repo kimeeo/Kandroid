@@ -2,19 +2,27 @@ package com.kimeeo.library.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
+import com.kimeeo.library.R;
+import com.kimeeo.library.actions.PermissionsHelper;
 import com.kimeeo.library.model.BaseApplication;
 import com.kimeeo.library.model.IApplicationAware;
 import com.kimeeo.library.model.IFragmentData;
 import com.kimeeo.library.webview.DefaultWebView;
 
 import java.lang.reflect.Constructor;
+import java.security.Permissions;
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -59,7 +67,44 @@ abstract public class BaseFragment extends Fragment implements IApplicationAware
             ((IFragmentWatcher)getActivity()).onCreate(this);
         if(getApplication()!=null && getApplication() instanceof BaseApplication)
             getApplication().onCreate(this);
+
+
+        handlePermissions();
     }
+
+    protected String[] requirePermissions() {
+        return null;
+    }
+    protected void handlePermissions() {
+        PermissionsHelper permissionsHelper = createPermissionsHelper();
+        permissionsHelper.check(requirePermissions());
+    }
+
+    protected PermissionsHelper createPermissionsHelper() {
+        PermissionsHelper permissionsHelper = new PermissionsHelper(getContext());
+        permissionsHelper.setDeniedCloseButtonText(getDeniedCloseButtonText());
+        permissionsHelper.setRationaleConfirmText(getRationaleConfirmText());
+        permissionsHelper.setRationaleMessage(getRationaleMessage());
+        permissionsHelper.setDeniedMessage(getDeniedMessage());
+        return permissionsHelper;
+    }
+
+    protected String getDeniedCloseButtonText() {
+        return getString(R.string._permission_denied_close_button_text);
+    }
+    protected String getRationaleConfirmText() {
+        return getString(R.string._permission_rationale_confirm_text);
+    }
+    protected String getRationaleMessage() {
+        return getString(R.string._permission_rationale_message);
+    }
+    protected String getDeniedMessage() {
+        return getString(R.string._permission_denied_message);
+    }
+
+
+
+
     protected boolean getHasOptionsMenu()
     {
         return false;

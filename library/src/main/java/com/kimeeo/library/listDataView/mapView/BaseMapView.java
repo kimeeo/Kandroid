@@ -1,5 +1,6 @@
 package com.kimeeo.library.listDataView.mapView;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -33,6 +34,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 import com.kimeeo.library.BuildConfig;
 import com.kimeeo.library.R;
 import com.kimeeo.library.listDataView.BaseListDataView;
@@ -302,6 +305,12 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
             return rootView;
         }
     }
+    @Override
+    protected String[] requirePermissions()
+    {
+        return new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, "com.google.android.providers.gsf.permission.READ_GSERVICES"};
+    }
+
 
     protected void configMapView(GoogleMap googleMap, SupportMapFragment mapFragment, DataManager dataManager) {
 

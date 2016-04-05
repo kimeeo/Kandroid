@@ -11,7 +11,9 @@ import com.kimeeo.kandroid.sample.lists.holder.RecyncleItemHolder1;
 import com.kimeeo.kandroid.sample.lists.holder.RecyncleItemHolder2;
 import com.kimeeo.kandroid.sample.projectCore.DefaultVerticalListView;
 import com.kimeeo.library.actions.Action;
+import com.kimeeo.library.actions.ImageSet;
 import com.kimeeo.library.actions.ImageShare;
+import com.kimeeo.library.actions.SMS;
 import com.kimeeo.library.listDataView.dataManagers.PageData;
 import com.kimeeo.library.listDataView.recyclerView.BaseItemHolder;
 
@@ -59,7 +61,11 @@ public class EasyVerticalListView extends DefaultVerticalListView
             String fail = "Failed";
             //action.downloadAndOpen(link, location, "Open File With", true, success, fail, null);
 
-            new ImageShare(getActivity()).perform(link, location, title, "Hello Data <a hreh=http://g.com>click</a>", aTrue, success, fail, null);
+            new ImageSet(getActivity()).perform(link, location, title, aTrue, success, fail, null);
+            //new ImageShare(getActivity()).perform(link, location, title, "Hello Data <a hreh=http://g.com>click</a>", aTrue, success, fail, null);
+        }
+        else if (position == 4) {
+            new SMS(getActivity()).perform("8469492621","Hello",true);
         }
     }
 
