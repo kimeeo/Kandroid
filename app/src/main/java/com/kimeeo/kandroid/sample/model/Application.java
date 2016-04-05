@@ -59,7 +59,12 @@ public class Application extends BaseApplication {
     {
         List<IFragmentData> data = new ArrayList<>();
 
-        FragmentData fragmentData=new FragmentData("02","H Page","","",HorizontalPageViewWithDefaltAdaptorView.class,"");
+        FragmentData fragmentData;
+
+        fragmentData = new FragmentData("01", "V List", "", "", EasyVerticalListView.class, "");
+        data.add(fragmentData);
+
+        fragmentData = new FragmentData("02", "H Page", "", "", HorizontalPageViewWithDefaltAdaptorView.class, "");
         data.add(fragmentData);
 
 
@@ -77,8 +82,6 @@ public class Application extends BaseApplication {
         data.add(fragmentData);
 
 
-        fragmentData=new FragmentData("01","V List","","",EasyVerticalListView.class,"");
-        data.add(fragmentData);
         fragmentData=new FragmentData("02","V Grid","","",EasyVerticalGridView.class,"");
         data.add(fragmentData);
 
