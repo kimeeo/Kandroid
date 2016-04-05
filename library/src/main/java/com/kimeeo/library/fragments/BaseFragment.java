@@ -75,9 +75,11 @@ abstract public class BaseFragment extends Fragment implements IApplicationAware
     protected String[] requirePermissions() {
         return null;
     }
+    protected String[] getFriendlyPermissionsMeaning() {return null;}
+
     protected void handlePermissions() {
         PermissionsHelper permissionsHelper = createPermissionsHelper();
-        permissionsHelper.check(requirePermissions());
+        permissionsHelper.check(requirePermissions(),getFriendlyPermissionsMeaning());
     }
 
     protected PermissionsHelper createPermissionsHelper() {
@@ -86,6 +88,7 @@ abstract public class BaseFragment extends Fragment implements IApplicationAware
         permissionsHelper.setRationaleConfirmText(getRationaleConfirmText());
         permissionsHelper.setRationaleMessage(getRationaleMessage());
         permissionsHelper.setDeniedMessage(getDeniedMessage());
+
         return permissionsHelper;
     }
 

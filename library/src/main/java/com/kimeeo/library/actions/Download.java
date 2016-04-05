@@ -162,9 +162,11 @@ public class Download extends BaseAction{
         invokePermission(permissionListener);
     }
     @Override
-    public String[] getPermissions() {
+    public String[] requirePermissions() {
         return new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     }
+    public String[] getFriendlyPermissionsMeaning() {return new String[]{"Storage"};}
+
     public void permissionGranted(final String link, String location, File targetFolder,final Boolean showProgress,final DownloadResult downloadResult,final String fileName)
     {
         try

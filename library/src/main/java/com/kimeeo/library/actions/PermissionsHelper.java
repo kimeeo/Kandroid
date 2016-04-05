@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.pm.PermissionInfo;
 import android.support.annotation.StringRes;
+import android.support.v4.content.ContextCompat;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
@@ -48,8 +49,11 @@ public class PermissionsHelper {
     }
     TedPermission permission;
 
-    public void check(String[] permissions)
+    public void check(String[] permissions,String[] friendlyPermissionsMeaning)
     {
+        if(friendlyPermissionsMeaning==null || friendlyPermissionsMeaning.length==0)
+            friendlyPermissionsMeaning = permissions;
+
         if(permissions!=null && permissions.length!=0) {
 
             permission = new TedPermission(context);
@@ -62,23 +66,24 @@ public class PermissionsHelper {
             if(getRationaleConfirmText()!=null)
                 permission.setRationaleConfirmText(getRationaleConfirmText());
 
+
             if(getRationaleMessage()!=null) {
                 String msg=getRationaleMessage();
                 msg +="\n";
 
-                for (int i = 0; i < permissions.length; i++) {
-                    String permissionVal=permissions[i];
+                for (int i = 0; i < friendlyPermissionsMeaning.length; i++) {
+                    String permissionVal=friendlyPermissionsMeaning[i];
+
                     if(permissionVal.lastIndexOf(".")!=-1)
                         permissionVal = permissionVal.substring(permissionVal.lastIndexOf(".")+1,permissionVal.length());
 
-                    String s1 = permissionVal.substring(0, 1).toUpperCase();
-                    permissionVal = s1 + permissionVal.substring(1).toLowerCase();
-                    permissionVal =permissionVal.replaceAll("_"," ");
+                    if(permissionVal.lastIndexOf("_")!=-1) {
+                        String s1 = permissionVal.substring(0, 1).toUpperCase();
+                        permissionVal = s1 + permissionVal.substring(1).toLowerCase();
+                        permissionVal = permissionVal.replaceAll("_", " ");
+                    }
 
-                    if(permissions.length==1)
-                        msg +="\n"+permissionVal;
-                    else
-                        msg +="\n("+(i+1)+")"+permissionVal;
+                    msg +="\n("+(i+1)+")"+permissionVal;
                 }
                 permission.setRationaleMessage(msg);
             }
@@ -87,8 +92,8 @@ public class PermissionsHelper {
                 String msg=getDeniedMessage();
                 msg +="\n";
 
-                for (int i = 0; i < permissions.length; i++) {
-                    String permissionVal=permissions[i];
+                for (int i = 0; i < friendlyPermissionsMeaning.length; i++) {
+                    String permissionVal=friendlyPermissionsMeaning[i];
                     if(permissionVal.lastIndexOf(".")!=-1)
                         permissionVal = permissionVal.substring(permissionVal.lastIndexOf(".")+1,permissionVal.length());
 
@@ -96,10 +101,7 @@ public class PermissionsHelper {
                     permissionVal = s1 + permissionVal.substring(1).toLowerCase();
                     permissionVal =permissionVal.replaceAll("_"," ");
 
-                    if(permissions.length==1)
-                        msg +="\n"+permissionVal;
-                    else
-                        msg +="\n("+(i+1)+")"+permissionVal;
+                    msg +="\n("+(i+1)+")"+permissionVal;
                 }
 
                 permission.setDeniedMessage(msg);
@@ -107,8 +109,13 @@ public class PermissionsHelper {
             }
 
             permission.setGotoSettingButton(true);
+
             permission.check();
         }
+    }
+    public void check(String[] permissions)
+    {
+        check(permissions,permissions);
     }
 
     PermissionListener permissionlistener = new PermissionListener() {
@@ -163,5 +170,28 @@ public class PermissionsHelper {
     protected void permissionDenied(ArrayList<String> deniedPermissions)
     {
 
+    }
+
+    public boolean requiredPermission(String[] permissions)
+    {
+        if(permissions!=null && permissions.length!=0)
+            return true;
+        return false;
+    }
+    public boolean hasPermission(String[] permissions)
+    {
+        boolean has=true;
+        if(permissions!=null && permissions.length!=0)
+        {
+            for (int i = 0; i < permissions.length; i++)
+            {
+                int result = ContextCompat.checkSelfPermission(context, permissions[i]);
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    has = false;
+                    break;
+                }
+            }
+        }
+        return has;
     }
 }

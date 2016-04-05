@@ -37,7 +37,7 @@ public class BaseAction {
     }
     public boolean requiredPermission()
     {
-        return requiredPermission(getPermissions());
+        return requiredPermission(requirePermissions());
     }
 
     public boolean hasPermission(String[] permissions)
@@ -58,16 +58,16 @@ public class BaseAction {
     }
     public boolean hasPermission()
     {
-        return hasPermission(getPermissions());
+        return hasPermission(requirePermissions());
     }
 
 
     public void invokePermission(PermissionListener permissionListener)
     {
-        invokePermission(getPermissions(), permissionListener);
+        invokePermission(requirePermissions(),getFriendlyPermissionsMeaning(), permissionListener);
     }
 
-    public void invokePermission(String[] permissions,PermissionListener permissionListener)
+    public void invokePermission(String[] permissions,String[] friendlyPermissionsMeaning,PermissionListener permissionListener)
     {
         if(requiredPermission(permissions))
         {
@@ -78,11 +78,12 @@ public class BaseAction {
                     permissionsHelper =createPermissionsHelper();
 
                 permissionsHelper.setOnPermission(permissionListener);
-                permissionsHelper.check(permissions);
+                permissionsHelper.check(permissions,friendlyPermissionsMeaning);
             }
         }
     }
-    public String[] getPermissions() {return null;}
+    public String[] requirePermissions() {return null;}
+    public String[] getFriendlyPermissionsMeaning() {return null;}
 
     protected PermissionsHelper createPermissionsHelper() {
         PermissionsHelper permissionsHelper = new PermissionsHelper(activity);

@@ -85,9 +85,12 @@ public class SMS extends BaseAction{
         }
     }
 
-    public String[] getPermissions() {
+    @Override
+    public String[] requirePermissions() {
         return new String[]{Manifest.permission.SEND_SMS};
     }
+    @Override
+    public String[] getFriendlyPermissionsMeaning() {return new String[]{"SMS"};}
 
     public void performDirect(final String recipient,final String message,final boolean sendWithFallback)
     {

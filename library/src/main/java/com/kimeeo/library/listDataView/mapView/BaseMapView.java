@@ -311,6 +311,8 @@ abstract public class BaseMapView extends BaseListDataView implements DataChange
         return new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, "com.google.android.providers.gsf.permission.READ_GSERVICES"};
     }
 
+    @Override
+    public String[] getFriendlyPermissionsMeaning() {return new String[]{"Location"};}
 
     protected void configMapView(GoogleMap googleMap, SupportMapFragment mapFragment, DataManager dataManager) {
 

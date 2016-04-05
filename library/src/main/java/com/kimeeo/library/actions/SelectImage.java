@@ -39,12 +39,12 @@ public class SelectImage extends BaseAction
     public static final int PICK_CAMERA_IMAGE = 0;
 
     @Override
-    public String[] getPermissions() {
+    public String[] requirePermissions() {
         return new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.CAMERA};
     }
-
+    public String[] getFriendlyPermissionsMeaning() {return new String[]{"Storage","Camera"};}
 
     protected RegisterImageUploadCallBack registerImageUploadCallBack;
     protected ImageView holder;

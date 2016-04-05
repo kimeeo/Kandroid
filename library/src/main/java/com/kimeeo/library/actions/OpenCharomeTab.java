@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -24,6 +25,8 @@ public class OpenCharomeTab extends OpenInAppBrowser
     private Bitmap mCloseButtonBitmap;
     private CustomTabActivityHelper mCustomTabActivityHelper;
     private CustomTabsIntent.Builder intentBuilder;
+    private int toolBarColor=-1;
+    private int iconColor=-1;
 
     public String getOpenURL() {
         return openURL;
@@ -75,7 +78,11 @@ public class OpenCharomeTab extends OpenInAppBrowser
             mCustomTabActivityHelper.bindCustomTabsService(activity);
             intentBuilder = new CustomTabsIntent.Builder();
 
-            int color = activity.getResources().getColor(R.color.colorPrimary);
+
+            int color = getToolBarColor();
+            if(color==-1)
+                color = activity.getResources().getColor(R.color.colorPrimary);
+
             intentBuilder.setToolbarColor(color);
             intentBuilder.setShowTitle(true);
 
@@ -90,16 +97,25 @@ public class OpenCharomeTab extends OpenInAppBrowser
             if(buttons!=null)
             {
                 for (Map.Entry<Bitmap, PendingIntent> entry : buttons.entrySet()) {
-                    intentBuilder.setActionButton(entry.getKey(),"", entry.getValue());
+                    intentBuilder.setActionButton(entry.getKey(), "", entry.getValue());
                 }
             }
 
+            Drawable closeIcon=null;
             if(showClose) {
-                if(mCloseButtonBitmap==null) {
-                    Drawable closeIcon = activity.getResources().getDrawable(R.drawable._tabby_ic_arrow_back);
-                    mCloseButtonBitmap = drawableToBitmap(closeIcon);
-                }
-                intentBuilder.setCloseButtonIcon(mCloseButtonBitmap);
+                if(mCloseButtonBitmap==null)
+                    closeIcon = activity.getResources().getDrawable(R.drawable._tabby_ic_arrow_back);
+                else
+                    intentBuilder.setCloseButtonIcon(mCloseButtonBitmap);
+            }
+            else
+                closeIcon = activity.getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+
+            if(closeIcon!=null) {
+                int iconColor = getIconColor();
+                if (iconColor != -1)
+                    closeIcon.setColorFilter(iconColor, PorterDuff.Mode.SRC_ATOP);
+                intentBuilder.setCloseButtonIcon(drawableToBitmap(closeIcon));
             }
             intentBuilder.setStartAnimations(activity,R.anim._tabby_slide_in_right, R.anim._tabby_slide_out_left);
             intentBuilder.setExitAnimations(activity, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
@@ -199,5 +215,21 @@ public class OpenCharomeTab extends OpenInAppBrowser
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bitmap;
+    }
+
+    public int getToolBarColor() {
+        return toolBarColor;
+    }
+
+    public void setToolBarColor(int toolBarColor) {
+        this.toolBarColor = toolBarColor;
+    }
+
+    public int getIconColor() {
+        return iconColor;
+    }
+
+    public void setIconColor(int iconColor) {
+        this.iconColor = iconColor;
     }
 }
