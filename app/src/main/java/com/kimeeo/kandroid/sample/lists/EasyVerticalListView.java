@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 import com.kimeeo.kandroid.R;
 import com.kimeeo.kandroid.sample.activities.CoordinatorLayoutExample;
@@ -12,6 +11,7 @@ import com.kimeeo.kandroid.sample.lists.holder.RecyncleItemHolder1;
 import com.kimeeo.kandroid.sample.lists.holder.RecyncleItemHolder2;
 import com.kimeeo.kandroid.sample.projectCore.DefaultVerticalListView;
 import com.kimeeo.library.actions.Action;
+import com.kimeeo.library.actions.ImageShare;
 import com.kimeeo.library.listDataView.dataManagers.PageData;
 import com.kimeeo.library.listDataView.recyclerView.BaseItemHolder;
 
@@ -49,13 +49,24 @@ public class EasyVerticalListView extends DefaultVerticalListView
         {
             Action action1 =new Action(getActivity());
             action1.openChromeTab("http://www.facebook.com");
+        } else if (position == 3) {
+            String link = "https://www.planwallpaper.com/static/images/nature_backgrounds_perfect_version_images_7035.jpg";
+            //String location="/aquery/abc";
+            String location = null;
+            String title = "download Test";
+            boolean aTrue = true;
+            String success = "Done";
+            String fail = "Failed";
+            //action.downloadAndOpen(link, location, "Open File With", true, success, fail, null);
+
+            new ImageShare(getActivity()).perform(link, location, title, "Hello Data <a hreh=http://g.com>click</a>", aTrue, success, fail, null);
         }
     }
 
     public void onItemClick(Object baseObject)
     {
         super.onItemClick(baseObject);
-        Toast.makeText(getActivity(), baseObject.toString(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), baseObject.toString(), Toast.LENGTH_SHORT).show();
     }
 
     //Return View Type here

@@ -2,6 +2,7 @@ package com.kimeeo.library.actions;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.text.Html;
 
 /**
  * Created by bhavinpadhiyar on 3/7/16.
@@ -21,7 +22,7 @@ public class TextShare extends BaseAction{
                 Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sendIntent.setType("text/plain");
                 sendIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, title);
-                sendIntent.putExtra(android.content.Intent.EXTRA_TEXT, data);
+                sendIntent.putExtra(android.content.Intent.EXTRA_TEXT, Html.fromHtml(data));
                 activity.startActivity(Intent.createChooser(sendIntent, title));
             }
         }
@@ -30,6 +31,7 @@ public class TextShare extends BaseAction{
 
         }
     }
+
     public void perform(String data) {
         perform(data,null);
     }
