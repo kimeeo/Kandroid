@@ -125,7 +125,12 @@ abstract public class BaseFragment extends Fragment implements IApplicationAware
             getApplication().onCreate(this);
 
 
-        handlePermissions();
+        if (getAutoHandlePermissions())
+            handlePermissions();
+    }
+
+    protected boolean getAutoHandlePermissions() {
+        return true;
     }
 
     protected String[] requirePermissions() {
