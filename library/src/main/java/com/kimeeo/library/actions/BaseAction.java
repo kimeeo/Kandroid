@@ -1,26 +1,23 @@
 package com.kimeeo.library.actions;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.support.v4.content.ContextCompat;
 
 import com.gun0912.tedpermission.PermissionListener;
 
-import java.util.ArrayList;
-
 /**
  * Created by bhavinpadhiyar on 3/7/16.
  */
 public class BaseAction {
-    public Activity getActivity() {
-        return activity;
-    }
-
     protected Activity activity;
     PermissionsHelper permissionsHelper;
     public BaseAction(Activity activity) {
         this.activity = activity;
+    }
+
+    public Activity getActivity() {
+        return activity;
     }
 
     public void clear()
@@ -29,11 +26,10 @@ public class BaseAction {
         permissionsHelper=null;
     }
 
+
     public boolean requiredPermission(String[] permissions)
     {
-        if(permissions!=null && permissions.length!=0)
-            return true;
-        return false;
+        return permissions != null && permissions.length != 0;
     }
     public boolean requiredPermission()
     {

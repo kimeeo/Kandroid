@@ -14,6 +14,10 @@ abstract public class RawDataManager extends BaseDataManager {
         super(context);
     }
 
+    @Override
+    public String[] requirePermissions() {
+        return null;
+    }
     protected InputStream getInputStream(Context context,String url) throws Exception
     {
         int id = context.getResources().getIdentifier(url, "raw", context.getPackageName());

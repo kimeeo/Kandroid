@@ -1,16 +1,12 @@
 package com.kimeeo.library.actions;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.content.pm.PermissionInfo;
-import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.kimeeo.library.R;
-import com.kimeeo.library.model.IFragmentData;
 
 import java.util.ArrayList;
 
@@ -20,23 +16,29 @@ import java.util.ArrayList;
 public class PermissionsHelper {
 
     private final Context context;
+    PermissionListener onPermission;
+    TedPermission permission;
+    PermissionListener permissionlistener = new PermissionListener() {
+        @Override
+        public void onPermissionGranted() {
+            if (onPermission != null)
+                onPermission.onPermissionGranted();
+            permissionGranted();
+        }
 
-
+        @Override
+        public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+            if (onPermission != null)
+                onPermission.onPermissionDenied(deniedPermissions);
+            permissionDenied(deniedPermissions);
+        }
+    };
     private String deniedCloseButtonText ="It\\'s ok, I don't want this";
     private String rationaleConfirmText="Give Permission";
     private String rationaleMessage="we need below permission to run the app smothly";
     private String deniedMessage="If you reject permission,you can not use this service\\n\\nPlease turn on permissions at [Setting] > [Permission]";
-
-    public PermissionListener getOnPermission() {
-        return onPermission;
-    }
-
-    public PermissionsHelper setOnPermission(PermissionListener onPermission) {
-        this.onPermission = onPermission;
-        return this;
-    }
-
-    PermissionListener onPermission;
+    private boolean showRationaleConfirm = true;
+    private boolean showDeniedMessage = true;
 
 
     public PermissionsHelper(Context context)
@@ -47,7 +49,15 @@ public class PermissionsHelper {
         rationaleMessage =context.getString(R.string._permission_rationale_message);
         deniedMessage=    context.getString(R.string._permission_denied_message);
     }
-    TedPermission permission;
+
+    public PermissionListener getOnPermission() {
+        return onPermission;
+    }
+
+    public PermissionsHelper setOnPermission(PermissionListener onPermission) {
+        this.onPermission = onPermission;
+        return this;
+    }
 
     public void check(String[] permissions,String[] friendlyPermissionsMeaning)
     {
@@ -60,104 +70,101 @@ public class PermissionsHelper {
             permission.setPermissionListener(permissionlistener);
             permission.setPermissions(permissions);
 
-            if(getDeniedCloseButtonText()!=null)
-                permission.setDeniedCloseButtonText(getDeniedCloseButtonText());
-
-            if(getRationaleConfirmText()!=null)
-                permission.setRationaleConfirmText(getRationaleConfirmText());
+            if (isShowDeniedMessage()) {
+                if (getDeniedCloseButtonText() != null)
+                    permission.setDeniedCloseButtonText(getDeniedCloseButtonText());
 
 
-            if(getRationaleMessage()!=null) {
-                String msg=getRationaleMessage();
-                msg +="\n";
+                if (getDeniedMessage() != null) {
+                    String msg = getDeniedMessage();
+                    msg += "\n";
 
-                for (int i = 0; i < friendlyPermissionsMeaning.length; i++) {
-                    String permissionVal=friendlyPermissionsMeaning[i];
+                    for (int i = 0; i < friendlyPermissionsMeaning.length; i++) {
+                        String permissionVal = friendlyPermissionsMeaning[i];
+                        if (permissionVal.lastIndexOf(".") != -1)
+                            permissionVal = permissionVal.substring(permissionVal.lastIndexOf(".") + 1, permissionVal.length());
 
-                    if(permissionVal.lastIndexOf(".")!=-1)
-                        permissionVal = permissionVal.substring(permissionVal.lastIndexOf(".")+1,permissionVal.length());
-
-                    if(permissionVal.lastIndexOf("_")!=-1) {
                         String s1 = permissionVal.substring(0, 1).toUpperCase();
                         permissionVal = s1 + permissionVal.substring(1).toLowerCase();
                         permissionVal = permissionVal.replaceAll("_", " ");
+
+                        msg += "\n(" + (i + 1) + ")" + permissionVal;
                     }
 
-                    msg +="\n("+(i+1)+")"+permissionVal;
+                    permission.setDeniedMessage(msg);
                 }
-                permission.setRationaleMessage(msg);
+                permission.setGotoSettingButton(true);
             }
 
-            if(getDeniedMessage()!=null) {
-                String msg=getDeniedMessage();
-                msg +="\n";
+            if (isShowRationaleConfirm()) {
+                if (getRationaleConfirmText() != null)
+                    permission.setRationaleConfirmText(getRationaleConfirmText());
 
-                for (int i = 0; i < friendlyPermissionsMeaning.length; i++) {
-                    String permissionVal=friendlyPermissionsMeaning[i];
-                    if(permissionVal.lastIndexOf(".")!=-1)
-                        permissionVal = permissionVal.substring(permissionVal.lastIndexOf(".")+1,permissionVal.length());
 
-                    String s1 = permissionVal.substring(0, 1).toUpperCase();
-                    permissionVal = s1 + permissionVal.substring(1).toLowerCase();
-                    permissionVal =permissionVal.replaceAll("_"," ");
+                if (getRationaleMessage() != null) {
+                    String msg = getRationaleMessage();
+                    msg += "\n";
 
-                    msg +="\n("+(i+1)+")"+permissionVal;
+                    for (int i = 0; i < friendlyPermissionsMeaning.length; i++) {
+                        String permissionVal = friendlyPermissionsMeaning[i];
+
+                        if (permissionVal.lastIndexOf(".") != -1)
+                            permissionVal = permissionVal.substring(permissionVal.lastIndexOf(".") + 1, permissionVal.length());
+
+                        if (permissionVal.lastIndexOf("_") != -1) {
+                            String s1 = permissionVal.substring(0, 1).toUpperCase();
+                            permissionVal = s1 + permissionVal.substring(1).toLowerCase();
+                            permissionVal = permissionVal.replaceAll("_", " ");
+                        }
+
+                        msg += "\n(" + (i + 1) + ")" + permissionVal;
+                    }
+                    permission.setRationaleMessage(msg);
                 }
-
-                permission.setDeniedMessage(msg);
-
             }
 
-            permission.setGotoSettingButton(true);
+
 
             permission.check();
         }
     }
+
     public void check(String[] permissions)
     {
         check(permissions,permissions);
     }
 
-    PermissionListener permissionlistener = new PermissionListener() {
-        @Override
-        public void onPermissionGranted() {
-            if(onPermission!=null)
-                onPermission.onPermissionGranted();
-            permissionGranted();
-        }
-        @Override
-        public void onPermissionDenied(ArrayList<String> deniedPermissions)
-        {
-            if(onPermission!=null)
-                onPermission.onPermissionDenied(deniedPermissions);
-            permissionDenied(deniedPermissions);
-        }
-    };
-
     public String getDeniedCloseButtonText() {
         return deniedCloseButtonText;
     }
+
+    public PermissionsHelper setDeniedCloseButtonText(String val) {
+        deniedCloseButtonText = val;
+        return this;
+    }
+
     public String getRationaleConfirmText() {
         return rationaleConfirmText;
     }
+
+    public PermissionsHelper setRationaleConfirmText(String val) {
+        rationaleConfirmText = val;
+        return this;
+    }
+
     public String getRationaleMessage() {
         return rationaleMessage;
     }
-    public String getDeniedMessage() {
-        return deniedMessage;
-    }
-    public PermissionsHelper setDeniedCloseButtonText(String val) {
-        deniedCloseButtonText=val;
-        return this;
-    }
-    public PermissionsHelper setRationaleConfirmText(String val) {
-        rationaleConfirmText=val;
-        return this;
-    }
+
     public PermissionsHelper setRationaleMessage(String val) {
         rationaleMessage=val;
         return this;
     }
+
+    public String getDeniedMessage() {
+        return deniedMessage;
+    }
+
     public PermissionsHelper setDeniedMessage(String val) {
         deniedMessage=val;
         return this;
@@ -174,9 +181,7 @@ public class PermissionsHelper {
 
     public boolean requiredPermission(String[] permissions)
     {
-        if(permissions!=null && permissions.length!=0)
-            return true;
-        return false;
+        return permissions != null && permissions.length != 0;
     }
     public boolean hasPermission(String[] permissions)
     {
@@ -193,5 +198,21 @@ public class PermissionsHelper {
             }
         }
         return has;
+    }
+
+    public boolean isShowRationaleConfirm() {
+        return showRationaleConfirm;
+    }
+
+    public void setShowRationaleConfirm(boolean showRationaleConfirm) {
+        this.showRationaleConfirm = showRationaleConfirm;
+    }
+
+    public boolean isShowDeniedMessage() {
+        return showDeniedMessage;
+    }
+
+    public void setShowDeniedMessage(boolean showDeniedMessage) {
+        this.showDeniedMessage = showDeniedMessage;
     }
 }

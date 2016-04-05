@@ -5,9 +5,9 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.kimeeo.library.listDataView.dataManagers.BaseDataParser;
-import com.kimeeo.library.listDataView.dataManagers.DataManager;
 import com.kimeeo.library.listDataView.dataManagers.IParseableObject;
 import com.kimeeo.library.listDataView.dataManagers.PageData;
+import com.kimeeo.library.listDataView.dataManagers.PermissionsBasedDataManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,10 +18,16 @@ import java.util.List;
 /**
  * Created by bhavinpadhiyar on 1/30/16.
  */
-abstract public class BaseDataManager extends DataManager {
+abstract public class BaseDataManager extends PermissionsBasedDataManager {
 
     private static final String LOG_TAG= "BaseDataManager";
     protected Context context;
+    protected BaseDataParser loadedDataVO;
+
+    public BaseDataManager(Context context) {
+        super(context);
+        this.context = context;
+    }
 
     public void garbageCollectorCall() {
         super.garbageCollectorCall();
@@ -30,11 +36,7 @@ abstract public class BaseDataManager extends DataManager {
     }
 
     abstract protected InputStream getInputStream(Context context,String url) throws Exception;
-    public BaseDataManager(Context context)
-    {
-        super(context);
-        this.context =context;
-    }
+
     protected void callService(String url)
     {
         try {
@@ -67,7 +69,6 @@ abstract public class BaseDataManager extends DataManager {
     {
 
     }
-    protected BaseDataParser loadedDataVO;
 
     protected void parseData(String url, Object value, Object status)
     {

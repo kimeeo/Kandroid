@@ -14,6 +14,10 @@ abstract public class AssetsDataManager extends BaseDataManager {
         super(context);
     }
 
+    @Override
+    public String[] requirePermissions() {
+        return null;
+    }
     protected InputStream getInputStream(Context context,String url) throws Exception
     {
         return context.getAssets().open(url);
