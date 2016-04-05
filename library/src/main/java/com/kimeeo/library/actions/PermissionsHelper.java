@@ -1,11 +1,15 @@
 package com.kimeeo.library.actions;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.content.pm.PermissionInfo;
 import android.support.annotation.StringRes;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.kimeeo.library.R;
+import com.kimeeo.library.model.IFragmentData;
 
 import java.util.ArrayList;
 
@@ -47,6 +51,7 @@ public class PermissionsHelper {
     public void check(String[] permissions)
     {
         if(permissions!=null && permissions.length!=0) {
+
             permission = new TedPermission(context);
             permission.setPermissionListener(permissionlistener);
             permission.setPermissions(permissions);
@@ -66,6 +71,10 @@ public class PermissionsHelper {
                     if(permissionVal.lastIndexOf(".")!=-1)
                         permissionVal = permissionVal.substring(permissionVal.lastIndexOf(".")+1,permissionVal.length());
 
+                    String s1 = permissionVal.substring(0, 1).toUpperCase();
+                    permissionVal = s1 + permissionVal.substring(1).toLowerCase();
+                    permissionVal =permissionVal.replaceAll("_"," ");
+
                     if(permissions.length==1)
                         msg +="\n"+permissionVal;
                     else
@@ -74,8 +83,28 @@ public class PermissionsHelper {
                 permission.setRationaleMessage(msg);
             }
 
-            if(getDeniedMessage()!=null)
-                permission.setDeniedMessage(getDeniedMessage());
+            if(getDeniedMessage()!=null) {
+                String msg=getDeniedMessage();
+                msg +="\n";
+
+                for (int i = 0; i < permissions.length; i++) {
+                    String permissionVal=permissions[i];
+                    if(permissionVal.lastIndexOf(".")!=-1)
+                        permissionVal = permissionVal.substring(permissionVal.lastIndexOf(".")+1,permissionVal.length());
+
+                    String s1 = permissionVal.substring(0, 1).toUpperCase();
+                    permissionVal = s1 + permissionVal.substring(1).toLowerCase();
+                    permissionVal =permissionVal.replaceAll("_"," ");
+
+                    if(permissions.length==1)
+                        msg +="\n"+permissionVal;
+                    else
+                        msg +="\n("+(i+1)+")"+permissionVal;
+                }
+
+                permission.setDeniedMessage(msg);
+
+            }
 
             permission.setGotoSettingButton(true);
             permission.check();

@@ -1,5 +1,6 @@
 package com.kimeeo.library.actions;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -19,12 +20,14 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.gun0912.tedpermission.PermissionListener;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -34,6 +37,13 @@ public class SelectImage extends BaseAction
 {
     public static final int PICK_IMAGE = 1;
     public static final int PICK_CAMERA_IMAGE = 0;
+
+    @Override
+    public String[] getPermissions() {
+        return new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA};
+    }
 
 
     protected RegisterImageUploadCallBack registerImageUploadCallBack;
@@ -333,11 +343,22 @@ public class SelectImage extends BaseAction
         builder.show();
     }
 
-    public void onOptionSelect(int which) {
-        if (which == PICK_CAMERA_IMAGE)
-            takeAPicture();
-        else if (which == PICK_IMAGE)
-            selectAPicture();
+    public void onOptionSelect(final int which) {
+        PermissionListener permissionListener = new PermissionListener()
+        {
+            @Override
+            public void onPermissionGranted() {
+                if (which == PICK_CAMERA_IMAGE)
+                    takeAPicture();
+                else if (which == PICK_IMAGE)
+                    selectAPicture();
+            }
+            @Override
+            public void onPermissionDenied(ArrayList<String> arrayList) {
+
+            }
+        };
+        invokePermission(permissionListener);
     }
 
     public void selectAPicture() {

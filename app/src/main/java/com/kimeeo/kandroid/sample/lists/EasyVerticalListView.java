@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.kimeeo.kandroid.R;
+import com.kimeeo.kandroid.sample.activities.BaseActivity;
 import com.kimeeo.kandroid.sample.activities.CoordinatorLayoutExample;
 import com.kimeeo.kandroid.sample.lists.holder.RecyncleItemHolder1;
 import com.kimeeo.kandroid.sample.lists.holder.RecyncleItemHolder2;
@@ -14,6 +15,7 @@ import com.kimeeo.library.actions.Action;
 import com.kimeeo.library.actions.ImageSet;
 import com.kimeeo.library.actions.ImageShare;
 import com.kimeeo.library.actions.SMS;
+import com.kimeeo.library.actions.SelectImage;
 import com.kimeeo.library.listDataView.dataManagers.PageData;
 import com.kimeeo.library.listDataView.recyclerView.BaseItemHolder;
 
@@ -67,6 +69,10 @@ public class EasyVerticalListView extends DefaultVerticalListView
         else if (position == 4) {
             new SMS(getActivity()).perform("8469492621","Hello",true);
         }
+        else if (position == 5) {
+            new SelectImage(getActivity(),(BaseActivity)getActivity()).perform();
+        }
+
     }
 
     public void onItemClick(Object baseObject)

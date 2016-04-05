@@ -40,7 +40,6 @@ public class SMS extends BaseAction{
                 final SharedPreferences sp=activity.getSharedPreferences("SMS_SETTINGS", Context.MODE_PRIVATE);
                 boolean doNotAskAgain =sp.getBoolean("doNotAskAgain", false);
                 boolean allow =sp.getBoolean("allow", false);
-                doNotAskAgain=false;
                 if (confirm && doNotAskAgain==false)
                 {
                     View checkBoxView = View.inflate(activity, R.layout._sms_don_not_ask_again, null);
