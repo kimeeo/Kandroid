@@ -191,6 +191,7 @@ public class Application extends BaseApplication {
         fragmentData=new FragmentData("04","AdaptorLayoutView","","",AdaptorLayoutView.class,"");
         data.add(fragmentData);
 
+
         return data;
     }
     public void configApplication()

@@ -101,6 +101,8 @@ public class EasyVerticalListView extends DefaultVerticalListView
     //END URL
     public String getNextDataURL(PageData pageData)
     {
+        //String key="AIzaSyDc_z3WNsc9EeW0SIM81m9FsCj8pgLvV8I";
+        //return "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=PLC250ED989B65C6B6&key="+key;
         return "http://www.googledrive.com/host/0B0GMnwpS0IrNRkI5WFVCZG5EUTQ/data"+pageData.curruntPage+".txt";
     }
 
