@@ -11,9 +11,11 @@ import com.kimeeo.library.ajax.ExtendedAjaxCallback;
 import com.kimeeo.library.listDataView.dataManagers.BaseDataParser;
 
 import org.apache.http.cookie.Cookie;
+import org.apache.http.entity.StringEntity;
 
 import java.io.File;
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,7 +68,7 @@ public class LoadDataAQuery extends BaseAction{
         super.clear();
     }
 
-    public void perform(String url,final Result callResult,Map<String, Object> params)
+    public void perform(String url,final Result callResult,String param,String contentType)
     {
         if(androidQuery==null)
             androidQuery = new AQuery(activity);
@@ -83,11 +85,52 @@ public class LoadDataAQuery extends BaseAction{
             }
         }
 
-        if(params!=null && params.entrySet().size()!=0)
+        if(param!=null)
         {
+            Map<String, Object> params = new HashMap<>();
             ajaxCallback.setParams(params);
             ajaxCallback.setClazz(String.class);
             ajaxCallback.expire(getCachingTime());
+            try {
+                params.put(AQuery.POST_ENTITY, new StringEntity(param));
+            }catch (Exception e)
+            {
+
+            }
+
+            if(contentType==null)
+                contentType= "application/json";
+            ajaxCallback.header("Content-type",contentType);
+            androidQuery.ajax(url, params, String.class, ajaxCallback);
+        }
+        else {
+            ajaxCallback.setClazz(String.class);
+            androidQuery.ajax(url, String.class, getCachingTime(), ajaxCallback);
+        }
+    }
+    public void perform(String url,final Result callResult,Map<String, Object> params,String contentType)
+    {
+        if(androidQuery==null)
+            androidQuery = new AQuery(activity);
+
+        ExtendedAjaxCallback ajaxCallback = new ExtendedAjaxCallback<Object>() {
+            public void callback(String url, Object json, AjaxStatus status)
+            {
+                callResult.done(url, json, status);
+            }
+        };
+        if(cookies!=null && cookies.size()!=0) {
+            for (Cookie cookie : cookies) {
+                ajaxCallback.cookie(cookie.getName(), cookie.getValue());
+            }
+        }
+
+        if(params!=null && params.entrySet().size()!=0) {
+            ajaxCallback.setParams(params);
+            ajaxCallback.setClazz(String.class);
+            ajaxCallback.expire(getCachingTime());
+            if (contentType != null)
+                ajaxCallback.header("Content-type", contentType);
             androidQuery.ajax(url, params, String.class, ajaxCallback);
         }
         else {
@@ -116,7 +159,7 @@ public class LoadDataAQuery extends BaseAction{
                     callResult.done(url, null, status);
             }
         };
-        perform(url,resultLocal,params);
+        perform(url,resultLocal,params,null);
     }
 
     public void perform(String url, Result callResult, Class typeCast) {

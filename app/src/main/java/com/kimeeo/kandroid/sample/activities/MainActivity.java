@@ -7,9 +7,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 
 import com.kimeeo.kandroid.R;
+import com.kimeeo.library.actions.LoadDataAQuery;
 import com.kimeeo.library.fragments.BaseFragment;
 import com.kimeeo.library.model.IFragmentData;
 import com.mikepenz.iconics.view.IconicsButton;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,6 +43,24 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+
+
+        String url ="http://kimeeo.com/restDemo/api.php/categories";
+        String name="\"name\"";
+        String val="\"Ok123456\"";
+        String data = "{"+name+":"+val+"}";
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("name","BHAVIN OK");
+        LoadDataAQuery.Result result= new LoadDataAQuery.Result()
+        {
+            @Override
+            public void done(String url, Object json, Object status) {
+                System.out.println(json);
+            }
+        };
+        new LoadDataAQuery(this).perform(url,result,params,null);
     }
     @Override
     protected void onSaveInstanceState(Bundle outState) {
