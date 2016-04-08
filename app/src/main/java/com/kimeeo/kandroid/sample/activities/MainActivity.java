@@ -6,6 +6,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 
+import com.androidquery.callback.AjaxStatus;
 import com.kimeeo.kandroid.R;
 import com.kimeeo.library.actions.LoadDataAQuery;
 import com.kimeeo.library.fragments.BaseFragment;
@@ -45,8 +46,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
         toggle.syncState();
 
 
-
-        String url ="http://kimeeo.com/restDemo/api.php/categories";
+        String url ="http://kimeeo.com/restDemo/api/categories";
         String name="\"name\"";
         String val="\"Ok123456\"";
         String data = "{"+name+":"+val+"}";
@@ -61,7 +61,49 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
             }
         };
         new LoadDataAQuery(this).perform(url,result,params,null);
+
+        callLogin();
+
+
+
+
+
     }
+
+    private void callLogin() {
+        String url ="http://kimeeo.com/restDemo/auth/login?username=user1&password=pass1&X-API-KEY=KImeeoApp";
+        LoadDataAQuery.Result result= new LoadDataAQuery.Result()
+        {
+            @Override
+            public void done(String url, Object json, Object status) {
+                AjaxStatus status1 = (AjaxStatus) status;
+                loadPost(status1);
+            }
+        };
+        new LoadDataAQuery(this).perform(url,result,"","application/json");
+    }
+
+    private void loadPost(AjaxStatus status1)
+    {
+        String url ="http://kimeeo.com/restDemo/api/posts?include=categories&filter=id,eq,1&columns=categories.name";
+        LoadDataAQuery.Result result= new LoadDataAQuery.Result()
+        {
+            @Override
+            public void done(String url, Object json, Object status) {
+                System.out.println(json);
+            }
+        };
+        LoadDataAQuery action =new LoadDataAQuery(this);
+        String header  =status1.getHeader("X-API-KEY");
+        Map<String,String> headers = new HashMap<>();
+        headers.put("X-API-KEY",header);
+        action.setHeaders(headers);
+        action.setCookies(status1.getCookies());
+        action.perform(url,result,"","application/json");
+    }
+
+
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         //No call for super(). Bug on API Level > 11.

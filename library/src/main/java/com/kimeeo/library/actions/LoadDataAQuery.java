@@ -54,12 +54,21 @@ public class LoadDataAQuery extends BaseAction{
     public List<Cookie> getCookies() {
         return cookies;
     }
-
     public void setCookies(List<Cookie> cookies) {
         this.cookies = cookies;
     }
-
     List<Cookie> cookies;
+
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
+    public void setHeaders(Map<String, String> headers) {
+        this.headers = headers;
+    }
+
+    Map<String,String> headers;
+
     public void clear()
     {
         androidQuery=null;
@@ -79,13 +88,19 @@ public class LoadDataAQuery extends BaseAction{
                 callResult.done(url, json, status);
             }
         };
+
         if(cookies!=null && cookies.size()!=0) {
             for (Cookie cookie : cookies) {
                 ajaxCallback.cookie(cookie.getName(), cookie.getValue());
             }
         }
+        if(headers!=null && headers.entrySet().size()!=0) {
+            for (Map.Entry<String, String> stringStringEntry : headers.entrySet()) {
+                ajaxCallback.header(stringStringEntry.getKey(),stringStringEntry.getValue());
+            }
+        }
 
-        if(param!=null)
+        if(param!=null && param.equals("")==false)
         {
             Map<String, Object> params = new HashMap<>();
             ajaxCallback.setParams(params);
@@ -106,6 +121,7 @@ public class LoadDataAQuery extends BaseAction{
         else {
             ajaxCallback.setClazz(String.class);
             androidQuery.ajax(url, String.class, getCachingTime(), ajaxCallback);
+
         }
     }
     public void perform(String url,final Result callResult,Map<String, Object> params,String contentType)
@@ -119,6 +135,12 @@ public class LoadDataAQuery extends BaseAction{
                 callResult.done(url, json, status);
             }
         };
+
+        if(headers!=null && headers.entrySet().size()!=0) {
+            for (Map.Entry<String, String> stringStringEntry : headers.entrySet()) {
+                ajaxCallback.header(stringStringEntry.getKey(),stringStringEntry.getValue());
+            }
+        }
         if(cookies!=null && cookies.size()!=0) {
             for (Cookie cookie : cookies) {
                 ajaxCallback.cookie(cookie.getName(), cookie.getValue());
