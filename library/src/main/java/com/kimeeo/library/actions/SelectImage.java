@@ -584,7 +584,6 @@ public class SelectImage extends BaseAction
 
     public interface RegisterImageUploadCallBack {
         void registerImageUploadCallBack(SelectImage imageSelector);
-
         void unRegisterImageUploadCallBack(SelectImage imageSelector);
     }
 

@@ -1,5 +1,11 @@
 package com.kimeeo.kandroid.sample.model;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
+import android.util.Base64;
+
+import com.kimeeo.kandroid.sample.lists.ActionTester;
 import com.kimeeo.kandroid.sample.lists.AdaptorLayoutView;
 import com.kimeeo.kandroid.sample.lists.BaseView;
 import com.kimeeo.kandroid.sample.lists.BaseViewListView;
@@ -39,6 +45,7 @@ import com.kimeeo.library.model.IFragmentData;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.Iconics;
 
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,12 +64,32 @@ public class Application extends BaseApplication {
     }
     public List<IFragmentData> configMainMenu()
     {
+        try {
+            String packageName = getApplicationContext().getPackageName();
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
+            for (Signature signature : packageInfo.signatures) {
+                MessageDigest md = MessageDigest.getInstance("MD5");
+                md.update(signature.toByteArray());
+                String key = new String(Base64.encode(md.digest(), 0));
+                key = key.trim();
+                System.out.println(key);
+            }
+        }catch (Exception e)
+        {
+
+        }
+
         List<IFragmentData> data = new ArrayList<>();
 
         FragmentData fragmentData;
 
         fragmentData = new FragmentData("01", "V List", "", "", EasyVerticalListView.class, "");
         data.add(fragmentData);
+
+        fragmentData = new FragmentData("01", "Action Tester", "", "", ActionTester.class, "");
+        data.add(fragmentData);
+
+
 
         fragmentData = new FragmentData("02", "H Page", "", "", HorizontalPageViewWithDefaltAdaptorView.class, "");
         data.add(fragmentData);

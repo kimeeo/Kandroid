@@ -46,7 +46,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
         toggle.syncState();
 
 
-        String url ="http://kimeeo.com/restDemo/api/categories";
+        String url ="http://kimeeo.com/rest/api/categories";
         String name="\"name\"";
         String val="\"Ok123456\"";
         String data = "{"+name+":"+val+"}";
@@ -71,7 +71,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
     }
 
     private void callLogin() {
-        String url ="http://kimeeo.com/restDemo/auth/login?username=user1&password=pass1&X-API-KEY=KImeeoApp";
+        String url ="http://kimeeo.com/rest/user/login?username=user1&password=pass1&X-API-KEY=KimeeoApp";
         LoadDataAQuery.Result result= new LoadDataAQuery.Result()
         {
             @Override
@@ -85,7 +85,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 
     private void loadPost(AjaxStatus status1)
     {
-        String url ="http://kimeeo.com/restDemo/api/posts?include=categories&filter=id,eq,1&columns=categories.name";
+        String url ="http://kimeeo.com/rest/api/posts?include=categories&filter=id,eq,1&columns=categories.name";
         LoadDataAQuery.Result result= new LoadDataAQuery.Result()
         {
             @Override
