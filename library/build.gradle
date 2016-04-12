@@ -68,5 +68,6 @@ dependencies {
     compile 'com.simplecityapps:recyclerview-fastscroll:1.0.5'
     compile 'com.commit451:adapterlayout:1.0.1'
     compile 'com.fivehundredpx:greedo-layout:1.0.0'
-    compile 'com.github.ParkSangGwon:TedPermission:v1.0.8'
+    compile 'com.github.kimeeo:TedPermission:5af22f5c7b'
+
 }

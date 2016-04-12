@@ -39,6 +39,40 @@ public class PermissionsHelper {
     private String deniedMessage="If you reject permission,you can not use this service\\n\\nPlease turn on permissions at [Setting] > [Permission]";
     private boolean showRationaleConfirm = true;
     private boolean showDeniedMessage = true;
+    private int rationaleView=0;
+    private int deniedView=0;
+    private boolean showRationaleConfirmView = true;
+    private boolean showDeniedMessageView = true;
+
+    public boolean isShowRationaleConfirmView() {
+        return showRationaleConfirmView;
+    }
+    public void setShowRationaleConfirmView(boolean showRationaleConfirmView) {
+        this.showRationaleConfirmView = showRationaleConfirmView;
+    }
+    public boolean isShowDeniedMessageView() {
+        return showDeniedMessageView;
+    }
+    public void setShowDeniedMessageView(boolean showDeniedMessageView) {
+        this.showDeniedMessageView = showDeniedMessageView;
+    }
+    public int getRationaleView() {
+        return rationaleView;
+    }
+
+    public void setRationaleView(int rationaleView) {
+        this.rationaleView = rationaleView;
+    }
+
+    public int getDeniedView() {
+        return deniedView;
+    }
+
+    public void setDeniedView(int deniedView) {
+        this.deniedView = deniedView;
+    }
+
+
 
 
     public PermissionsHelper(Context context)
@@ -70,7 +104,11 @@ public class PermissionsHelper {
             permission.setPermissionListener(permissionlistener);
             permission.setPermissions(permissions);
 
-            if (isShowDeniedMessage()) {
+            if(isShowDeniedMessageView())
+            {
+                permission.setDenyView(getDeniedView());
+            }
+            else if (isShowDeniedMessage()) {
                 if (getDeniedCloseButtonText() != null)
                     permission.setDeniedCloseButtonText(getDeniedCloseButtonText());
 
@@ -93,13 +131,16 @@ public class PermissionsHelper {
 
                     permission.setDeniedMessage(msg);
                 }
-                permission.setGotoSettingButton(true);
+                //permission.setGotoSettingButton(true);
             }
 
-            if (isShowRationaleConfirm()) {
+            if(isShowRationaleConfirmView())
+            {
+                permission.setRationaleView(getRationaleView());
+            }
+            else if (isShowRationaleConfirm()) {
                 if (getRationaleConfirmText() != null)
                     permission.setRationaleConfirmText(getRationaleConfirmText());
-
 
                 if (getRationaleMessage() != null) {
                     String msg = getRationaleMessage();
@@ -122,8 +163,6 @@ public class PermissionsHelper {
                     permission.setRationaleMessage(msg);
                 }
             }
-
-
 
             permission.check();
         }
