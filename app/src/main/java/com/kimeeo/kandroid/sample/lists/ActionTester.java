@@ -1,5 +1,6 @@
 package com.kimeeo.kandroid.sample.lists;
 
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import com.kimeeo.kandroid.sample.activities.ImageUploader;
 import com.kimeeo.kandroid.sample.lists.holder.RecyncleItemHolder1;
 import com.kimeeo.kandroid.sample.lists.holder.RecyncleItemHolder2;
 import com.kimeeo.kandroid.sample.model.SampleModel;
+import com.kimeeo.kandroid.sample.sheetDialogFragment.TutsPlusBottomSheetDialogFragment;
 import com.kimeeo.library.actions.Action;
 import com.kimeeo.library.actions.ImageSet;
 import com.kimeeo.library.actions.SMS;
@@ -88,6 +90,11 @@ public class ActionTester extends ListView
             {
                 new SelectImage(getActivity(),(BaseActivity)getActivity()).perform();
             }
+            else if(data.name.equals(ACTION_BOTTOM_SHEET_DIALOG_FRAGMENT))
+            {
+                BottomSheetDialogFragment bottomSheetDialogFragment = new TutsPlusBottomSheetDialogFragment();
+                bottomSheetDialogFragment.show(getActivity().getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+            }
 
         }
         //Toast.makeText(getActivity(), baseObject.toString(), Toast.LENGTH_SHORT).show();
@@ -104,6 +111,8 @@ public class ActionTester extends ListView
     private static final String ACTION_DOWNLOAD_AND_OPEN="downloadAndOpen";
     private static final String ACTION_LAUNCH_ACTIVITY="launchActivity";
     private static final String ACTION_LAUNCH_ACTIVITY_UPLOADER="launchActivityUploader";
+    private static final String ACTION_BOTTOM_SHEET_DIALOG_FRAGMENT="BottomSheetDialogFragment";
+
     private static final String ACTION_OPEN_CHROME_TAB="openChromeTab";
     private static final String ACTION_IMAGE_SET="ImageSet";
     private static final String ACTION_SMS="SMS";
@@ -123,6 +132,7 @@ public class ActionTester extends ListView
                 list.add(getSample(ACTION_SMS, ""));
                 list.add(getSample(ACTION_SELECT_IMAGE, ""));
                 list.add(getSample(ACTION_LAUNCH_ACTIVITY_UPLOADER, ""));
+                list.add(getSample(ACTION_BOTTOM_SHEET_DIALOG_FRAGMENT, ""));
                 return list;
             }
             return null;

@@ -10,6 +10,7 @@ import com.kimeeo.kandroid.sample.lists.AdaptorLayoutView;
 import com.kimeeo.kandroid.sample.lists.BaseView;
 import com.kimeeo.kandroid.sample.lists.BaseViewListView;
 import com.kimeeo.kandroid.sample.lists.BaseViewPager2;
+import com.kimeeo.kandroid.sample.sheetDialogFragment.BottomSheet;
 import com.kimeeo.kandroid.sample.lists.CardStackViewLikeAirTel;
 import com.kimeeo.kandroid.sample.lists.CarouselView;
 import com.kimeeo.kandroid.sample.lists.EasyCircleListView;
@@ -218,6 +219,8 @@ public class Application extends BaseApplication {
         fragmentData=new FragmentData("04","AdaptorLayoutView","","",AdaptorLayoutView.class,"");
         data.add(fragmentData);
 
+        fragmentData=new FragmentData("04","BottomSheet","","",BottomSheet.class,"");
+        data.add(fragmentData);
 
         return data;
     }
