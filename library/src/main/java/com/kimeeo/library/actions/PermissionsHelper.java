@@ -34,6 +34,16 @@ public class PermissionsHelper {
         }
     };
     private String deniedCloseButtonText ="It\\'s ok, I don't want this";
+
+    public String getRationaleDenyText() {
+        return rationaleDenyText;
+    }
+
+    public void setRationaleDenyText(String rationaleDenyText) {
+        this.rationaleDenyText = rationaleDenyText;
+    }
+
+    private String rationaleDenyText;
     private String rationaleConfirmText="Give Permission";
     private String rationaleMessage="we need below permission to run the app smothly";
     private String deniedMessage="If you reject permission,you can not use this service\\n\\nPlease turn on permissions at [Setting] > [Permission]";
@@ -41,8 +51,8 @@ public class PermissionsHelper {
     private boolean showDeniedMessage = true;
     private int rationaleView=0;
     private int deniedView=0;
-    private boolean showRationaleConfirmView = true;
-    private boolean showDeniedMessageView = true;
+    private boolean showRationaleConfirmView = false;
+    private boolean showDeniedMessageView = false;
 
     public boolean isShowRationaleConfirmView() {
         return showRationaleConfirmView;
@@ -104,14 +114,13 @@ public class PermissionsHelper {
             permission.setPermissionListener(permissionlistener);
             permission.setPermissions(permissions);
 
-            if(isShowDeniedMessageView())
+            if(isShowDeniedMessageView() && getDeniedView()<=0)
             {
                 permission.setDenyView(getDeniedView());
             }
             else if (isShowDeniedMessage()) {
                 if (getDeniedCloseButtonText() != null)
                     permission.setDeniedCloseButtonText(getDeniedCloseButtonText());
-
 
                 if (getDeniedMessage() != null) {
                     String msg = getDeniedMessage();
@@ -134,13 +143,16 @@ public class PermissionsHelper {
                 //permission.setGotoSettingButton(true);
             }
 
-            if(isShowRationaleConfirmView())
+            if(isShowRationaleConfirmView() && getRationaleView()<=0)
             {
                 permission.setRationaleView(getRationaleView());
             }
             else if (isShowRationaleConfirm()) {
                 if (getRationaleConfirmText() != null)
                     permission.setRationaleConfirmText(getRationaleConfirmText());
+
+                if (getRationaleDenyText() != null)
+                    permission.setRationaleDenyText(getRationaleDenyText());
 
                 if (getRationaleMessage() != null) {
                     String msg = getRationaleMessage();
