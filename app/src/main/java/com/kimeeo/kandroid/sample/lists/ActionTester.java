@@ -11,13 +11,16 @@ import com.kimeeo.kandroid.sample.activities.CoordinatorLayoutExample;
 import com.kimeeo.kandroid.sample.activities.ImageUploader;
 import com.kimeeo.kandroid.sample.lists.holder.RecyncleItemHolder1;
 import com.kimeeo.kandroid.sample.lists.holder.RecyncleItemHolder2;
+import com.kimeeo.kandroid.sample.model.FragmentData;
 import com.kimeeo.kandroid.sample.model.SampleModel;
 import com.kimeeo.kandroid.sample.sheetDialogFragment.TutsPlusBottomSheetDialogFragment;
+import com.kimeeo.kandroid.sample.viewPager.VerticalPageViewWithDefaltAdaptorView;
 import com.kimeeo.library.actions.Action;
 import com.kimeeo.library.actions.ImageSet;
 import com.kimeeo.library.actions.SMS;
 import com.kimeeo.library.actions.SelectImage;
-import com.kimeeo.library.bottomSheet.BottomSheetViewDialogFragment;
+import com.kimeeo.library.bottomSheet.BottomSheetViewDialog;
+import com.kimeeo.library.fragments.BaseFragment;
 import com.kimeeo.library.listDataView.dataManagers.DataManager;
 import com.kimeeo.library.listDataView.dataManagers.IListProvider;
 import com.kimeeo.library.listDataView.dataManagers.PageData;
@@ -100,9 +103,19 @@ public class ActionTester extends ListView
             {
 
                 //View contentView = View.inflate(getContext(), R.layout.bottom_sheet, null);
-                //BottomSheetViewDialogFragment.show(getActivity().getSupportFragmentManager(),contentView);
 
-                BottomSheetViewDialogFragment.show(getActivity().getSupportFragmentManager(),R.layout.bottom_sheet,getActivity());
+                //BottomSheetViewDialogFragment.show(getActivity().getSupportFragmentManager(),contentView);
+                //BottomSheetViewDialogFragment.show(getActivity().getSupportFragmentManager(),R.layout.bottom_sheet,getActivity());
+                //BottomSheetViewDialogFragment.show(getActivity(),R.layout.bottom_sheet);
+
+                //BottomSheetViewDialog.show(getActivity(),R.layout.bottom_sheet);
+
+                FragmentData fragmentData=new FragmentData("02","V Page","","",EasyVerticalListView.class,"");
+                BaseFragment view =BaseFragment.newInstance(fragmentData);
+                BaseFragment.openInDialog(getActivity(),view,false);
+                //BottomSheetViewDialog.show(getActivity(),view);
+
+                //FBottomSheetDialogFragment.show(getActivity().getSupportFragmentManager(),view);
 
             }
 
@@ -121,7 +134,7 @@ public class ActionTester extends ListView
     private static final String ACTION_DOWNLOAD_AND_OPEN="downloadAndOpen";
     private static final String ACTION_LAUNCH_ACTIVITY="launchActivity";
     private static final String ACTION_LAUNCH_ACTIVITY_UPLOADER="launchActivityUploader";
-    private static final String ACTION_BOTTOM_SHEET_DIALOG_FRAGMENT="BottomSheetDialogFragment";
+    private static final String ACTION_BOTTOM_SHEET_DIALOG_FRAGMENT="FBottomSheetDialogFragment";
     private static final String ACTION_BOTTOM_SHEET_DIALOG_FRAGMENT_HELPER="BottomSheetDialogFragmentHelper";
 
     private static final String ACTION_OPEN_CHROME_TAB="openChromeTab";

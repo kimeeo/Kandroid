@@ -9,11 +9,12 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.support.design.widget.BottomSheetDialog;
 import com.gun0912.tedpermission.PermissionsBottomSheetDialogFragment;
 
 /**
@@ -61,7 +62,6 @@ public class BottomSheetViewDialogFragment extends BottomSheetDialogFragment {
                 ((ViewGroup)contentView.getParent()).removeView(contentView);
 
             dialog.setContentView(contentView);
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
             if (contentView.getParent() != null && ((View) contentView.getParent()).getLayoutParams() instanceof CoordinatorLayout.LayoutParams) {
                 CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) ((View) contentView.getParent()).getLayoutParams();
@@ -72,6 +72,14 @@ public class BottomSheetViewDialogFragment extends BottomSheetDialogFragment {
         }
     }
 
+    public static BottomSheetViewDialogFragment show(FragmentActivity activity, @LayoutRes int viewRes)
+    {
+        if (viewRes <= 0)
+            throw new IllegalArgumentException("Invalid layout");
+        LayoutInflater inflater = (LayoutInflater) activity.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+        View view= inflater.inflate(viewRes,null);
+        return show(activity.getSupportFragmentManager(),view);
+    }
 
     public static BottomSheetViewDialogFragment show(final FragmentManager fragmentManager,@LayoutRes int viewRes,Context context)
     {
@@ -84,12 +92,12 @@ public class BottomSheetViewDialogFragment extends BottomSheetDialogFragment {
     }
     public static BottomSheetViewDialogFragment show(final FragmentManager fragmentManager,View view)
     {
-        if(view.getParent()!=null && view.getParent() instanceof ViewGroup)
-            ((ViewGroup)view.getParent()).removeView(view);
         final BottomSheetViewDialogFragment bottomSheetDialogFragment = new BottomSheetViewDialogFragment();
         bottomSheetDialogFragment.setRootView(view);
         bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.getTag());
         return bottomSheetDialogFragment;
     }
+
+
 
 }
