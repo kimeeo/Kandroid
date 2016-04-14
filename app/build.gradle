@@ -27,7 +27,7 @@ dependencies {
     compile files('libs/apache-mime4j-0.6.jar')
     compile files('libs/httpmime-4.0.1.jar')
 
-    final SUPPORT_LIBRARY_VERSION = '23.2.1'
+    final SUPPORT_LIBRARY_VERSION = '23.3.0'
 
     compile "com.android.support:design:$SUPPORT_LIBRARY_VERSION"
     compile "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"

@@ -23,5 +23,6 @@
     <color name="_emptyViewMessageColor">@color/colorPrimary</color>
 
     <color name="_indicator_background_color">#ffffff</color>
+    <color name="bottomSheetBackgroundColor">#00ffffff</color>
 
 </resources>

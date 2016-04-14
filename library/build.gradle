@@ -23,7 +23,7 @@ android {
 }
 
 dependencies {
-    final SUPPORT_LIBRARY_VERSION = '23.2.1'
+    final SUPPORT_LIBRARY_VERSION = '23.3.0'
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -43,7 +43,7 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.4.0'
 
-    compile 'com.google.code.gson:gson:2.3.1'
+    compile 'com.google.code.gson:gson:2.6.2'
 
     //compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.github.rey5137:material:1.1.1'
@@ -68,6 +68,6 @@ dependencies {
     compile 'com.simplecityapps:recyclerview-fastscroll:1.0.5'
     compile 'com.commit451:adapterlayout:1.0.1'
     compile 'com.fivehundredpx:greedo-layout:1.0.0'
-    compile 'com.github.kimeeo:TedPermission:5af22f5c7b'
+    compile 'com.github.kimeeo:TedPermission:064cbbbeba'
 
 }
