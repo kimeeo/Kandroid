@@ -17,18 +17,7 @@ public class SQLLiteDataManager extends DataManager {
     private static final String LOG_TAG= "SQLLiteDataManager";
 
     private IListProvider listProvider;
-
-    public SQLiteDataHelper getSqlLiteOpenHelper() {
-        return sqlLiteOpenHelper;
-    }
-
     private SQLiteDataHelper sqlLiteOpenHelper;
-    public void garbageCollectorCall()
-    {
-        super.garbageCollectorCall();
-        listProvider = null;
-        listProvider = null;
-    }
 
     public SQLLiteDataManager(Context context,SQLiteDataHelper sqlLiteDataHelper,IListProvider listProvider)
     {
@@ -42,6 +31,16 @@ public class SQLLiteDataManager extends DataManager {
         this.listProvider=listProvider;
         this.sqlLiteOpenHelper =null;
     }
+
+    public SQLiteDataHelper getSqlLiteOpenHelper() {
+        return sqlLiteOpenHelper;
+    }
+
+    public void garbageCollectorCall() {
+        super.garbageCollectorCall();
+        listProvider = null;
+    }
+
     protected void callService(String url)
     {
         boolean isRefreshPage = isRefreshPage(getPageData(), url);

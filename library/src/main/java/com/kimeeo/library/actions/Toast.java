@@ -1,8 +1,7 @@
 package com.kimeeo.library.actions;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
+
 
 /**
  * Created by bhavinpadhiyar on 3/7/16.

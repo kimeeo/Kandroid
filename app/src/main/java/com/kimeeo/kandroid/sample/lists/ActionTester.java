@@ -33,7 +33,31 @@ import java.util.Map;
 public class ActionTester extends ListView
 {
 
+    private static final String ACTION_DOWNLOAD_AND_OPEN = "downloadAndOpen";
+    private static final String ACTION_LAUNCH_ACTIVITY = "launchActivity";
+    private static final String ACTION_LAUNCH_ACTIVITY_UPLOADER = "launchActivityUploader";
+    private static final String ACTION_OPEN_CHROME_TAB = "openChromeTab";
+    private static final String ACTION_IMAGE_SET = "ImageSet";
+    private static final String ACTION_SMS = "SMS";
+    private static final String ACTION_SELECT_IMAGE = "SelectImage";
     Action action;
+    IListProvider listData = new IListProvider() {
+        public List<?> getList(PageData data, Map<String, Object> param) {
+            if (data.curruntPage == 1) {
+                List<SampleModel> list = new ArrayList<>();
+                list.add(getSample(ACTION_DOWNLOAD_AND_OPEN, ""));
+                list.add(getSample(ACTION_LAUNCH_ACTIVITY, ""));
+                list.add(getSample(ACTION_OPEN_CHROME_TAB, ""));
+                list.add(getSample(ACTION_IMAGE_SET, ""));
+                list.add(getSample(ACTION_SMS, ""));
+                list.add(getSample(ACTION_SELECT_IMAGE, ""));
+                list.add(getSample(ACTION_LAUNCH_ACTIVITY_UPLOADER, ""));
+                return list;
+            }
+            return null;
+        }
+    };
+
     public void onItemClick(Object baseObject)
     {
         super.onItemClick(baseObject);
@@ -86,7 +110,8 @@ public class ActionTester extends ListView
             }
             else if(data.name.equals(ACTION_SELECT_IMAGE))
             {
-                new SelectImage(getActivity(),(BaseActivity)getActivity()).perform();
+                SelectImage si = new SelectImage(getActivity(), (BaseActivity) getActivity());
+                si.perform();
             }
 
         }
@@ -101,33 +126,6 @@ public class ActionTester extends ListView
         return listData1;
     }
 
-    private static final String ACTION_DOWNLOAD_AND_OPEN="downloadAndOpen";
-    private static final String ACTION_LAUNCH_ACTIVITY="launchActivity";
-    private static final String ACTION_LAUNCH_ACTIVITY_UPLOADER="launchActivityUploader";
-    private static final String ACTION_OPEN_CHROME_TAB="openChromeTab";
-    private static final String ACTION_IMAGE_SET="ImageSet";
-    private static final String ACTION_SMS="SMS";
-    private static final String ACTION_SELECT_IMAGE="SelectImage";
-
-
-    IListProvider listData=new IListProvider()
-    {
-        public List<?> getList(PageData data,Map<String, Object> param)
-        {
-            if(data.curruntPage==1) {
-                List<SampleModel> list = new ArrayList<>();
-                list.add(getSample(ACTION_DOWNLOAD_AND_OPEN,""));
-                list.add(getSample(ACTION_LAUNCH_ACTIVITY, ""));
-                list.add(getSample(ACTION_OPEN_CHROME_TAB, ""));
-                list.add(getSample(ACTION_IMAGE_SET, ""));
-                list.add(getSample(ACTION_SMS, ""));
-                list.add(getSample(ACTION_SELECT_IMAGE, ""));
-                list.add(getSample(ACTION_LAUNCH_ACTIVITY_UPLOADER, ""));
-                return list;
-            }
-            return null;
-        }
-    };
     private SampleModel getSample(String name, String phone) {
         SampleModel o = new SampleModel();
         o.name =name;
@@ -141,11 +139,6 @@ public class ActionTester extends ListView
         return new DefaultRecyclerIndexableViewAdapter(getDataManager(),this);
     }
 
-    public static class ViewTypes {
-        public static final int VIEW_ITEM1 = 5;
-        public static final int VIEW_ITEM2 = 10;
-    }
-
     //Return View Type here
     @Override
     public int getListItemViewType(int position,Object item)
@@ -155,14 +148,13 @@ public class ActionTester extends ListView
         else
             return ViewTypes.VIEW_ITEM2;
     }
+
     // get View
     @Override
     public View getItemView(int viewType,LayoutInflater inflater,ViewGroup container)
     {
         return inflater.inflate(R.layout._sample_column_cell,null);
     }
-
-
 
     // get New BaseItemHolder
     @Override
@@ -171,5 +163,10 @@ public class ActionTester extends ListView
             return new RecyncleItemHolder1(view);
         else
             return new RecyncleItemHolder2(view);
+    }
+
+    public static class ViewTypes {
+        public static final int VIEW_ITEM1 = 5;
+        public static final int VIEW_ITEM2 = 10;
     }
 }

@@ -35,7 +35,7 @@ public class SimpleListDirectoryView extends ListView
                 if(data.curruntPage==1)
                     return Environment.getExternalStorageDirectory().toString();
                 return null;
-            };
+            }
         };
 
         listData1.setRefreshEnabled(false);
@@ -47,11 +47,6 @@ public class SimpleListDirectoryView extends ListView
         return new DefaultRecyclerIndexableViewAdapter(getDataManager(),this);
     }
 
-    public static class ViewTypes {
-        public static final int VIEW_ITEM1 = 5;
-        public static final int VIEW_ITEM2 = 10;
-    }
-
     //Return View Type here
     @Override
     public int getListItemViewType(int position,Object item)
@@ -61,14 +56,13 @@ public class SimpleListDirectoryView extends ListView
         else
             return ViewTypes.VIEW_ITEM2;
     }
+
     // get View
     @Override
     public View getItemView(int viewType,LayoutInflater inflater,ViewGroup container)
     {
         return inflater.inflate(R.layout._sample_column_cell,null);
     }
-
-
 
     // get New BaseItemHolder
     @Override
@@ -79,9 +73,14 @@ public class SimpleListDirectoryView extends ListView
         else
             return new VlistItemHolder2(view);
     }
+
+    public static class ViewTypes {
+        public static final int VIEW_ITEM1 = 5;
+        public static final int VIEW_ITEM2 = 10;
+    }
+
     // Update View Here
     public class VlistItemHolder1 extends BaseItemHolder {
-
         @Bind(R.id.label)TextView label;
         @Bind(R.id.backgroud)ImageView image;
         public VlistItemHolder1(View itemView)
@@ -93,7 +92,6 @@ public class SimpleListDirectoryView extends ListView
         {
             File listObject = (File)item;
             label.setText(position + " -> " + listObject.getAbsolutePath());
-
         }
     }
 

@@ -1,38 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
 
 <android.support.v7.widget.CardView
     android:id="@+id/card_view"
-    android:layout_margin="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:layout_margin="10dp"
     android:elevation="10dp"
-    android:foreground="?android:attr/selectableItemBackground"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:foreground="?android:attr/selectableItemBackground">
 
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/backgroud"
         android:layout_width="match_parent"
-        android:minHeight="100dp"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:adjustViewBounds="true"/>
+        android:adjustViewBounds="true"
+        android:minHeight="100dp" />
 
 
-    <View  android:layout_alignParentBottom="true" android:layout_width="match_parent" android:layout_height="match_parent"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true" />
 
 
 
@@ -41,28 +42,34 @@
 
 
     <View
-        android:layout_alignParentBottom="true"
-        android:visibility="gone"
         android:id="@+id/selectorOverlay"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <TextView
+        android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:id="@+id/label" />
+        android:visibility="gone" />
 
     <TextView
+        android:id="@+id/label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ff9999"
+        android:textSize="14sp"
+        tools:text="ABC" />
+
+    <TextView
+        android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" android:visibility="gone"
-        android:layout_width="wrap_content" android:id="@+id/checkbox" android:textSize="40sp"
-        android:layout_height="wrap_content"/>
+        android:layout_centerVertical="true"
+        android:textSize="40sp"
+        android:visibility="gone" />
 </RelativeLayout>
     <Button
         android:layout_width="wrap_content"
-        android:visibility="gone"
-        android:layout_height="wrap_content" android:text="HEllo" />
+        android:layout_height="wrap_content"
+        android:text="HEllo"
+        android:visibility="gone" />
 
 </android.support.v7.widget.CardView>
 </RelativeLayout>

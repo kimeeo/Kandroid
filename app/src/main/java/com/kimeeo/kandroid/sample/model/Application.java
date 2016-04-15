@@ -215,7 +215,10 @@ public class Application extends BaseApplication {
         fragmentData=new FragmentData("04","Airtel View","","",CardStackViewLikeAirTel.class,"");
         data.add(fragmentData);
 
-        fragmentData=new FragmentData("04","AdaptorLayoutView","","",AdaptorLayoutView.class,"");
+        fragmentData = new FragmentData("04", "aa AdaptorLayoutView", "", "", AdaptorLayoutView.class, "");
+        data.add(fragmentData);
+
+        fragmentData = new FragmentData("04", "retrofitDataManger-->", "", "", com.kimeeo.kandroid.sample.retrofitDataManger.SimpleListView.class, "");
         data.add(fragmentData);
 
 
