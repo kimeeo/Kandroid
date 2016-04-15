@@ -1,1 +1,1 @@
-include ':app', ':library', ':retrofitDataManger'
+include ':app', ':library'
