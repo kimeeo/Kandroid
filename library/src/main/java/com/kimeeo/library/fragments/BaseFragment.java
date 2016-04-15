@@ -1,8 +1,11 @@
 package com.kimeeo.library.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +43,18 @@ abstract public class BaseFragment extends Fragment implements IApplicationAware
         }
     };
 
+
+    public static AlertDialog openInDialog(FragmentActivity activity, BaseFragment fragment, boolean cancelable) {
+
+        LayoutInflater inflater = (LayoutInflater) activity.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+        View view= inflater.inflate(R.layout.bottom_sheet_dialog_fragment_holder,null);
+        AlertDialog.Builder b = new AlertDialog.Builder(activity)
+                .setView(view)
+                .setCancelable(cancelable);
+
+        activity.getSupportFragmentManager().beginTransaction().replace(R.id.bottom_sheet_fragment_container,fragment);
+        return b.show();
+    }
     public static BaseFragment newInstance(IFragmentData object) {
         try {
             if (object.getView() != null) {

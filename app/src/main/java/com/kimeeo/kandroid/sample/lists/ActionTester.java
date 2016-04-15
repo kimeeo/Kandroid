@@ -1,5 +1,6 @@
 package com.kimeeo.kandroid.sample.lists;
 
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,16 @@ import com.kimeeo.kandroid.sample.activities.CoordinatorLayoutExample;
 import com.kimeeo.kandroid.sample.activities.ImageUploader;
 import com.kimeeo.kandroid.sample.lists.holder.RecyncleItemHolder1;
 import com.kimeeo.kandroid.sample.lists.holder.RecyncleItemHolder2;
+import com.kimeeo.kandroid.sample.model.FragmentData;
 import com.kimeeo.kandroid.sample.model.SampleModel;
+import com.kimeeo.kandroid.sample.sheetDialogFragment.TutsPlusBottomSheetDialogFragment;
+import com.kimeeo.kandroid.sample.viewPager.VerticalPageViewWithDefaltAdaptorView;
 import com.kimeeo.library.actions.Action;
 import com.kimeeo.library.actions.ImageSet;
 import com.kimeeo.library.actions.SMS;
 import com.kimeeo.library.actions.SelectImage;
+import com.kimeeo.library.bottomSheet.BottomSheetViewDialog;
+import com.kimeeo.library.fragments.BaseFragment;
 import com.kimeeo.library.listDataView.dataManagers.DataManager;
 import com.kimeeo.library.listDataView.dataManagers.IListProvider;
 import com.kimeeo.library.listDataView.dataManagers.PageData;
@@ -33,31 +39,7 @@ import java.util.Map;
 public class ActionTester extends ListView
 {
 
-    private static final String ACTION_DOWNLOAD_AND_OPEN = "downloadAndOpen";
-    private static final String ACTION_LAUNCH_ACTIVITY = "launchActivity";
-    private static final String ACTION_LAUNCH_ACTIVITY_UPLOADER = "launchActivityUploader";
-    private static final String ACTION_OPEN_CHROME_TAB = "openChromeTab";
-    private static final String ACTION_IMAGE_SET = "ImageSet";
-    private static final String ACTION_SMS = "SMS";
-    private static final String ACTION_SELECT_IMAGE = "SelectImage";
     Action action;
-    IListProvider listData = new IListProvider() {
-        public List<?> getList(PageData data, Map<String, Object> param) {
-            if (data.curruntPage == 1) {
-                List<SampleModel> list = new ArrayList<>();
-                list.add(getSample(ACTION_DOWNLOAD_AND_OPEN, ""));
-                list.add(getSample(ACTION_LAUNCH_ACTIVITY, ""));
-                list.add(getSample(ACTION_OPEN_CHROME_TAB, ""));
-                list.add(getSample(ACTION_IMAGE_SET, ""));
-                list.add(getSample(ACTION_SMS, ""));
-                list.add(getSample(ACTION_SELECT_IMAGE, ""));
-                list.add(getSample(ACTION_LAUNCH_ACTIVITY_UPLOADER, ""));
-                return list;
-            }
-            return null;
-        }
-    };
-
     public void onItemClick(Object baseObject)
     {
         super.onItemClick(baseObject);
@@ -110,8 +92,31 @@ public class ActionTester extends ListView
             }
             else if(data.name.equals(ACTION_SELECT_IMAGE))
             {
-                SelectImage si = new SelectImage(getActivity(), (BaseActivity) getActivity());
-                si.perform();
+                new SelectImage(getActivity(),(BaseActivity)getActivity()).perform();
+            }
+            else if(data.name.equals(ACTION_BOTTOM_SHEET_DIALOG_FRAGMENT))
+            {
+                BottomSheetDialogFragment bottomSheetDialogFragment = new TutsPlusBottomSheetDialogFragment();
+                bottomSheetDialogFragment.show(getActivity().getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+            }
+            else if(data.name.equals(ACTION_BOTTOM_SHEET_DIALOG_FRAGMENT_HELPER))
+            {
+
+                //View contentView = View.inflate(getContext(), R.layout.bottom_sheet, null);
+
+                //BottomSheetViewDialogFragment.show(getActivity().getSupportFragmentManager(),contentView);
+                //BottomSheetViewDialogFragment.show(getActivity().getSupportFragmentManager(),R.layout.bottom_sheet,getActivity());
+                //BottomSheetViewDialogFragment.show(getActivity(),R.layout.bottom_sheet);
+
+                //BottomSheetViewDialog.show(getActivity(),R.layout.bottom_sheet);
+
+                FragmentData fragmentData=new FragmentData("02","V Page","","",EasyVerticalListView.class,"");
+                BaseFragment view =BaseFragment.newInstance(fragmentData);
+                BaseFragment.openInDialog(getActivity(),view,false);
+                //BottomSheetViewDialog.show(getActivity(),view);
+
+                //FBottomSheetDialogFragment.show(getActivity().getSupportFragmentManager(),view);
+
             }
 
         }
@@ -126,6 +131,39 @@ public class ActionTester extends ListView
         return listData1;
     }
 
+    private static final String ACTION_DOWNLOAD_AND_OPEN="downloadAndOpen";
+    private static final String ACTION_LAUNCH_ACTIVITY="launchActivity";
+    private static final String ACTION_LAUNCH_ACTIVITY_UPLOADER="launchActivityUploader";
+    private static final String ACTION_BOTTOM_SHEET_DIALOG_FRAGMENT="FBottomSheetDialogFragment";
+    private static final String ACTION_BOTTOM_SHEET_DIALOG_FRAGMENT_HELPER="BottomSheetDialogFragmentHelper";
+
+    private static final String ACTION_OPEN_CHROME_TAB="openChromeTab";
+    private static final String ACTION_IMAGE_SET="ImageSet";
+    private static final String ACTION_SMS="SMS";
+    private static final String ACTION_SELECT_IMAGE="SelectImage";
+
+
+    IListProvider listData=new IListProvider()
+    {
+        public List<?> getList(PageData data,Map<String, Object> param)
+        {
+            if(data.curruntPage==1) {
+                List<SampleModel> list = new ArrayList<>();
+                list.add(getSample(ACTION_DOWNLOAD_AND_OPEN,""));
+                list.add(getSample(ACTION_LAUNCH_ACTIVITY, ""));
+                list.add(getSample(ACTION_OPEN_CHROME_TAB, ""));
+                list.add(getSample(ACTION_IMAGE_SET, ""));
+                list.add(getSample(ACTION_SMS, ""));
+                list.add(getSample(ACTION_SELECT_IMAGE, ""));
+                list.add(getSample(ACTION_LAUNCH_ACTIVITY_UPLOADER, ""));
+                list.add(getSample(ACTION_BOTTOM_SHEET_DIALOG_FRAGMENT, ""));
+                list.add(getSample(ACTION_BOTTOM_SHEET_DIALOG_FRAGMENT_HELPER, ""));
+
+                return list;
+            }
+            return null;
+        }
+    };
     private SampleModel getSample(String name, String phone) {
         SampleModel o = new SampleModel();
         o.name =name;
@@ -139,6 +177,11 @@ public class ActionTester extends ListView
         return new DefaultRecyclerIndexableViewAdapter(getDataManager(),this);
     }
 
+    public static class ViewTypes {
+        public static final int VIEW_ITEM1 = 5;
+        public static final int VIEW_ITEM2 = 10;
+    }
+
     //Return View Type here
     @Override
     public int getListItemViewType(int position,Object item)
@@ -148,13 +191,14 @@ public class ActionTester extends ListView
         else
             return ViewTypes.VIEW_ITEM2;
     }
-
     // get View
     @Override
     public View getItemView(int viewType,LayoutInflater inflater,ViewGroup container)
     {
         return inflater.inflate(R.layout._sample_column_cell,null);
     }
+
+
 
     // get New BaseItemHolder
     @Override
@@ -163,10 +207,5 @@ public class ActionTester extends ListView
             return new RecyncleItemHolder1(view);
         else
             return new RecyncleItemHolder2(view);
-    }
-
-    public static class ViewTypes {
-        public static final int VIEW_ITEM1 = 5;
-        public static final int VIEW_ITEM2 = 10;
     }
 }

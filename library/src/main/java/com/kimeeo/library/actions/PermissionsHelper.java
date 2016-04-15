@@ -34,11 +34,55 @@ public class PermissionsHelper {
         }
     };
     private String deniedCloseButtonText ="It\\'s ok, I don't want this";
+
+    public String getRationaleDenyText() {
+        return rationaleDenyText;
+    }
+
+    public void setRationaleDenyText(String rationaleDenyText) {
+        this.rationaleDenyText = rationaleDenyText;
+    }
+
+    private String rationaleDenyText;
     private String rationaleConfirmText="Give Permission";
     private String rationaleMessage="we need below permission to run the app smothly";
     private String deniedMessage="If you reject permission,you can not use this service\\n\\nPlease turn on permissions at [Setting] > [Permission]";
     private boolean showRationaleConfirm = true;
     private boolean showDeniedMessage = true;
+    private int rationaleView=0;
+    private int deniedView=0;
+    private boolean showRationaleConfirmView = false;
+    private boolean showDeniedMessageView = false;
+
+    public boolean isShowRationaleConfirmView() {
+        return showRationaleConfirmView;
+    }
+    public void setShowRationaleConfirmView(boolean showRationaleConfirmView) {
+        this.showRationaleConfirmView = showRationaleConfirmView;
+    }
+    public boolean isShowDeniedMessageView() {
+        return showDeniedMessageView;
+    }
+    public void setShowDeniedMessageView(boolean showDeniedMessageView) {
+        this.showDeniedMessageView = showDeniedMessageView;
+    }
+    public int getRationaleView() {
+        return rationaleView;
+    }
+
+    public void setRationaleView(int rationaleView) {
+        this.rationaleView = rationaleView;
+    }
+
+    public int getDeniedView() {
+        return deniedView;
+    }
+
+    public void setDeniedView(int deniedView) {
+        this.deniedView = deniedView;
+    }
+
+
 
 
     public PermissionsHelper(Context context)
@@ -70,10 +114,13 @@ public class PermissionsHelper {
             permission.setPermissionListener(permissionlistener);
             permission.setPermissions(permissions);
 
-            if (isShowDeniedMessage()) {
+            if(isShowDeniedMessageView() && getDeniedView()<=0)
+            {
+                permission.setDenyView(getDeniedView());
+            }
+            else if (isShowDeniedMessage()) {
                 if (getDeniedCloseButtonText() != null)
                     permission.setDeniedCloseButtonText(getDeniedCloseButtonText());
-
 
                 if (getDeniedMessage() != null) {
                     String msg = getDeniedMessage();
@@ -93,13 +140,19 @@ public class PermissionsHelper {
 
                     permission.setDeniedMessage(msg);
                 }
-                permission.setGotoSettingButton(true);
+                //permission.setGotoSettingButton(true);
             }
 
-            if (isShowRationaleConfirm()) {
+            if(isShowRationaleConfirmView() && getRationaleView()<=0)
+            {
+                permission.setRationaleView(getRationaleView());
+            }
+            else if (isShowRationaleConfirm()) {
                 if (getRationaleConfirmText() != null)
                     permission.setRationaleConfirmText(getRationaleConfirmText());
 
+                if (getRationaleDenyText() != null)
+                    permission.setRationaleDenyText(getRationaleDenyText());
 
                 if (getRationaleMessage() != null) {
                     String msg = getRationaleMessage();
@@ -122,8 +175,6 @@ public class PermissionsHelper {
                     permission.setRationaleMessage(msg);
                 }
             }
-
-
 
             permission.check();
         }
