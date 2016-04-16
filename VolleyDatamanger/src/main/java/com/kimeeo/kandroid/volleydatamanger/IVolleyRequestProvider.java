@@ -1,13 +1,9 @@
-package com.kimeeo.library.ajax;
-
-import android.text.TextUtils;
+package com.kimeeo.kandroid.volleydatamanger;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
-
 import org.apache.http.cookie.Cookie;
-
 import java.util.List;
 
 /**

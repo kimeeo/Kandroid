@@ -1,4 +1,4 @@
-package com.kimeeo.library.listDataView.dataManagers.volley;
+package com.kimeeo.kandroid.volleydatamanger;
 
 import android.content.Context;
 
@@ -6,7 +6,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
-import com.kimeeo.library.ajax.IVolleyRequestProvider;
 
 import org.apache.http.cookie.Cookie;
 

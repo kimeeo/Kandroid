@@ -1,4 +1,4 @@
-package com.kimeeo.library.ajax;
+package com.kimeeo.kandroid.volleydatamanger;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -97,5 +97,4 @@ public class SampleVolleyRequestController implements IVolleyRequestProvider {
             mRequestQueue.cancelAll(tag);
         }
     }
-
 }

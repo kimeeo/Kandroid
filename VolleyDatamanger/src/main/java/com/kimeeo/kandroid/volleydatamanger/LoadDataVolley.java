@@ -1,4 +1,4 @@
-package com.kimeeo.library.actions;
+package com.kimeeo.kandroid.volleydatamanger;
 
 import android.app.Activity;
 
@@ -8,8 +8,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
-import com.kimeeo.library.ajax.IVolleyRequestProvider;
-import com.kimeeo.library.ajax.SampleVolleyRequestController;
+import com.kimeeo.library.actions.BaseAction;
 
 import org.apache.http.cookie.Cookie;
 
@@ -19,7 +18,7 @@ import java.util.Map;
 /**
  * Created by bhavinpadhiyar on 3/7/16.
  */
-public class LoadDataVolley extends BaseAction{
+public class LoadDataVolley extends BaseAction {
 
     private IVolleyRequestProvider volleyRequestController;
     Gson gson = new Gson();

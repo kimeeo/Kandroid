@@ -1,8 +1,7 @@
-package com.kimeeo.library.listDataView.dataManagers.volley;
+package com.kimeeo.kandroid.volleydatamanger;
 
 import android.content.Context;
 
-import com.kimeeo.library.ajax.IVolleyRequestProvider;
 
 /**
  * Created by bhavinpadhiyar on 12/23/15.

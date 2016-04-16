@@ -1,16 +1,16 @@
-package com.kimeeo.library.listDataView.dataManagers.volley;
+package com.kimeeo.kandroid.volleydatamanger;
 
 import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.kimeeo.library.ajax.IVolleyRequestProvider;
 import com.kimeeo.library.listDataView.dataManagers.BaseDataParser;
 import com.kimeeo.library.listDataView.dataManagers.IParseableObject;
 import com.kimeeo.library.listDataView.dataManagers.PageData;
 
 import java.lang.reflect.Type;
 import java.util.List;
+
 /**
  * Created by bhavinpadhiyar on 12/23/15.
  */

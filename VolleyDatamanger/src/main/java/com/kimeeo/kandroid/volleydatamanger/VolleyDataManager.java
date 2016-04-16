@@ -1,12 +1,11 @@
-package com.kimeeo.library.listDataView.dataManagers.volley;
+package com.kimeeo.kandroid.volleydatamanger;
 
 import android.content.Context;
-
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.kimeeo.library.ajax.IVolleyRequestProvider;
+
 import com.kimeeo.library.listDataView.dataManagers.DataManager;
 
 import java.util.HashMap;
