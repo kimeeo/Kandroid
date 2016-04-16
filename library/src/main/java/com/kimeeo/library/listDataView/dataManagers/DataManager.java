@@ -309,7 +309,8 @@ abstract public class DataManager extends ArrayList<Object>{
                 else
                     return true;
             }
-            return true;
+            else
+                return false;
         }
         else
             return false;

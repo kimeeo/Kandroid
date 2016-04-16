@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kimeeo.library.R;
+import com.kimeeo.library.listDataView.dataManagers.DataManager;
 import com.kimeeo.library.listDataView.recyclerView.BaseRecyclerViewAdapter;
 import com.kimeeo.library.listDataView.recyclerView.DefaultRecyclerView;
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
@@ -25,29 +26,26 @@ abstract public class BaseViewPager extends DefaultRecyclerView {
     {
         mAdapter.supportLoader=false;
     }
+    protected void configDataManager(DataManager dataManager) {
+        dataManager.setPagingSupport(false);
+    }
     @Override
     public void onViewCreated(View view) {
         super.onViewCreated(view);
         final TabLayout tabLayout = createTabLayout(getRootView());
         if(tabLayout!=null) {
-            tabLayout.setVisibility(View.INVISIBLE);
-            if(getRecyclerView()!=null)
-                getRecyclerView().setVisibility(View.INVISIBLE);
+            tabLayout.setVisibility(View.GONE);
         }
-
     }
 
     protected void updateIndicator(final RecyclerView mList,final BaseRecyclerViewAdapter mAdapter)
     {
-        if(mList instanceof RecyclerViewPager)
+        if(mList instanceof RecyclerViewPager && getDataManager().getPagingSupport()==false)
         {
             final TabLayout tabLayout = createTabLayout(getRootView());
             if(tabLayout!=null) {
+                tabLayout.setVisibility(View.VISIBLE);
 
-                if(getDataManager()!=null && getDataManager().size()==0) {
-                    mList.setVisibility(View.INVISIBLE);
-                    tabLayout.setVisibility(View.INVISIBLE);
-                }
                 final Handler handler = new Handler();
                 final Runnable runnablelocal = new Runnable() {
                     @Override
@@ -67,9 +65,6 @@ abstract public class BaseViewPager extends DefaultRecyclerView {
 
                         }
                         configTabLayout(tabLayout, (RecyclerViewPager) mList);
-
-                        tabLayout.setVisibility(View.VISIBLE);
-                        mList.setVisibility(View.VISIBLE);
                     }
                 };
                 handler.postDelayed(runnablelocal, 700);
