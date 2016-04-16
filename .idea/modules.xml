@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Kandroid.iml" filepath="$PROJECT_DIR$/Kandroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RSSDataManager/RSSDataManager.iml" filepath="$PROJECT_DIR$/RSSDataManager/RSSDataManager.iml" />
       <module fileurl="file://$PROJECT_DIR$/VolleyDatamanger/VolleyDatamanger.iml" filepath="$PROJECT_DIR$/VolleyDatamanger/VolleyDatamanger.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />

@@ -65,7 +65,7 @@ dependencies {
     compile 'com.fivehundredpx:greedo-layout:1.0.0'
 
     //RSS
-    compile 'com.github.ahorn:android-rss:v1.0-rc1'
+    //compile 'com.github.ahorn:android-rss:v1.0-rc1'
 
     //Permission
     compile 'com.github.kimeeo:TedPermission:064cbbbeba'
