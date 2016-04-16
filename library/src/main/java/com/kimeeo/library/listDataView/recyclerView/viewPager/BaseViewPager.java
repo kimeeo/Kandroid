@@ -24,10 +24,10 @@ abstract public class BaseViewPager extends DefaultRecyclerView {
 
     protected void configRecyclerView(RecyclerView mList,BaseRecyclerViewAdapter mAdapter)
     {
-        mAdapter.supportLoader=false;
+        //mAdapter.supportLoader=false;
     }
     protected void configDataManager(DataManager dataManager) {
-        dataManager.setPagingSupport(false);
+        //dataManager.setPagingSupport(false);
     }
     @Override
     public void onViewCreated(View view) {
@@ -40,6 +40,9 @@ abstract public class BaseViewPager extends DefaultRecyclerView {
 
     protected void updateIndicator(final RecyclerView mList,final BaseRecyclerViewAdapter mAdapter)
     {
+
+        //TODO
+        /*
         if(mList instanceof RecyclerViewPager && getDataManager().getPagingSupport()==false)
         {
             final TabLayout tabLayout = createTabLayout(getRootView());
@@ -70,6 +73,7 @@ abstract public class BaseViewPager extends DefaultRecyclerView {
                 handler.postDelayed(runnablelocal, 700);
             }
         }
+        */
     }
 
     protected void configTabLayout(TabLayout tabLayout, RecyclerViewPager mList) {
