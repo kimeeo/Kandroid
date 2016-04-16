@@ -2,10 +2,10 @@ package com.kimeeo.kandroid.sample.projectCore;
 
 import android.content.Context;
 
-import com.kimeeo.kandroid.volleydatamanger.DefaultJSONDataManager;
+//import com.kimeeo.kandroid.volleydatamanger.DefaultJSONDataManager;
 import com.kimeeo.library.listDataView.dataManagers.BaseDataParser;
 import com.kimeeo.library.listDataView.dataManagers.PageData;
-//import com.kimeeo.library.listDataView.dataManagers.aQuery.DefaultJSONDataManager;
+import com.kimeeo.library.listDataView.dataManagers.aQuery.DefaultJSONDataManager;
 
 /**
  * Created by bhavinpadhiyar on 1/11/16.
@@ -15,7 +15,8 @@ public class DefaultProjectDataManager extends DefaultJSONDataManager
     private IDataManagerDelegate delegate;
     public DefaultProjectDataManager(Context context,IDataManagerDelegate delegate)
     {
-        super(context,VolleyRequestController.getInstance(context));
+        super(context);
+        //super(context,VolleyRequestController.getInstance(context));
         //setCachingTime(15 * 60 * 1000);
         setCachingTime(-1);
         this.delegate = delegate;
