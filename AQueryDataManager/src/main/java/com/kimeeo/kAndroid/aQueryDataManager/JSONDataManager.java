@@ -1,10 +1,9 @@
-package com.kimeeo.library.listDataView.dataManagers.aQuery;
+package com.kimeeo.kAndroid.aQueryDataManager;
 
 import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.kimeeo.library.ajax.ExtendedAjaxCallback;
 import com.kimeeo.library.listDataView.dataManagers.BaseDataParser;
 import com.kimeeo.library.listDataView.dataManagers.IParseableObject;
 import com.kimeeo.library.listDataView.dataManagers.PageData;

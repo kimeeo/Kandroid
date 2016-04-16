@@ -5,12 +5,11 @@ import android.content.Context;
 //import com.kimeeo.kandroid.volleydatamanger.DefaultJSONDataManager;
 import com.kimeeo.library.listDataView.dataManagers.BaseDataParser;
 import com.kimeeo.library.listDataView.dataManagers.PageData;
-import com.kimeeo.library.listDataView.dataManagers.aQuery.DefaultJSONDataManager;
 
 /**
  * Created by bhavinpadhiyar on 1/11/16.
  */
-public class DefaultProjectDataManager extends DefaultJSONDataManager
+public class DefaultProjectDataManager extends com.kimeeo.kAndroid.aQueryDataManager.DefaultJSONDataManager
 {
     private IDataManagerDelegate delegate;
     public DefaultProjectDataManager(Context context,IDataManagerDelegate delegate)
