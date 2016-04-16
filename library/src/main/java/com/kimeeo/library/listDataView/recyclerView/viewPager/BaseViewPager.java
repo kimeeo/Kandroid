@@ -25,12 +25,29 @@ abstract public class BaseViewPager extends DefaultRecyclerView {
     {
         mAdapter.supportLoader=false;
     }
+    @Override
+    public void onViewCreated(View view) {
+        super.onViewCreated(view);
+        final TabLayout tabLayout = createTabLayout(getRootView());
+        if(tabLayout!=null) {
+            tabLayout.setVisibility(View.INVISIBLE);
+            if(getRecyclerView()!=null)
+                getRecyclerView().setVisibility(View.INVISIBLE);
+        }
+
+    }
+
     protected void updateIndicator(final RecyclerView mList,final BaseRecyclerViewAdapter mAdapter)
     {
         if(mList instanceof RecyclerViewPager)
         {
             final TabLayout tabLayout = createTabLayout(getRootView());
             if(tabLayout!=null) {
+
+                if(getDataManager()!=null && getDataManager().size()==0) {
+                    mList.setVisibility(View.INVISIBLE);
+                    tabLayout.setVisibility(View.INVISIBLE);
+                }
                 final Handler handler = new Handler();
                 final Runnable runnablelocal = new Runnable() {
                     @Override
@@ -39,12 +56,23 @@ abstract public class BaseViewPager extends DefaultRecyclerView {
                         TabLayoutSupport.setupWithViewPager(tabLayout, (RecyclerViewPager) mList, mAdapter);
                         if (selected > 0) {
                             tabLayout.getTabAt(selected).select();
-                            tabLayout.setScrollPosition(selected, Float.parseFloat("0.3"), true);
+
+                            final Handler handler = new Handler();
+                            final Runnable runnablelocal = new Runnable() {
+                                @Override
+                                public void run() {
+                                    tabLayout.setScrollPosition(selected, Float.parseFloat("0.3"), true);
+                                }};
+                            handler.postDelayed(runnablelocal, 300);
+
                         }
                         configTabLayout(tabLayout, (RecyclerViewPager) mList);
+
+                        tabLayout.setVisibility(View.VISIBLE);
+                        mList.setVisibility(View.VISIBLE);
                     }
                 };
-                handler.postDelayed(runnablelocal, 500);
+                handler.postDelayed(runnablelocal, 700);
             }
         }
     }
@@ -63,9 +91,11 @@ abstract public class BaseViewPager extends DefaultRecyclerView {
     }
 
     protected View createRootView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-        if(getDataManager().getRefreshEnabled())
+        if(getDataManager().getRefreshEnabled()) {
             return inflater.inflate(R.layout._fragment_recycler_view_pager_with_swipe_refresh_layout, container, false);
-        else
+        }
+        else {
             return inflater.inflate(R.layout._fragment_recycler_view_pager, container, false);
+        }
     }
 }
