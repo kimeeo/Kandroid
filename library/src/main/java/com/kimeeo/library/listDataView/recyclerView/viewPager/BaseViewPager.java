@@ -25,33 +25,27 @@ abstract public class BaseViewPager extends DefaultRecyclerView {
     {
         mAdapter.supportLoader=false;
     }
-    protected void updateIndicator(RecyclerView mList,BaseRecyclerViewAdapter mAdapter)
+    protected void updateIndicator(final RecyclerView mList,final BaseRecyclerViewAdapter mAdapter)
     {
         if(mList instanceof RecyclerViewPager)
         {
             final TabLayout tabLayout = createTabLayout(getRootView());
             if(tabLayout!=null) {
-
-                final int selected = tabLayout.getSelectedTabPosition();
-                TabLayoutSupport.setupWithViewPager(tabLayout, (RecyclerViewPager) mList, mAdapter);
-
-                if (selected > 0) {
-                    tabLayout.setVisibility(View.INVISIBLE);
-                    tabLayout.getTabAt(selected).select();
-                    final Handler handler = new Handler();
-                    final Runnable runnablelocal = new Runnable() {
-                        @Override
-                        public void run() {
+                final Handler handler = new Handler();
+                final Runnable runnablelocal = new Runnable() {
+                    @Override
+                    public void run() {
+                        final int selected = tabLayout.getSelectedTabPosition();
+                        TabLayoutSupport.setupWithViewPager(tabLayout, (RecyclerViewPager) mList, mAdapter);
+                        if (selected > 0) {
+                            tabLayout.getTabAt(selected).select();
                             tabLayout.setScrollPosition(selected, Float.parseFloat("0.3"), true);
-                            tabLayout.setVisibility(View.VISIBLE);
                         }
-                    };
-                    handler.postDelayed(runnablelocal, 200);
-                }
-
-                configTabLayout(tabLayout, (RecyclerViewPager) mList);
+                        configTabLayout(tabLayout, (RecyclerViewPager) mList);
+                    }
+                };
+                handler.postDelayed(runnablelocal, 500);
             }
-
         }
     }
 
