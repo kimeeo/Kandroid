@@ -1,22 +1,13 @@
-package com.kimeeo.library.listDataView.dataManagers.aQuery;
+package com.kimeeo.kAndroid.aQueryDataManager;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxStatus;
-import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.TedPermission;
-import com.kimeeo.library.R;
-import com.kimeeo.library.ajax.ExtendedAjaxCallback;
 import com.kimeeo.library.listDataView.dataManagers.DataManager;
 
 import org.apache.http.cookie.Cookie;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

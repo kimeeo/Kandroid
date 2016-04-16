@@ -1,4 +1,4 @@
-package com.kimeeo.library.listDataView.dataManagers.aQuery;
+package com.kimeeo.kAndroid.aQueryDataManager;
 
 import android.content.Context;
 

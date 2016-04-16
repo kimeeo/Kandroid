@@ -26,6 +26,7 @@ dependencies {
     compile project(':library')
     compile project(':VolleyDatamanger')
     compile project(':RSSDataManager')
+    compile project(':AQueryDataManager')
 
     compile files('libs/apache-mime4j-0.6.jar')
     compile files('libs/httpmime-4.0.1.jar')
