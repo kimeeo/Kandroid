@@ -1,4 +1,4 @@
-package com.kimeeo.library.listDataView.dataManagers.rssDataManager;
+package com.kimeeo.kAndroid.rssDataManager;
 
 import android.content.Context;
 import android.os.AsyncTask;

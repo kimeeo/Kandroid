@@ -25,6 +25,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile project(':library')
     compile project(':VolleyDatamanger')
+    compile project(':RSSDataManager')
+
     compile files('libs/apache-mime4j-0.6.jar')
     compile files('libs/httpmime-4.0.1.jar')
 

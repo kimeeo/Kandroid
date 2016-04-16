@@ -1,1 +1,1 @@
-include ':app', ':library', ':VolleyDatamanger'
+include ':app', ':library', ':VolleyDatamanger', ':RSSDataManager'
