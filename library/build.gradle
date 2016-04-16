@@ -1,7 +1,9 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 
-group='com.github.kimeeo'
+apply plugin: 'maven'
+version = "1.0"
+group = "com.github.kimeeo"
 
 android {
     compileSdkVersion 23
@@ -21,7 +23,6 @@ android {
     }
     useLibrary 'org.apache.http.legacy'
 }
-
 dependencies {
     final SUPPORT_LIBRARY_VERSION = '23.3.0'
 
