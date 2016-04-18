@@ -11,8 +11,8 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.Volley;
 
 
-import com.kimeeo.kandroid.volleydatamanger.IVolleyRequestProvider;
-import com.kimeeo.kandroid.volleydatamanger.LruBitmapCache;
+import com.kimeeo.library.listDataView.dataManagers.volleyDataManger.IVolleyRequestProvider;
+import com.kimeeo.library.listDataView.dataManagers.volleyDataManger.LruBitmapCache;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.OkUrlFactory;
 

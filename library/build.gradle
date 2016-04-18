@@ -24,7 +24,7 @@ android {
 
 dependencies {
     final SUPPORT_LIBRARY_VERSION = '23.3.0'
-
+    testCompile 'junit:junit:4.12'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     //ANDROID design library
     compile "com.android.support:customtabs:$SUPPORT_LIBRARY_VERSION"
@@ -65,9 +65,13 @@ dependencies {
     compile 'com.fivehundredpx:greedo-layout:1.0.0'
 
     //RSS
-    //compile 'com.github.ahorn:android-rss:v1.0-rc1'
+    compile 'com.github.ahorn:android-rss:v1.0-rc1'
 
     //Permission
     compile 'com.github.kimeeo:TedPermission:064cbbbeba'
 
+    //volley
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.4.0'
+    compile 'com.android.volley:volley:1.0.0'
 }

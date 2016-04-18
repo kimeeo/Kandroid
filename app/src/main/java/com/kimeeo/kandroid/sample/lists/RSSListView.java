@@ -7,11 +7,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.kimeeo.kAndroid.rssDataManager.RSSDataManager;
 import com.kimeeo.kandroid.R;
 import com.kimeeo.library.listDataView.dataManagers.DataManager;
 import com.kimeeo.library.listDataView.dataManagers.PageData;
 
+import com.kimeeo.library.listDataView.dataManagers.rssDataManager.RSSDataManager;
 import com.kimeeo.library.listDataView.recyclerView.BaseItemHolder;
 import com.kimeeo.library.listDataView.recyclerView.BaseRecyclerViewAdapter;
 import com.kimeeo.library.listDataView.recyclerView.verticalViews.ListView;
