@@ -21,7 +21,6 @@ abstract public class BaseItemHolder extends RecyclerView.ViewHolder implements 
     }
 
     private OnItemHolderClick onItemHolderClick;
-    protected int position;
 
     public View getItemView()
     {
@@ -29,7 +28,6 @@ abstract public class BaseItemHolder extends RecyclerView.ViewHolder implements 
     }
     public void updateItemView(Object item, int position)
     {
-        this.position = position;
         updateItemView(item,itemView,position);
     }
 
@@ -43,7 +41,7 @@ abstract public class BaseItemHolder extends RecyclerView.ViewHolder implements 
 
     @Override
     public void onClick(View v) {
-        onItemHolderClick.onItemHolderClick(this, position);
+        onItemHolderClick.onItemHolderClick(this, getAdapterPosition());
     }
 
     public static interface OnItemHolderClick
