@@ -34,8 +34,9 @@ public class SimpleListView extends ListView {
     PostsService service;
     IListProvider listProvider = new IListProvider() {
         public List<?> getList(PageData data, Map<String, Object> param) {
-            if (data.curruntPage == 1) {
+            if (data.curruntPage != 3) {
                 try {
+                    data.curruntPage+=1;
                     Call<Posts> post = service.listPost();
                     return post.execute().body().posts;
                 } catch (IOException e) {
